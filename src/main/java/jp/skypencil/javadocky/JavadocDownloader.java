@@ -8,11 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ReactiveHttpInputMessage;
 import org.springframework.web.reactive.function.BodyExtractor;
@@ -26,7 +28,7 @@ class JavadocDownloader {
     private static final String REPO_URL = "http://central.maven.org/maven2/";
     private WebClient webClient = WebClient.create(REPO_URL);
 
-    Mono<File> download(String groupId, String artifactId, String version) {
+    Mono<Optional<File>> download(String groupId, String artifactId, String version) {
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("groupId", groupId.replace(".", "/"));
         uriVariables.put("artifactId", artifactId);
@@ -39,11 +41,14 @@ class JavadocDownloader {
         return response.flatMap(this::fetchResponse);
     }
 
-    private Mono<File> fetchResponse(ClientResponse res) {
-        if (!res.statusCode().is2xxSuccessful()) {
-            throw new IllegalArgumentException("Unexpected status code:" + res.statusCode().value());
+    private Mono<Optional<File>> fetchResponse(ClientResponse res) {
+        HttpStatus status = res.statusCode();
+        if (status == HttpStatus.NOT_FOUND) {
+            return Mono.just(Optional.empty());
+        } else if (!status.is2xxSuccessful()) {
+            return Mono.error(new IllegalArgumentException("Unexpected status code:" + status.value()));
         }
-        return res.body(new ExtractToFile());
+        return res.body(new ExtractToFile()).map(Optional::of);
     }
 
     private static class ExtractToFile implements BodyExtractor<Mono<File>, ReactiveHttpInputMessage> {
