@@ -55,7 +55,7 @@ class JavadocDownloader {
         @Override
         public Mono<File> extract(ReactiveHttpInputMessage inputMessage,
                 BodyExtractor.Context context) {
-            return Mono.fromDirect(source -> {
+            return Mono.fromDirect(subscriber -> {
                 try {
                     File file = File.createTempFile("downloaded", ".jar");
                     SeekableByteChannel channel = Files.newByteChannel(file.toPath(), StandardOpenOption.WRITE);
@@ -78,10 +78,10 @@ class JavadocDownloader {
                     .reduce((a, b) -> a + b)
                     .subscribe(total -> {
                         log.info("Downloaded {} bytes", total);
-                        source.onNext(file);
+                        subscriber.onNext(file);
                     });
                 } catch (RuntimeException | IOException e) {
-                    source.onError(e);
+                    subscriber.onError(e);
                 }
             });
         }
