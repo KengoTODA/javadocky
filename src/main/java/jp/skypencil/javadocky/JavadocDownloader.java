@@ -9,6 +9,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Mono;
 
+@Slf4j
 class JavadocDownloader {
     private static final String REPO_URL = "http://central.maven.org/maven2/";
     private WebClient webClient = WebClient.create(REPO_URL);
@@ -69,6 +72,7 @@ class JavadocDownloader {
                     })
                     .reduce((a, b) -> a + b)
                     .subscribe(total -> {
+                        log.info("Downloaded {} bytes", total);
                         source.onNext(file);
                     });
                 } catch (RuntimeException | IOException e) {

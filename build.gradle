@@ -27,8 +27,8 @@ repositories {
 dependencies {
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
   compile('org.springframework.boot:spring-boot-starter-webflux')
+  compileOnly "org.projectlombok:lombok:1.16.16"
   testCompile('org.springframework.boot:spring-boot-starter-test')
-	testcompile('io.projectreactor.addons:reactor-test')
 }
 
 wrapper {
