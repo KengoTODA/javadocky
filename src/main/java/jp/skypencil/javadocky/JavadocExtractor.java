@@ -44,7 +44,6 @@ class JavadocExtractor {
                 }
                 return unzip(downloaded.get());
             }).flatMap(nameAndData -> {
-                // FIXME this flatMap makes Flux not terminated
                 String name = nameAndData.getT1();
                 log.info("Count: {}, name: {}", count.incrementAndGet(), name);
                 Flux<ByteBuffer> data = nameAndData.getT2();
