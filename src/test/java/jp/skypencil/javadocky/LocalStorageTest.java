@@ -26,7 +26,7 @@ public class LocalStorageTest {
 
     @Test
     public void test() throws IOException {
-        Path root = folder.newFolder().toPath();
+        Path root = folder.newFolder("javadocky").toPath();
         Storage storage = new LocalStorage(root);
         assertFalse(storage.find("g", "a", "v", "index.html").block().isPresent());
         storage.write("g", "a", "v", "index.html", Flux.just(ByteBuffer.wrap("Hello world!".getBytes(StandardCharsets.UTF_8)))).block();

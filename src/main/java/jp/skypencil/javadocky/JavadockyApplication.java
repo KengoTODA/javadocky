@@ -4,6 +4,11 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +20,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 
 @SpringBootApplication
+@Slf4j
 public class JavadockyApplication {
     private static final String URL_PATTERN = "/doc/{groupId}/{artifactId}/{version}/**";
 
@@ -26,6 +32,14 @@ public class JavadockyApplication {
     public RouterFunction<ServerResponse> routes() {
         return route(GET(URL_PATTERN),
                 req -> ok().body(Flux.just(buildResponse(req)), String.class));
+    }
+
+    @Bean
+    public Storage localStorage() {
+        Path home = Paths.get(System.getProperty("user.home"), ".javadocky");
+        home.toFile().mkdirs();
+        log.info("Making storage at {}", home.toFile().getAbsolutePath());
+        return new LocalStorage(home);
     }
 
     private String buildResponse(ServerRequest req) {
