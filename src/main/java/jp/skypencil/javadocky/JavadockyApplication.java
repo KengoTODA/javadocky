@@ -2,12 +2,9 @@ package jp.skypencil.javadocky;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +14,8 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import reactor.core.publisher.Flux;
+import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @Slf4j
@@ -29,9 +27,9 @@ public class JavadockyApplication {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> routes() {
+    public RouterFunction<ServerResponse> routes(RequestHandler requestHandler) {
         return route(GET(URL_PATTERN),
-                req -> ok().body(Flux.just(buildResponse(req)), String.class));
+                req -> buildResponse(req, requestHandler));
     }
 
     @Bean
@@ -42,16 +40,16 @@ public class JavadockyApplication {
         return new LocalStorage(home);
     }
 
-    private String buildResponse(ServerRequest req) {
+    private Mono<ServerResponse> buildResponse(ServerRequest req, RequestHandler requestHandler) {
         String groupId = req.pathVariable("groupId");
         String artifactId = req.pathVariable("artifactId");
         String version = req.pathVariable("version");
         String path = findFilePath(req);
         if (path == null || path.isEmpty()) {
-            return String.format("%s:%s:%s", groupId, artifactId, version);
-        } else {
-            return String.format("%s:%s:%s/%s", groupId, artifactId, version, path);
+            path = "index.html";
         }
+
+        return requestHandler.response(groupId, artifactId, version, path);
     }
 
     /**
