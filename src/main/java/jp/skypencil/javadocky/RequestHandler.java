@@ -1,9 +1,11 @@
 package jp.skypencil.javadocky;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static org.springframework.web.reactive.function.server.ServerResponse.status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -30,7 +32,7 @@ class RequestHandler {
             } else {
                 log.info("Javadoc for {}:{}:{} not found, kick a job to download & unzip them", groupId, artifactId, version);
                 extractor.extract(groupId, artifactId, version).subscribe();
-                return ok().body(Mono.just("File not found, trying to download.."), String.class);
+                return status(HttpStatus.NOT_FOUND).body(Mono.just("File not found, trying to download.."), String.class);
             }
         });
     }}
