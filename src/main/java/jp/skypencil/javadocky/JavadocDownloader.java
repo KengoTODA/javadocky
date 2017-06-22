@@ -3,14 +3,15 @@ package jp.skypencil.javadocky;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.channels.SeekableByteChannel;
-import java.nio.file.Files;
+import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import org.springframework.web.reactive.function.BodyExtractor;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -57,33 +59,50 @@ class JavadocDownloader {
         @Override
         public Mono<File> extract(ReactiveHttpInputMessage inputMessage,
                 BodyExtractor.Context context) {
-            return Mono.fromDirect(subscriber -> {
+            return Mono.create(emitter -> {
                 try {
                     File file = File.createTempFile("downloaded", ".jar");
-                    SeekableByteChannel channel = Files.newByteChannel(file.toPath(), StandardOpenOption.WRITE);
+                    AtomicInteger size = new AtomicInteger(0);
+                    AsynchronousFileChannel channel = AsynchronousFileChannel.open(file.toPath(), StandardOpenOption.WRITE);
                     inputMessage.getBody()
                     .doFinally(signal -> {
-                        try {
+                        if (channel.isOpen()) try {
                             channel.close();
                         } catch (IOException e) {
                             throw new UncheckedIOException(e);
                         }
                     })
                     .map(DataBuffer::asByteBuffer)
-                    .map(buffer -> {
-                        try {
-                            return channel.write(buffer);
-                        } catch (IOException e) {
-                            throw new UncheckedIOException(e);
-                        }
+                    .flatMap(buffer -> {
+                        int position = size.getAndAdd(buffer.capacity());
+                        CompletableFuture<Integer> future = makeCompletableFuture(channel.write(buffer, position));
+                        return Mono.fromFuture(future);
                     })
                     .reduce((a, b) -> a + b)
-                    .subscribe(total -> {
+                    .doOnNext(total -> {
                         log.info("Downloaded {} bytes", total);
-                        subscriber.onNext(file);
-                    });
+                    })
+                    .subscribe(total -> {
+                        if (channel.isOpen()) try {
+                            channel.close();
+                        } catch (IOException e) {
+                            emitter.error(e);
+                        }
+                        emitter.success(file);
+                    }, emitter::error);
                 } catch (RuntimeException | IOException e) {
-                    subscriber.onError(e);
+                    emitter.error(e);
+                }
+            });
+        }
+
+        // https://stackoverflow.com/a/23302308/814928
+        private <T> CompletableFuture<T> makeCompletableFuture(Future<T> future) {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+                    return future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
                 }
             });
         }
