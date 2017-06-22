@@ -1,22 +1,21 @@
 package jp.skypencil.javadocky;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -36,7 +35,6 @@ class JavadocExtractor {
     private final Storage storage;
 
     Mono<Void> extract(String groupId, String artifactId, String version) {
-        AtomicInteger count = new AtomicInteger(0);
         return downloader.download(groupId, artifactId, version).flatMapMany(downloaded -> {
                 if (!downloaded.isPresent()) {
                     String message = String.format("Javadoc.jar not found for %s:%s:%s", groupId, artifactId, version);
@@ -45,18 +43,10 @@ class JavadocExtractor {
                 return unzip(downloaded.get());
             }).flatMap(nameAndData -> {
                 String name = nameAndData.getT1();
-                log.info("Count: {}, name: {}", count.incrementAndGet(), name);
                 Flux<ByteBuffer> data = nameAndData.getT2();
                 return storage.write(groupId, artifactId, version, name, data);
             })
-            .doFinally(signal -> {
-                log.info("Closed, signal is {}", signal);
-            })
-            .count()
-            .ofType(Void.class)
-            .doFinally(signal -> {
-                log.info("Closed, signal is {}", signal);
-            });
+            .reduce((a,b) -> a);
     }
 
     Flux<Tuple2<String, Flux<ByteBuffer>>> unzip(File file) {
@@ -66,48 +56,72 @@ class JavadocExtractor {
         } catch (IOException e) {
             return Flux.error(e);
         }
-        return Flux.<Tuple2<String, Flux<ByteBuffer>>>from(subscriber -> {
+        // Flux.from invokes internal lambda immediately, so use Flux.create instead
+        Flux<Tuple2<String, Flux<ByteBuffer>>> result = Flux.<Tuple2<String, Flux<ByteBuffer>>>create(emitter -> {
+            AtomicInteger opened = new AtomicInteger(0);
+            // When we use emitter (FluxSink), we need to consider how we should handle cancellation
+            emitter.onCancel(() -> {
+                if (emitter.isCancelled() && opened.get() > 0) {
+                    try {
+                        zip.close();
+                    } catch (IOException e) {
+                        log.warn("Failed to close ZIP input stream", e);
+                    }
+                }
+            });
+
             Enumeration<? extends ZipEntry> entries = zip.entries();
-            int count = 0;
-            while (entries.hasMoreElements()) {
+            while (!emitter.isCancelled() && entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 if (entry.isDirectory()) {
                     continue;
                 }
                 try {
                     InputStream input = zip.getInputStream(entry);
-                    subscriber.onNext(handleEntry(entry, input));
+                    Tuple2<String, Flux<ByteBuffer>> tuple = handleEntry(entry, input);
+                    opened.incrementAndGet();
+                    tuple.getT2().doFinally(signal -> {
+                        if (opened.decrementAndGet() == 0) {
+                            // Closing ZipFile will close all InputStream created from it, so we need to wait until all InputStreams are closed
+                            try {
+                                zip.close();
+                            } catch (IOException e) {
+                                log.warn("Failed to close ZIP input stream", e);
+                            }
+                        }
+                    });
+                    emitter.next(tuple);
                 } catch (IOException e) {
-                    subscriber.onError(e);
+                    emitter.error(e);
                 }
-                ++count;
             }
-            log.warn("COUNT {}", count);
-            subscriber.onComplete();
-        }).doFinally(signal -> {
-            try {
-                zip.close();
-            } catch (IOException e) {
-                log.warn("Failed to close ZIP input stream", e);
-            }
+            emitter.complete();
         });
+        return result;
     }
 
     private Tuple2<String, Flux<ByteBuffer>> handleEntry(ZipEntry entry, InputStream input) throws IOException {
         String name = entry.getName();
-        // FIXME We're using blocking I/O and on-memory storage, try to find how to handle ZIP entry based on Reactor
-        ByteBuffer byteBuffer;
-        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[8 * 1024];
-            int len;
-            while ((len = input.read(buffer)) != -1) {
-                output.write(buffer, 0, len);
+        // Flux.from invokes internal lambda immediately, so use Flux.create instead
+        Flux<ByteBuffer> flux = Flux.create(emitter -> {
+            try {
+                byte[] buffer = new byte[8 * 1024];
+                int len;
+                while (!emitter.isCancelled() && (len = input.read(buffer)) != -1) {
+                    ByteBuffer byteBuffer = ByteBuffer.wrap(Arrays.copyOf(buffer, len));
+                    emitter.next(byteBuffer);
+                }
+            } catch (IOException e) {
+                emitter.error(e);
+            } finally {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    log.warn("Failed to close InputStream from ZIP file", e);
+                }
             }
-            byteBuffer = ByteBuffer.wrap(output.toByteArray());
-        } finally {
-            input.close();
-        }
-
-        return Tuples.of(name, Flux.just(byteBuffer));
+            emitter.complete();
+        });
+        return Tuples.of(name, flux);
     }
 }
