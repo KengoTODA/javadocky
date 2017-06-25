@@ -33,7 +33,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-class RequestHandler {
+class DocumentController {
     private static final String URL_PATTERN = "/doc/{groupId}/{artifactId}/{version}/**";
 
     private static final String URL_PATTERN_FOR_LATEST = "/doc/{groupId}/{artifactId}/latest/**";
@@ -52,8 +52,8 @@ class RequestHandler {
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz");
 
     @Bean
-    public RouterFunction<ServerResponse> routeForLatestPage(RequestHandler requestHandler) {
-        return route(GET(RequestHandler.URL_PATTERN_FOR_LATEST), req -> {
+    public RouterFunction<ServerResponse> routeForLatestPage(DocumentController requestHandler) {
+        return route(GET(DocumentController.URL_PATTERN_FOR_LATEST), req -> {
             String groupId = req.pathVariable("groupId");
             String artifactId = req.pathVariable("artifactId");
             String rawPath = findRawFilePath(req);
@@ -79,8 +79,8 @@ class RequestHandler {
      * @return router function for artifact page
      */
     @Bean
-    public RouterFunction<ServerResponse> routeForArtifact(RequestHandler requestHandler) {
-        return route(GET(RequestHandler.URL_PATTERN_WITHOUT_VERSION),
+    public RouterFunction<ServerResponse> routeForArtifact(DocumentController requestHandler) {
+        return route(GET(DocumentController.URL_PATTERN_WITHOUT_VERSION),
                 req -> {
                     String groupId = req.pathVariable("groupId");
                     String artifactId = req.pathVariable("artifactId");
@@ -100,8 +100,8 @@ class RequestHandler {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> routeForPage(RequestHandler requestHandler) {
-        return route(GET(RequestHandler.URL_PATTERN), req -> {
+    public RouterFunction<ServerResponse> routeForPage(DocumentController requestHandler) {
+        return route(GET(DocumentController.URL_PATTERN), req -> {
             String groupId = req.pathVariable("groupId");
             String artifactId = req.pathVariable("artifactId");
             String path = findFilePath(req);

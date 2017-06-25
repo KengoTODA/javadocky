@@ -26,7 +26,7 @@ public class JavadockyApplication {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> routeIndex(RequestHandler requestHandler) {
+    public RouterFunction<ServerResponse> routeIndex(DocumentController requestHandler) {
         return route(GET("/"),
                 req -> ok().body(Mono.just(new ClassPathResource("static/index.html")), ClassPathResource.class));
     }
