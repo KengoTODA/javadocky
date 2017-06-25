@@ -32,7 +32,7 @@ public class JavadockyApplication {
     }
 
     @Bean
-    public Storage localStorage() {
+    public LocalStorage localStorage() {
         Path home = Paths.get(System.getProperty("user.home"), ".javadocky");
         home.toFile().mkdirs();
         log.info("Making storage at {}", home.toFile().getAbsolutePath());
