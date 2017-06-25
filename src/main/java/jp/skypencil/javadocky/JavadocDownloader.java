@@ -28,6 +28,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
+// FIXME ByteBuffer leak? Try -Dio.netty.leakDetection.level=advanced to get detailed report
 class JavadocDownloader {
     private static final String REPO_URL = "http://central.maven.org/maven2/";
     private WebClient webClient = WebClient.create(REPO_URL);

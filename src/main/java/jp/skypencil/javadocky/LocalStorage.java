@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class LocalStorage implements Storage {
     @NonNull
+    @Getter
     private final Path root;
 
     @Override
@@ -77,5 +79,4 @@ public class LocalStorage implements Storage {
             }
         });
     }
-
 }
