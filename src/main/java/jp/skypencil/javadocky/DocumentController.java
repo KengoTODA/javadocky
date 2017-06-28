@@ -5,7 +5,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static org.springframework.web.reactive.function.server.ServerResponse.seeOther;
-import static org.springframework.web.reactive.function.server.ServerResponse.status;
 
 import java.net.URI;
 import java.time.Instant;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.CacheControl;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -132,9 +130,14 @@ class DocumentController {
 
     private Mono<ServerResponse> response(String groupId, String artifactId, String version, String path, boolean shortlyExpired) {
         return storage.find(groupId, artifactId, version, path).flatMap(file -> {
-            if (file.isPresent()) {
-                log.trace("Requested file found at {}", file.get());
-                ZonedDateTime lastModified = ZonedDateTime.ofInstant(Instant.ofEpochMilli(file.get().lastModified()), ZoneId.systemDefault());
+            if (!file.isPresent()) {
+                log.info("{} for {}:{}:{} not found, try to unzip", path, groupId, artifactId, version);
+                return extractor.extract(groupId, artifactId, version, path);
+            }
+            return Mono.just(file.get());
+        }).flatMap(file -> {
+                log.trace("Requested file found at {}", file.getAbsolutePath());
+                ZonedDateTime lastModified = ZonedDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
                 ZonedDateTime expired = shortlyExpired
                         ? ZonedDateTime.now().plusDays(1L)
                         // according to RFC7234, 1 year is max value for Expires
@@ -144,11 +147,6 @@ class DocumentController {
                         // all data are immutable, does not depend on session state
                         .header("Cache-Control", "public")
                         .header("Expires", expired.format(FORMAT))
-                        .body(Mono.just(new FileSystemResource(file.get())), FileSystemResource.class);
-            } else {
-                log.info("Javadoc for {}:{}:{} not found, kick a job to download & unzip them", groupId, artifactId, version);
-                extractor.extract(groupId, artifactId, version).subscribe();
-                return status(HttpStatus.NOT_FOUND).body(Mono.just("File not found, trying to download.."), String.class);
-            }
+                        .body(Mono.just(new FileSystemResource(file)), FileSystemResource.class);
         });
     }}

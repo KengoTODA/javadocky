@@ -3,6 +3,7 @@ package jp.skypencil.javadocky;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -34,19 +35,47 @@ class JavadocExtractor {
     @NonNull
     private final Storage storage;
 
-    Mono<Void> extract(String groupId, String artifactId, String version) {
-        return downloader.download(groupId, artifactId, version).flatMapMany(downloaded -> {
+    Mono<File> extract(String groupId, String artifactId, String version, String path) {
+        return downloader.download(groupId, artifactId, version).flatMap(downloaded -> {
                 if (!downloaded.isPresent()) {
                     String message = String.format("Javadoc.jar not found for %s:%s:%s", groupId, artifactId, version);
                     return Mono.error(new IllegalArgumentException(message));
                 }
-                return unzip(downloaded.get());
-            }).flatMap(nameAndData -> {
-                String name = nameAndData.getT1();
-                Flux<ByteBuffer> data = nameAndData.getT2();
-                return storage.write(groupId, artifactId, version, name, data);
-            })
-            .reduce((a,b) -> a);
+                Flux<ByteBuffer> flux = unzip(downloaded.get(), groupId, artifactId, version, path);
+                return storage.write(groupId, artifactId, version, path, flux);
+            });
+    }
+
+    private Flux<ByteBuffer> unzip(File jar, String groupId, String artifactId, String version, String path) {
+        try {
+            ZipFile zip = new ZipFile(jar);
+            ZipEntry entry = zip.getEntry(path);
+            if (entry == null) {
+                zip.close();
+                String message = String.format("%s not found in javadoc.jar of %s:%s:%s", path, groupId, artifactId, version);
+                return Flux.error(new IllegalArgumentException(message));
+            }
+            return Flux.<ByteBuffer>create(sink -> {
+                byte[] bytes = new byte[8 * 1024];
+                try (InputStream input = zip.getInputStream(entry)){
+                    int len;
+                    while ((len = input.read(bytes)) != -1) {
+                        sink.next(ByteBuffer.wrap(bytes, 0, len));
+                    }
+                } catch (IOException e) {
+                    sink.error(e);
+                }
+                sink.complete();
+            }).doFinally(signal -> {
+                try {
+                    zip.close();
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            });
+        } catch (IOException e) {
+            return Flux.error(e);
+        }
     }
 
     Flux<Tuple2<String, Flux<ByteBuffer>>> unzip(File file) {

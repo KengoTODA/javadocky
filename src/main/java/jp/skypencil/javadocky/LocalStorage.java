@@ -37,7 +37,7 @@ public class LocalStorage implements Storage {
     }
 
     @Override
-    public Mono<Void> write(String groupId, String artifactId, String version,
+    public Mono<File> write(String groupId, String artifactId, String version,
             String path, Flux<ByteBuffer> data) {
         File dir = root.resolve(groupId).resolve(artifactId).resolve(version)
                 .toFile();
@@ -46,7 +46,7 @@ public class LocalStorage implements Storage {
             file.getParentFile().mkdirs();
         }
 
-        return Mono.from(subscriber -> {
+        return Mono.create(subscriber -> {
             try {
                 SeekableByteChannel channel = Files.newByteChannel(
                         file.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE);
@@ -54,7 +54,7 @@ public class LocalStorage implements Storage {
                     try {
                         channel.close();
                     } catch (IOException e) {
-                        subscriber.onError(e);
+                        subscriber.error(e);
                     }
                 })
                 .map(buffer -> {
@@ -69,9 +69,10 @@ public class LocalStorage implements Storage {
                         total -> {
                             log.info("Written {} bytes data to {}",
                                     total, file.getAbsolutePath());
-                        }, subscriber::onError, subscriber::onComplete);
+                            subscriber.success(file);
+                        }, subscriber::error);
             } catch (IOException | RuntimeException e) {
-                subscriber.onError(e);
+                subscriber.error(e);
             }
         });
     }

@@ -2,9 +2,7 @@ package jp.skypencil.javadocky;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,8 +53,9 @@ public class JavadocExtractorTest {
         JavadocExtractor extractor = new JavadocExtractor(downloader, storage);
 
         assertFalse(storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block().isPresent());
-        extractor.extract("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3").block();
-        assertTrue(storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block().isPresent());
+        File downloaded = extractor.extract("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block();
+        assertTrue(downloaded.isFile());
+        assertEquals(downloaded, storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block().get());
     }
 
 }
