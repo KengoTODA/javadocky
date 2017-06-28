@@ -28,7 +28,7 @@ public class JavadocExtractorTest {
 
     @Test
     public void testUnzip() throws IOException {
-        JavadocDownloader downloader = new JavadocDownloader();
+        JavadocDownloader downloader = new JavadocDownloader(folder.newFolder("javadocky-javadoc").toPath());
         Path root = folder.newFolder("javadocky").toPath();
         Storage storage = new LocalStorage(root);
         JavadocExtractor extractor = new JavadocExtractor(downloader, storage);
@@ -49,7 +49,7 @@ public class JavadocExtractorTest {
 
     @Test
     public void test() throws IOException {
-        JavadocDownloader downloader = new JavadocDownloader();
+        JavadocDownloader downloader = new JavadocDownloader(folder.newFolder("javadocky-javadoc").toPath());
         Path root = folder.newFolder("javadocky").toPath();
         Storage storage = new LocalStorage(root);
         JavadocExtractor extractor = new JavadocExtractor(downloader, storage);

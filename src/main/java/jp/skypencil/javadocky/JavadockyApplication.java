@@ -33,9 +33,17 @@ public class JavadockyApplication {
 
     @Bean
     public Storage localStorage() {
-        Path home = Paths.get(System.getProperty("user.home"), ".javadocky");
+        Path home = Paths.get(System.getProperty("user.home"), ".javadocky", "storage");
         home.toFile().mkdirs();
         log.info("Making storage at {}", home.toFile().getAbsolutePath());
         return new LocalStorage(home);
+    }
+
+    @Bean
+    public JavadocDownloader javadocDownloader() {
+        Path home = Paths.get(System.getProperty("user.home"), ".javadocky", "javadoc");
+        home.toFile().mkdirs();
+        log.info("Making javadoc storage at {}", home.toFile().getAbsolutePath());
+        return new JavadocDownloader(home);
     }
 }
