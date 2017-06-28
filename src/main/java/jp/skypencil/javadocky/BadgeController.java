@@ -11,7 +11,7 @@ import java.net.URI;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-@Component
+@Controller
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 class BadgeController {
     @NonNull

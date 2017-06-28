@@ -10,7 +10,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.xml.XmlEventDecoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
  * <p>A {@link VersionRepository} implementation which refers XML in remote Maven repository.</p>
  */
 @Slf4j
-@Component
+@Repository
 class RemoteRepoVersionReposiory implements VersionRepository {
     private static final String REPO_URL = "http://central.maven.org/maven2/";
     private static final String XML_NAME = "maven-metadata.xml";

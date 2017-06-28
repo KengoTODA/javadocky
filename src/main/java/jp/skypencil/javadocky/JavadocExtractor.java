@@ -12,7 +12,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import reactor.util.function.Tuples;
  * This class is responsible to download javadoc.jar and unzip its contents onto {@link Storage}.
  */
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 class JavadocExtractor {
     @NonNull
