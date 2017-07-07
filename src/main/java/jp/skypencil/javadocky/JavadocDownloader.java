@@ -77,7 +77,7 @@ class JavadocDownloader {
             File parent = path.toFile().getParentFile();
 
             try {
-                if (!parent.mkdirs()) {
+                if (!parent.isDirectory() && !parent.mkdirs()) {
                     throw new IOException("Failed to make directory at " + parent.getAbsolutePath());
                 }
                 return FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE);

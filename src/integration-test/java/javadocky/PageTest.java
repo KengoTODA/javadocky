@@ -26,7 +26,7 @@ public class PageTest {
      * Page page should have {@code <frameset>} to display javadoc.
      */
     @Test
-    public void testPagePageShouldHaveFrameset() {
+    public void testPageShouldHaveFrameset() {
         open("http://localhost:8080/page/jp.skypencil.guava/helper/1.0.1/");
         assertTrue(getElement(By.tagName("frameset")).exists());
     }
@@ -35,7 +35,7 @@ public class PageTest {
      * Page page should support {@code latest} version, which redirects to specific version.
      */
     @Test
-    public void testDocPageShouldHaveListOfVersion() {
+    public void testLatestPageRedirectsToSpecificVersion() {
         open("http://localhost:8080/page/jp.skypencil.guava/helper/latest/");
         assertThat(getWebDriver().getCurrentUrl(), is("http://localhost:8080/page/jp.skypencil.guava/helper/1.0.1/"));
     }
