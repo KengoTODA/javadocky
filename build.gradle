@@ -15,6 +15,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply from: 'https://raw.github.com/brunodecarvalho/gradle-plugins/master/integration-test.gradle'
 
 version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -29,6 +30,7 @@ dependencies {
   compile('org.springframework.boot:spring-boot-starter-webflux')
   compileOnly "org.projectlombok:lombok:1.16.16"
   testCompile('org.springframework.boot:spring-boot-starter-test')
+  testCompile('com.codeborne:selenide:4.5.1')
 }
 
 wrapper {
