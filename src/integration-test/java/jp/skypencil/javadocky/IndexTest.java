@@ -1,4 +1,4 @@
-package javadocky;
+package jp.skypencil.javadocky;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.getElement;
@@ -9,9 +9,17 @@ import static org.junit.Assume.assumeThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IndexTest {
+    @LocalServerPort
+    private int port;
 
     @Before
     public void config() {
@@ -25,7 +33,7 @@ public class IndexTest {
      */
     @Test
     public void testTitleExplainsServiceName() {
-        open("http://localhost:8080/");
+        open("http://localhost:" + port + "/");
         getElement(By.tagName("h1")).shouldHave(text("Javadocky"));
     }
 }

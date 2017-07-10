@@ -1,4 +1,4 @@
-package javadocky;
+package jp.skypencil.javadocky;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -11,9 +11,17 @@ import static org.junit.Assume.assumeThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DocTest {
+    @LocalServerPort
+    private int port;
 
     @Before
     public void config() {
@@ -27,7 +35,7 @@ public class DocTest {
      */
     @Test
     public void testDocPageShouldHaveIframe() {
-        open("http://localhost:8080/doc/jp.skypencil.guava/helper/1.0.1/");
+        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/1.0.1/");
         assertTrue(getElement(By.tagName("iframe")).exists());
     }
 
@@ -36,7 +44,7 @@ public class DocTest {
      */
     @Test
     public void testDocPageShouldHaveListOfArtifactId() {
-        open("http://localhost:8080/doc/jp.skypencil.guava/helper/1.0.1/");
+        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/1.0.1/");
         $("div.dropdown#artifact-id").shouldHave(text("helper"));
     }
 
@@ -45,7 +53,7 @@ public class DocTest {
      */
     @Test
     public void testDocPageShouldHaveListOfVersion() {
-        open("http://localhost:8080/doc/jp.skypencil.guava/helper/1.0.1/");
+        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/1.0.1/");
         $("div.dropdown#version").shouldHave(text("1.0.1"));
     }
 }
