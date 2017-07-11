@@ -12,7 +12,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
@@ -57,11 +56,10 @@ class DocumentController {
             String rawPath = findRawFilePath(req);
             log.debug("Got access to latest page {}:{} with path {}", groupId, artifactId, rawPath);
 
-            return versionRepo.findLatest(groupId, artifactId).flatMap(optionalVersion -> {
-                if (!optionalVersion.isPresent()) {
+            return versionRepo.findLatest(groupId, artifactId).flatMap(latestVersion -> {
+                if (latestVersion == null) {
                     return notFound().build();
                 }
-                ArtifactVersion latestVersion = optionalVersion.get();
                 URI uri = URI.create("/doc/").resolve(groupId + "/").resolve(artifactId + "/").resolve(latestVersion.toString() + "/").resolve(rawPath);
                 log.info("Latest version for {}:{} is {}, redirecting to {}",
                         groupId, artifactId, latestVersion, uri);
@@ -84,16 +82,13 @@ class DocumentController {
                     String artifactId = req.pathVariable("artifactId");
                     log.debug("Got access to artifact page {}:{}", groupId, artifactId);
 
-                    return versionRepo.findLatest(groupId, artifactId).flatMap(optionalVersion -> {
-                        if (!optionalVersion.isPresent()) {
-                            return notFound().cacheControl(CacheControl.noStore()).build();
-                        }
-                        ArtifactVersion latestVersion = optionalVersion.get();
+                    return versionRepo.findLatest(groupId, artifactId)
+                            .flatMap(latestVersion -> {
                         URI uri = URI.create("/doc/").resolve(groupId + "/").resolve(artifactId + "/").resolve(latestVersion.toString() + "/");
                         log.info("Latest version for {}:{} is {}, redirecting to {}",
                                 groupId, artifactId, latestVersion, uri);
                         return seeOther(uri).build();
-                    });
+                    }).switchIfEmpty(notFound().cacheControl(CacheControl.noStore()).build());
                 });
     }
 

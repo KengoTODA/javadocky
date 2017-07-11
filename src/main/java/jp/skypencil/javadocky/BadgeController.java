@@ -8,7 +8,6 @@ import static org.springframework.web.reactive.function.server.ServerResponse.se
 
 import java.net.URI;
 
-import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
@@ -39,18 +38,14 @@ class BadgeController {
             String artifactId = req.pathVariable("artifactId");
             log.debug("Got access to badge for {}:{}", groupId, artifactId);
 
-            return versionRepo.findLatest(groupId, artifactId).flatMap(optionalVersion -> {
-                if (!optionalVersion.isPresent()) {
-                    return notFound().build();
-                }
-                ArtifactVersion latestVersion = optionalVersion.get();
+            return versionRepo.findLatest(groupId, artifactId).flatMap(latestVersion -> {
                 URI shieldsUri = URI.create(String.format("https://img.shields.io/badge/%s-%s-%s.%s",
                         escape(req.queryParam("label").orElse("javadoc")),
                         escape(latestVersion.toString()),
                         escape(req.queryParam("color").orElse("brightgreen")),
                         ext));
                 return seeOther(shieldsUri).build();
-            });
+            }).switchIfEmpty(notFound().build());
         });
     }
 

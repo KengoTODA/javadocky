@@ -12,7 +12,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
@@ -53,16 +52,12 @@ class PageController {
             String path = findFilePath(req);
             String version = req.pathVariable("version");
             if ("latest".equals(version)) {
-                return versionRepo.findLatest(groupId, artifactId).flatMap(optionalVersion -> {
-                    if (!optionalVersion.isPresent()) {
-                        return notFound().cacheControl(CacheControl.noStore()).build();
-                    }
-                    ArtifactVersion latestVersion = optionalVersion.get();
+                return versionRepo.findLatest(groupId, artifactId).flatMap(latestVersion -> {
                     URI uri = URI.create("/page/").resolve(groupId + "/").resolve(artifactId + "/").resolve(latestVersion.toString() + "/");
                     log.info("Latest version for {}:{} is {}, redirecting to {}",
                             groupId, artifactId, latestVersion, uri);
                     return seeOther(uri).build();
-                });
+                }).switchIfEmpty(notFound().cacheControl(CacheControl.noStore()).build());
             } else {
                 // TODO support major_version
             }
