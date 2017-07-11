@@ -28,7 +28,7 @@ class BadgeController {
     private final VersionRepository versionRepo;
 
     @Bean
-    public RouterFunction<ServerResponse> routeForBadge(DocumentController requestHandler) {
+    public RouterFunction<ServerResponse> routeForBadge() {
         return route(GET("/badge/{groupId}/{artifactId}.{ext}"), req -> {
             String ext = req.pathVariable("ext");
             if (!ext.equals("png") && !ext.equals("svg")) {

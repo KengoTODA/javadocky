@@ -46,7 +46,7 @@ class PageController {
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz");
 
     @Bean
-    public RouterFunction<ServerResponse> routeForPage(PageController requestHandler) {
+    public RouterFunction<ServerResponse> routeForPage() {
         return route(GET(PageController.URL_PATTERN), req -> {
             String groupId = req.pathVariable("groupId");
             String artifactId = req.pathVariable("artifactId");
