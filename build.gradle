@@ -56,6 +56,9 @@ dependencies {
 }
 
 task integrationTest(type: Test) {
+  // for SPR-15707
+  systemProperty "io.netty.buffer.bytebuf.checkAccessible", "false"
+
   systemProperty "webdriver.chrome.driver", "/Users/kengo/bin/chromedriver"
   testClassesDirs = files(sourceSets.integrationTest.java.outputDir)
   classpath = sourceSets.integrationTest.runtimeClasspath
