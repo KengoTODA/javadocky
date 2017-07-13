@@ -11,6 +11,7 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
@@ -33,6 +34,11 @@ class LocalStorageVersionRepository implements VersionRepository {
             .sorted(Comparator.reverseOrder())
             .findFirst();
         return Mono.justOrEmpty(found);
+    }
+
+    @Override
+    public Flux<? extends ArtifactVersion> list(String groupId, String artifactId) {
+        throw new UnsupportedOperationException();
     }
 
 }

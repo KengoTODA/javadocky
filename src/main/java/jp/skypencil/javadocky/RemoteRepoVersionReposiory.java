@@ -2,6 +2,7 @@ package jp.skypencil.javadocky;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.HashSet;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
@@ -57,5 +58,34 @@ class RemoteRepoVersionReposiory implements VersionRepository {
                 .reduce("", finder::parse)
                 .filter(s -> !s.isEmpty())
                 .map(DefaultArtifactVersion::new);
+    }
+
+    @Override
+    public Flux<? extends ArtifactVersion> list(String groupId, String artifactId) {
+        URI uri = URI.create(REPO_URL).resolve(groupId.replace('.', '/') + "/").resolve(artifactId + "/").resolve(XML_NAME);
+        log.info("Downloading metadata from {}", uri);
+         Mono<ClientResponse> response = webClient.get()
+            .uri(String.format("%s/%s/" + XML_NAME, groupId.replace('.', '/'), artifactId))
+            .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
+            .exchange();
+        return response.flatMapMany(this::listVersions);
+    }
+
+    private Flux<ArtifactVersion> listVersions(ClientResponse res) {
+        HttpStatus status = res.statusCode();
+        if (status == HttpStatus.NOT_FOUND) {
+            return Flux.empty();
+        } else if (!status.is2xxSuccessful()) {
+            return Flux.error(new IllegalArgumentException("Unexpected status code:" + status.value()));
+        }
+
+        Flux<DataBuffer> data = res.body(BodyExtractors.toDataBuffers());
+        AllVersionFinder finder = new AllVersionFinder();
+        // XXX -Dio.netty.buffer.bytebuf.checkAccessible=false is necessary, or we face IllegalReferenceCountException(refCnt = 0) in AbstractByteBuf.class
+        // https://jira.spring.io/browse/SPR-15707
+        return new XmlEventDecoder()
+                .decode(data, null, null, Collections.emptyMap())
+                .reduce(new HashSet<DefaultArtifactVersion>(), finder::parse)
+                .flatMapIterable(set -> set);
     }
 }
