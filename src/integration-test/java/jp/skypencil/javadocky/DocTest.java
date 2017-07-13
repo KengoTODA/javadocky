@@ -1,12 +1,12 @@
 package jp.skypencil.javadocky;
 
+import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getElement;
 import static com.codeborne.selenide.Selenide.open;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
 
 import org.junit.Before;
@@ -35,8 +35,8 @@ public class DocTest {
      */
     @Test
     public void testDocPageShouldHaveIframe() {
-        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/1.0.1/");
-        assertTrue(getElement(By.tagName("iframe")).exists());
+        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+        getElement(By.tagName("iframe")).should(exist);
     }
 
     /**
@@ -44,8 +44,8 @@ public class DocTest {
      */
     @Test
     public void testDocPageShouldHaveListOfArtifactId() {
-        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/1.0.1/");
-        $("div.dropdown#artifact-id").shouldHave(text("helper"));
+        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+        $("li.dropdown#artifact-id").shouldHave(text("helper"));
     }
 
     /**
@@ -53,7 +53,7 @@ public class DocTest {
      */
     @Test
     public void testDocPageShouldHaveListOfVersion() {
-        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/1.0.1/");
-        $("div.dropdown#version").shouldHave(text("1.0.1"));
+        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+        $("li.dropdown#version").shouldHave(text("1.0.1"));
     }
 }
