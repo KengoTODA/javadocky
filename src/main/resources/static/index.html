@@ -18,26 +18,38 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
           <a class="navbar-brand" href="#">Javadocky</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
+            <li class="active"><a href="#">About</a></li>
+            <li><a href="#api">API</a></li>
+            <li><a href="#badge-generator">Badge generator</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div id="main" class="container">
-      <h1>Javadocky</h1>
-      <p class="lead">An OSS clone of javadoc.io</p>
+      <h1 id="about">Javadocky</h1>
+      <p class="lead">This is a clone of <a href="https://javadoc.io/">javadoc.io</a>, based on Spring Boot 2.0.0.M2 and Spring WebFlux 5.0.0.RC2.
+      Visit <a href="https://github.com/KengoTODA/javadocky">GitHub</a> to fork!</p>
+
+      <h2 id="api">API</h2>
+      <h3>Doc</h3>
+      <p>Javadocky provides the doc URL which responds latest javadoc. It also has navigation which lists all available versions and other artifact in the same groupId.</p>
+      <p>For instance, <a href="/doc/com.github.spotbugs/spotbugs/"><code>/page/com.github.spotbugs/spotbugs/</code></a> will display latest Javadoc page of <code>com.github.spotbugs:spotbugs</code>.</p>
+
+      <h3>Page</h3>
+      <p>Javadocky provides the page URL which has fixed version and file name. It is useful to link to specific page.</p>
+      <p>For instance, <a href="/page/com.github.spotbugs/spotbugs/3.1.0-RC3/overview-summary.html"><code>/page/com.github.spotbugs/spotbugs/3.1.0-RC3/overview-summary.html</code></a> will display Javadoc page of <code>com.github.spotbugs:spotbugs:3.1.0-RC3</code> without frame.</p>
+      <p>It is also possible to use <code>latest</code> instead of specific version like <a href="/page/com.github.spotbugs/spotbugs/latest/overview-summary.html"><code>/page/com.github.spotbugs/spotbugs/latest/overview-summary.html</code></a>.</p>
+
+      <h3>Badge</h3>
+      <p>Javadocky provides the badge API which is suitable to guide users to latest javadoc by <code>README.md</code>.</p>
+      <p>For instance, <a href="/badge/com.github.spotbugs/spotbugs.svg"><code>/badge/com.github.spotbugs/spotbugs.svg</code></a> will display badge for javadoc of <code>com.github.spotbugs:spotbugs</code>.</p>
+
+      <h2 id="badge-generator">Badge generator</h2>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
