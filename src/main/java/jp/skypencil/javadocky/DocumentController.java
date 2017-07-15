@@ -5,7 +5,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,18 +26,23 @@ class DocumentController {
     @NonNull
     private final VersionRepository versionRepo;
 
+    @NonNull
+    private final ArtifactRepository artifactRepo;
+
     @Bean
     public RouterFunction<ServerResponse> routeForDoc() {
         return route(GET("/doc/{groupId}/{artifactId}"), req -> {
             String groupId = req.pathVariable("groupId");
             String artifactId = req.pathVariable("artifactId");
 
+            Flux<String> artifacts = artifactRepo.list(groupId);
             Flux<? extends ArtifactVersion> versions = versionRepo.list(groupId, artifactId);
             return versionRepo.findLatest(groupId, artifactId).flatMap(latestVersion -> {
+
                 Map<String, Object> model = new HashMap<>();
                 model.put("groupId", groupId);
                 model.put("artifactId", artifactId);
-                model.put("artifactIds", Collections.singleton(artifactId));
+                model.put("artifactIds", artifacts);
                 model.put("version", latestVersion);
                 model.put("versions", versions);
                 return ok().contentType(MediaType.TEXT_HTML).render("doc", model);
