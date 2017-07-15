@@ -11,6 +11,7 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
@@ -20,10 +21,10 @@ class LocalStorageVersionRepository implements VersionRepository {
     private final Path root;
 
     @Override
-    public Mono<Optional<? extends ArtifactVersion>> findLatest(String groupId, String artifactId) {
+    public Mono<ArtifactVersion> findLatest(String groupId, String artifactId) {
         File dir = root.resolve(groupId).resolve(artifactId).toFile();
         if (!dir.isDirectory()) {
-            return Mono.just(Optional.empty());
+            return Mono.empty();
         }
 
         Optional<DefaultArtifactVersion> found = Arrays.stream(dir.listFiles())
@@ -32,7 +33,12 @@ class LocalStorageVersionRepository implements VersionRepository {
             .map(DefaultArtifactVersion::new)
             .sorted(Comparator.reverseOrder())
             .findFirst();
-        return Mono.just(found);
+        return Mono.justOrEmpty(found);
+    }
+
+    @Override
+    public Flux<ArtifactVersion> list(String groupId, String artifactId) {
+        throw new UnsupportedOperationException();
     }
 
 }

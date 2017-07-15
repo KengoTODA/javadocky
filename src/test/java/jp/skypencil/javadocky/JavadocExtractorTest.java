@@ -1,8 +1,6 @@
 package jp.skypencil.javadocky;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,6 +8,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -18,6 +17,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 import reactor.util.function.Tuple2;
 
 public class JavadocExtractorTest {
@@ -41,8 +41,13 @@ public class JavadocExtractorTest {
             output.closeEntry();
         }
         Flux<Tuple2<String, Flux<ByteBuffer>>> result = extractor.unzip(zip);
-        ByteBuffer firstData = result.blockLast().getT2().blockLast();
-        assertThat(firstData, is(equalTo(ByteBuffer.wrap("World".getBytes(StandardCharsets.UTF_8)))));
+        StepVerifier.create(result)
+            .expectNextMatches(tuple -> 
+                tuple.getT1().equals("hello.txt") && tuple.getT2().blockFirst().equals(ByteBuffer.wrap("Hello".getBytes(StandardCharsets.UTF_8))))
+            .expectNextMatches(tuple -> 
+            tuple.getT1().equals("world.txt") && tuple.getT2().blockFirst().equals(ByteBuffer.wrap("World".getBytes(StandardCharsets.UTF_8))))
+            .expectComplete()
+            .verify();
     }
 
     @Test
@@ -52,10 +57,16 @@ public class JavadocExtractorTest {
         Storage storage = new LocalStorage(root);
         JavadocExtractor extractor = new JavadocExtractor(downloader, storage);
 
-        assertFalse(storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block().isPresent());
+        StepVerifier.create(storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html"))
+            .expectNext(Optional.empty())
+            .expectComplete()
+            .verify();
         File downloaded = extractor.extract("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block();
         assertTrue(downloaded.isFile());
-        assertEquals(downloaded, storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block().get());
+        StepVerifier.create(storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html"))
+            .expectNextMatches(optional -> optional.get().equals(downloaded))
+            .expectComplete()
+            .verify();
     }
 
 }
