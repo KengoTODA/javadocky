@@ -1,7 +1,6 @@
 package jp.skypencil.javadocky;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +19,9 @@ public class LocalStorageArtifactRepositoryTest {
     public void testNoDir() throws IOException {
         File root = folder.newFolder();
         LocalStorageArtifactRepository repo = new LocalStorageArtifactRepository(root.toPath());
-        assertThat(repo.list("foo").count().block(), is(0L));
+        StepVerifier.create(repo.list("foo"))
+            .expectComplete()
+            .verify();
     }
 
     @Test
@@ -28,7 +29,9 @@ public class LocalStorageArtifactRepositoryTest {
         File root = folder.newFolder();
         LocalStorageArtifactRepository repo = new LocalStorageArtifactRepository(root.toPath());
         assertTrue(new File(root, "foo").mkdir());
-        assertThat(repo.list("foo").count().block(), is(0L));
+        StepVerifier.create(repo.list("foo"))
+            .expectComplete()
+            .verify();
     }
 
     @Test
@@ -42,6 +45,7 @@ public class LocalStorageArtifactRepositoryTest {
         StepVerifier.create(repo.list("group"))
             .expectNext("artifact-1")
             .expectNext("artifact-2")
-            .expectComplete();
+            .expectComplete()
+            .verify();
     }
 }
