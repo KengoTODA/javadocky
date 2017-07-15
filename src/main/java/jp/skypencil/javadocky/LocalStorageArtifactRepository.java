@@ -13,7 +13,8 @@ class LocalStorageArtifactRepository implements ArtifactRepository {
     private final Path root;
 
     @Override
-    public Flux<String> list(String groupId) {
+    @NonNull
+    public Flux<String> list(@NonNull String groupId) {
         File groupDir = root.resolve(groupId + "/").toFile();
         if (!groupDir.isDirectory()) {
             return Flux.empty();

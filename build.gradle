@@ -45,6 +45,7 @@ dependencies {
   compileOnly "org.projectlombok:lombok:1.16.16"
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('com.codeborne:selenide:4.5.1')
+  testCompile('io.projectreactor:reactor-test')
 
   // for SPR-15761
   compile 'org.thymeleaf:thymeleaf-spring5:3.0.7-SNAPSHOT'
