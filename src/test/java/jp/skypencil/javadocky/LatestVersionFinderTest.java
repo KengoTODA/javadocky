@@ -1,8 +1,5 @@
 package jp.skypencil.javadocky;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
@@ -14,6 +11,7 @@ import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.codec.xml.XmlEventDecoder;
 
 import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 public class LatestVersionFinderTest {
     private static final String XML = "<metadata>" + "<groupId>com.github.spotbugs</groupId>" + "<artifactId>spotbugs</artifactId>"
@@ -26,7 +24,10 @@ public class LatestVersionFinderTest {
         Flux<XMLEvent> events =
                 new XmlEventDecoder().decode(Flux.just(stringBuffer(XML)), null, null, Collections.emptyMap());
         LatestVersionFinder finder = new LatestVersionFinder();
-        assertThat(events.reduce("", finder::parse).block(), is("3.1.0-RC3"));
+        StepVerifier.create(events.reduce("", finder::parse))
+            .expectNext("3.1.0-RC3")
+            .expectComplete()
+            .verify();
     }
 
     private DataBuffer stringBuffer(String value) {

@@ -21,7 +21,7 @@ class LocalStorageVersionRepository implements VersionRepository {
     private final Path root;
 
     @Override
-    public Mono<? extends ArtifactVersion> findLatest(String groupId, String artifactId) {
+    public Mono<ArtifactVersion> findLatest(String groupId, String artifactId) {
         File dir = root.resolve(groupId).resolve(artifactId).toFile();
         if (!dir.isDirectory()) {
             return Mono.empty();
@@ -37,7 +37,7 @@ class LocalStorageVersionRepository implements VersionRepository {
     }
 
     @Override
-    public Flux<? extends ArtifactVersion> list(String groupId, String artifactId) {
+    public Flux<ArtifactVersion> list(String groupId, String artifactId) {
         throw new UnsupportedOperationException();
     }
 

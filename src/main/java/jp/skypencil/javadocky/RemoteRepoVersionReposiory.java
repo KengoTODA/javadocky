@@ -31,7 +31,7 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     private WebClient webClient = WebClient.create(REPO_URL);
 
     @Override
-    public Mono<? extends ArtifactVersion> findLatest(String groupId, String artifactId) {
+    public Mono<ArtifactVersion> findLatest(String groupId, String artifactId) {
         URI uri = URI.create(REPO_URL).resolve(groupId.replace('.', '/') + "/").resolve(artifactId + "/").resolve(XML_NAME);
         log.info("Downloading metadata from {}", uri);
          Mono<ClientResponse> response = webClient.get()
@@ -61,7 +61,7 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     }
 
     @Override
-    public Flux<? extends ArtifactVersion> list(String groupId, String artifactId) {
+    public Flux<ArtifactVersion> list(String groupId, String artifactId) {
         URI uri = URI.create(REPO_URL).resolve(groupId.replace('.', '/') + "/").resolve(artifactId + "/").resolve(XML_NAME);
         log.info("Downloading metadata from {}", uri);
          Mono<ClientResponse> response = webClient.get()
