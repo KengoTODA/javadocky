@@ -2,6 +2,7 @@ package jp.skypencil.javadocky;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
@@ -86,6 +87,8 @@ class RemoteRepoVersionReposiory implements VersionRepository {
         return new XmlEventDecoder()
                 .decode(data, null, null, Collections.emptyMap())
                 .reduce(new HashSet<DefaultArtifactVersion>(), finder::parse)
-                .flatMapIterable(set -> set);
+                .flatMapIterable(set -> set)
+                .sort(Comparator.reverseOrder())
+                .cast(ArtifactVersion.class);
     }
 }
