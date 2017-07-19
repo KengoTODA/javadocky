@@ -1,3 +1,5 @@
+ext.targetJavaVersion = JavaVersion.VERSION_1_8
+
 buildscript {
   ext {
     springBootVersion = '2.0.0.M3'
@@ -37,6 +39,13 @@ sourceSets {
   }
 }
 
+configurations {
+  checkerFrameworkAnnotatedJDK {
+    description = 'a copy of JDK classes with Checker Framework type qualifers inserted'
+  }
+  annotationProcessors
+}
+
 dependencies {
   compile('org.apache.maven:maven-artifact:3.5.0')
   compile('org.springframework.boot:spring-boot-starter-webflux')
@@ -45,10 +54,34 @@ dependencies {
   testCompile('com.codeborne:selenide:4.5.1')
   testCompile('io.projectreactor:reactor-test')
 
+  // for lombok
+  def lombok = "org.projectlombok:lombok:1.16.16"
+  compileOnly lombok
+  annotationProcessors lombok
+
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output
   integrationTestCompile configurations.testCompile
   integrationTestRuntime configurations.testRuntime
+
+  // for checker-framework
+  ext.checkerFrameworkVersion = '2.1.13'
+  ext.jdkVersion = 'jdk8'
+  checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
+  annotationProcessors "org.checkerframework:checker:${checkerFrameworkVersion}"
+  compile "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
+}
+
+tasks.withType(JavaCompile).all { JavaCompile compile ->
+  def processors = [
+      'org.checkerframework.checker.nullness.NullnessChecker',
+      'lombok.launch.AnnotationProcessorHider\$AnnotationProcessor',
+  ]
+  compile.options.compilerArgs = [
+      '-processor', processors.join(','),
+      '-processorpath', configurations.annotationProcessors.asPath,
+      "-Xbootclasspath/p:${configurations.checkerFrameworkAnnotatedJDK.asPath}"
+  ]
 }
 
 task integrationTest(type: Test) {
