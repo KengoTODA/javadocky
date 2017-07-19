@@ -19,6 +19,6 @@ class LocalStorageArtifactRepository implements ArtifactRepository {
         if (!groupDir.isDirectory()) {
             return Flux.empty();
         }
-        return Flux.fromArray(groupDir.listFiles(File::isDirectory)).map(File::getName);
+        return Flux.fromArray(groupDir.listFiles(File::isDirectory)).map(File::getName).sort();
     }
 }
