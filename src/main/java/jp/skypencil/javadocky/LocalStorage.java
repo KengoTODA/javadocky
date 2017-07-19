@@ -41,8 +41,11 @@ public class LocalStorage implements Storage {
         File dir = root.resolve(groupId).resolve(artifactId).resolve(version)
                 .toFile();
         File file = new File(dir, path);
-        if (!file.getParentFile().isDirectory()) {
-            file.getParentFile().mkdirs();
+        File parent = file.getParentFile();
+        if (parent == null) {
+            return Mono.error(new IOException("Given path has no parent directory: " + file));
+        } else if (!parent.isDirectory() && !parent.mkdirs()) {
+            return Mono.error(new IOException("Failed to make directory at " + parent.getAbsolutePath()));
         }
 
         return Mono.create(subscriber -> {
