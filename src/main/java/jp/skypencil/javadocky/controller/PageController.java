@@ -65,7 +65,7 @@ class PageController {
             } else {
                 // TODO support major_version
             }
-            return response(groupId, artifactId, version, path, false);
+            return response(groupId, artifactId, version, path);
         });
     }
 
@@ -86,17 +86,16 @@ class PageController {
         return new AntPathMatcher().extractPathWithinPattern(URL_PATTERN, req.path());
     }
 
-    private Mono<ServerResponse> response(String groupId, String artifactId, String version, String path, boolean shortlyExpired) {
+    private Mono<ServerResponse> response(String groupId, String artifactId, String version, String path) {
         Mono<File> extract = extractor.extract(groupId, artifactId, version, path);
         return storage.find(groupId, artifactId, version, path).switchIfEmpty(extract.doOnSubscribe(subscription -> {
             log.info("{} for {}:{}:{} not found, try to unzip", path, groupId, artifactId, version);
         })).flatMap(file -> {
             log.trace("Requested file found at {}", file.getAbsolutePath());
             ZonedDateTime lastModified = ZonedDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
-            ZonedDateTime expired = shortlyExpired
-                    ? ZonedDateTime.now().plusDays(1L)
+            ZonedDateTime expired = 
                     // according to RFC7234, 1 year is max value for Expires
-                    : ZonedDateTime.now().plusYears(1L);
+                    ZonedDateTime.now().plusYears(1L);
             return ok()
                     .header("Last-Modifed", lastModified.format(FORMAT))
                     // all data are immutable, does not depend on session state
