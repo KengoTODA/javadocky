@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -58,13 +57,12 @@ public class JavadocExtractorTest {
         JavadocExtractor extractor = new JavadocExtractor(downloader, storage);
 
         StepVerifier.create(storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html"))
-            .expectNext(Optional.empty())
             .expectComplete()
             .verify();
         File downloaded = extractor.extract("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html").block();
         assertTrue(downloaded.isFile());
         StepVerifier.create(storage.find("com.github.spotbugs", "spotbugs-annotations", "3.1.0-RC3", "index.html"))
-            .expectNextMatches(optional -> optional.get().equals(downloaded))
+            .expectNextMatches(file -> file.equals(downloaded))
             .expectComplete()
             .verify();
     }

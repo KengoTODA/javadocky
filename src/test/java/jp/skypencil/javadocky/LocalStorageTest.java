@@ -1,9 +1,9 @@
 package jp.skypencil.javadocky;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,10 +27,10 @@ public class LocalStorageTest {
     public void test() throws IOException {
         Path root = folder.newFolder("javadocky").toPath();
         Storage storage = new LocalStorage(root);
-        assertFalse(storage.find("g", "a", "v", "index.html").block().isPresent());
+        assertThat(storage.find("g", "a", "v", "index.html").block(), is(nullValue()));
         storage.write("g", "a", "v", "index.html", Flux.just(ByteBuffer.wrap("Hello world!".getBytes(StandardCharsets.UTF_8)))).block();
-        Optional<File> written = storage.find("g", "a", "v", "index.html").block();
-        assertTrue(written.isPresent());
-        assertThat(Files.readAllLines(written.get().toPath()), is(Arrays.asList("Hello world!")));
+        File written = storage.find("g", "a", "v", "index.html").block();
+        assertThat(written, is(notNullValue()));
+        assertThat(Files.readAllLines(written.toPath()), is(Arrays.asList("Hello world!")));
     }
 }

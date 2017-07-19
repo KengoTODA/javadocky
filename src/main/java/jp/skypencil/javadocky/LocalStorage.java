@@ -8,7 +8,6 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Optional;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -25,14 +24,14 @@ public class LocalStorage implements Storage {
     private final Path root;
 
     @Override
-    public Mono<Optional<File>> find(String groupId, String artifactId,
+    public Mono<File> find(String groupId, String artifactId,
             String version, String path) {
         File file = root.resolve(groupId).resolve(artifactId).resolve(version)
                 .resolve(path).toFile();
         if (file.isFile()) {
-            return Mono.just(Optional.of(file));
+            return Mono.just(file);
         } else {
-            return Mono.just(Optional.empty());
+            return Mono.empty();
         }
     }
 

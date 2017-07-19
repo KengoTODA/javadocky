@@ -6,6 +6,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static org.springframework.web.reactive.function.server.ServerResponse.seeOther;
 
+import java.io.File;
 import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -86,24 +87,21 @@ class PageController {
     }
 
     private Mono<ServerResponse> response(String groupId, String artifactId, String version, String path, boolean shortlyExpired) {
-        return storage.find(groupId, artifactId, version, path).flatMap(file -> {
-            if (!file.isPresent()) {
-                log.info("{} for {}:{}:{} not found, try to unzip", path, groupId, artifactId, version);
-                return extractor.extract(groupId, artifactId, version, path);
-            }
-            return Mono.just(file.get());
-        }).flatMap(file -> {
-                log.trace("Requested file found at {}", file.getAbsolutePath());
-                ZonedDateTime lastModified = ZonedDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
-                ZonedDateTime expired = shortlyExpired
-                        ? ZonedDateTime.now().plusDays(1L)
-                        // according to RFC7234, 1 year is max value for Expires
-                        : ZonedDateTime.now().plusYears(1L);
-                return ok()
-                        .header("Last-Modifed", lastModified.format(FORMAT))
-                        // all data are immutable, does not depend on session state
-                        .header("Cache-Control", "public")
-                        .header("Expires", expired.format(FORMAT))
-                        .body(Mono.just(new FileSystemResource(file)), FileSystemResource.class);
+        Mono<File> extract = extractor.extract(groupId, artifactId, version, path);
+        return storage.find(groupId, artifactId, version, path).switchIfEmpty(extract.doOnSubscribe(subscription -> {
+            log.info("{} for {}:{}:{} not found, try to unzip", path, groupId, artifactId, version);
+        })).flatMap(file -> {
+            log.trace("Requested file found at {}", file.getAbsolutePath());
+            ZonedDateTime lastModified = ZonedDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
+            ZonedDateTime expired = shortlyExpired
+                    ? ZonedDateTime.now().plusDays(1L)
+                    // according to RFC7234, 1 year is max value for Expires
+                    : ZonedDateTime.now().plusYears(1L);
+            return ok()
+                    .header("Last-Modifed", lastModified.format(FORMAT))
+                    // all data are immutable, does not depend on session state
+                    .header("Cache-Control", "public")
+                    .header("Expires", expired.format(FORMAT))
+                    .body(Mono.just(new FileSystemResource(file)), FileSystemResource.class);
         });
     }}
