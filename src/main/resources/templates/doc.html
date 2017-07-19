@@ -24,25 +24,26 @@
 						</a>
 							<ul class="dropdown-menu">
 								<li th:each="id : ${artifactIds}"><a class="dropdown-item"
-									href="#" th:text="${id}">artifactId</a></li>
+									href="#" th:text="${id}" th:href="|/doc/${groupId}/${id}/|">artifactId</a></li>
 							</ul></li>
 						<li class="dropdown" id="version"><a href="#"
 							class="dropdown-toggle" data-toggle="dropdown" role="button"
-							aria-expanded="false"><span th:text="${version}">current version</span><span class="caret"></span>
+							aria-expanded="false"><span th:text="${version}" id="current-version">current version</span><span class="caret"></span>
 						</a>
 							<ul class="dropdown-menu">
-								<li th:each="v : ${versions}"><a class="dropdown-item"
-									href="#" th:text="${v}">version</a></li>
+								<li th:each="v : ${versions}"><a class="dropdown-item version"
+									href="#" th:text="${v}" th:href="|/page/${groupId}/${artifactId}/${v}|" target="main">version</a></li>
 							</ul></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
-		<iframe th:src="|/page/${groupId}/${artifactId}/${version}/|"
+		<iframe name="main" th:src="|/page/${groupId}/${artifactId}/${version}/|"
 			style="width: 100%; height: 100%;margin-top: 50px"></iframe>
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/doc.js"></script>
 </body>
 </html>
