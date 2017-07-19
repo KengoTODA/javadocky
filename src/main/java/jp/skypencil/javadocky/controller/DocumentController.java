@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.controller;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import jp.skypencil.javadocky.ArtifactRepository;
+import jp.skypencil.javadocky.VersionRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;

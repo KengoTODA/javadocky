@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
  * 
  * @author kengo
  */
-interface ArtifactRepository {
+public interface ArtifactRepository {
     /**
      * @param groupId Target {@code groupId} to list up {@code artifactId}.
      * @return a non-null {@link Flux} of {@code artifactId} belonging to specified {@code groupId}.

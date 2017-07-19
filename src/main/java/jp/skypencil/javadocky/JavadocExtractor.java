@@ -28,14 +28,14 @@ import reactor.util.function.Tuples;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
-class JavadocExtractor {
+public class JavadocExtractor {
     @NonNull
     private final JavadocDownloader downloader;
 
     @NonNull
     private final Storage storage;
 
-    Mono<File> extract(String groupId, String artifactId, String version, String path) {
+    public Mono<File> extract(String groupId, String artifactId, String version, String path) {
         return downloader.download(groupId, artifactId, version).flatMap(downloaded -> {
                 if (!downloaded.isPresent()) {
                     String message = String.format("Javadoc.jar not found for %s:%s:%s", groupId, artifactId, version);

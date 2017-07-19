@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
  * 
  * @author kengo
  */
-interface VersionRepository {
+public interface VersionRepository {
     /**
      * @param groupId
      *            Key to specify the target artifact
