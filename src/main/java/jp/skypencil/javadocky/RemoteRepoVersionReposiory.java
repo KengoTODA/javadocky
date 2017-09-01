@@ -52,8 +52,6 @@ class RemoteRepoVersionReposiory implements VersionRepository {
 
         Flux<DataBuffer> data = res.body(BodyExtractors.toDataBuffers());
         LatestVersionFinder finder = new LatestVersionFinder();
-        // XXX -Dio.netty.buffer.bytebuf.checkAccessible=false is necessary, or we face IllegalReferenceCountException(refCnt = 0) in AbstractByteBuf.class
-        // https://jira.spring.io/browse/SPR-15707
         return new XmlEventDecoder()
                 .decode(data, null, null, Collections.emptyMap())
                 .reduce("", finder::parse)
@@ -82,8 +80,6 @@ class RemoteRepoVersionReposiory implements VersionRepository {
 
         Flux<DataBuffer> data = res.body(BodyExtractors.toDataBuffers());
         AllVersionFinder finder = new AllVersionFinder();
-        // XXX -Dio.netty.buffer.bytebuf.checkAccessible=false is necessary, or we face IllegalReferenceCountException(refCnt = 0) in AbstractByteBuf.class
-        // https://jira.spring.io/browse/SPR-15707
         return new XmlEventDecoder()
                 .decode(data, null, null, Collections.emptyMap())
                 .reduce(new HashSet<DefaultArtifactVersion>(), finder::parse)

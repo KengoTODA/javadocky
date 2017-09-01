@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    springBootVersion = '2.0.0.M2'
+    springBootVersion = '2.0.0.M3'
   }
   repositories {
     mavenCentral()
@@ -24,10 +24,6 @@ repositories {
   maven {
     url "https://repo.spring.io/milestone"
   }
-  // for SPR-15761
-  maven {
-    url "https://oss.sonatype.org/content/repositories/snapshots"
-  }
 }
 
 sourceSets {
@@ -47,9 +43,6 @@ dependencies {
   testCompile('com.codeborne:selenide:4.5.1')
   testCompile('io.projectreactor:reactor-test')
 
-  // for SPR-15761
-  compile 'org.thymeleaf:thymeleaf-spring5:3.0.7-SNAPSHOT'
-
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output
   integrationTestCompile configurations.testCompile
@@ -57,9 +50,6 @@ dependencies {
 }
 
 task integrationTest(type: Test) {
-  // for SPR-15707
-  systemProperty "io.netty.buffer.bytebuf.checkAccessible", "false"
-
   systemProperty "webdriver.chrome.driver", "/Users/kengo/bin/chromedriver"
   testClassesDirs = files(sourceSets.integrationTest.java.outputDir)
   classpath = sourceSets.integrationTest.runtimeClasspath
