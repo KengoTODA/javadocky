@@ -65,24 +65,22 @@ dependencies {
   integrationTestRuntime configurations.testRuntime
 
   // for checker-framework
-  ext.checkerFrameworkVersion = '2.1.13'
+  ext.checkerFrameworkVersion = '2.2.0'
   ext.jdkVersion = 'jdk8'
   checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
   annotationProcessors "org.checkerframework:checker:${checkerFrameworkVersion}"
   compile "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
 }
 
-tasks.withType(JavaCompile).all { JavaCompile compile ->
-  def processors = [
-      'org.checkerframework.checker.nullness.NullnessChecker',
-      'lombok.launch.AnnotationProcessorHider\$AnnotationProcessor',
-  ]
-  compile.options.compilerArgs = [
-      '-processor', processors.join(','),
-      '-processorpath', configurations.annotationProcessors.asPath,
-      "-Xbootclasspath/p:${configurations.checkerFrameworkAnnotatedJDK.asPath}"
-  ]
-}
+def processors = [
+    'org.checkerframework.checker.nullness.NullnessChecker',
+    'lombok.launch.AnnotationProcessorHider\$AnnotationProcessor',
+]
+compileJava.options.compilerArgs = [
+    '-processor', processors.join(','),
+    '-processorpath', configurations.annotationProcessors.asPath,
+    "-Xbootclasspath/p:${configurations.checkerFrameworkAnnotatedJDK.asPath}"
+]
 
 task integrationTest(type: Test) {
   systemProperty "webdriver.chrome.driver", "/Users/kengo/bin/chromedriver"

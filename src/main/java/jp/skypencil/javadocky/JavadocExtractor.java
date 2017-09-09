@@ -46,6 +46,7 @@ public class JavadocExtractor {
             });
     }
 
+    @SuppressWarnings("nullness")
     private Flux<ByteBuffer> unzip(File jar, String groupId, String artifactId, String version, String path) {
         try {
             ZipFile zip = new ZipFile(jar);
@@ -78,6 +79,7 @@ public class JavadocExtractor {
         }
     }
 
+    @SuppressWarnings("nullness")
     Flux<Tuple2<String, Flux<ByteBuffer>>> unzip(File file) {
         ZipFile zip;
         try {

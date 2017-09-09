@@ -21,6 +21,7 @@ class LocalStorageVersionRepository implements VersionRepository {
     private final Path root;
 
     @Override
+    @SuppressWarnings("nullness")
     public Mono<ArtifactVersion> findLatest(String groupId, String artifactId) {
         File dir = root.resolve(groupId).resolve(artifactId).toFile();
         if (!dir.isDirectory()) {
