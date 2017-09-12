@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -77,7 +78,9 @@ class JavadocDownloader {
             File parent = path.toFile().getParentFile();
 
             try {
-                if (!parent.isDirectory() && !parent.mkdirs()) {
+                if (parent == null) {
+                    throw new IOException("Given path has no parent directory: " + path.toFile());
+                } else if (!parent.isDirectory() && !parent.mkdirs()) {
                     throw new IOException("Failed to make directory at " + parent.getAbsolutePath());
                 }
                 return FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE);

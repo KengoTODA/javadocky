@@ -1,6 +1,7 @@
 package jp.skypencil.javadocky;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 import lombok.NonNull;
@@ -19,6 +20,11 @@ class LocalStorageArtifactRepository implements ArtifactRepository {
         if (!groupDir.isDirectory()) {
             return Flux.empty();
         }
-        return Flux.fromArray(groupDir.listFiles(File::isDirectory)).map(File::getName).sort();
+        File[] directories = groupDir.listFiles(File::isDirectory);
+        if (directories == null) {
+            return Flux.error(new IOException("Unknown error occured during listing directory"));
+        } else {
+            return Flux.fromArray(directories).map(File::getName).sort();
+        }
     }
 }
