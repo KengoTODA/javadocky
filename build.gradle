@@ -65,7 +65,7 @@ dependencies {
   integrationTestRuntime configurations.testRuntime
 
   // for checker-framework
-  ext.checkerFrameworkVersion = '2.2.0'
+  ext.checkerFrameworkVersion = '2.5.2'
   ext.jdkVersion = 'jdk8'
   checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
   annotationProcessors "org.checkerframework:checker:${checkerFrameworkVersion}"
