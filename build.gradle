@@ -47,7 +47,7 @@ configurations {
 }
 
 dependencies {
-  compile('org.apache.maven:maven-artifact:3.5.0')
+  compile('org.apache.maven:maven-artifact:3.5.4')
   compile('org.springframework.boot:spring-boot-starter-webflux')
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
   testCompile('org.springframework.boot:spring-boot-starter-test')
