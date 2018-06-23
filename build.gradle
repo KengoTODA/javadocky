@@ -11,7 +11,7 @@ buildscript {
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath "io.franzbecker:gradle-lombok:1.10"
+    classpath "io.franzbecker:gradle-lombok:1.14"
   }
 }
 
