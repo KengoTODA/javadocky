@@ -43,7 +43,6 @@ configurations {
   checkerFrameworkAnnotatedJDK {
     description = 'a copy of JDK classes with Checker Framework type qualifers inserted'
   }
-  annotationProcessors
 }
 
 dependencies {
@@ -57,7 +56,7 @@ dependencies {
   // for lombok
   def lombok = "org.projectlombok:lombok:1.16.16"
   compileOnly lombok
-  annotationProcessors lombok
+  annotationProcessor lombok
 
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output
@@ -68,19 +67,9 @@ dependencies {
   ext.checkerFrameworkVersion = '2.5.3'
   ext.jdkVersion = 'jdk8'
   checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
-  annotationProcessors "org.checkerframework:checker:${checkerFrameworkVersion}"
+  annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
   compile "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
 }
-
-def processors = [
-    'org.checkerframework.checker.nullness.NullnessChecker',
-    'lombok.launch.AnnotationProcessorHider\$AnnotationProcessor',
-]
-compileJava.options.compilerArgs = [
-    '-processor', processors.join(','),
-    '-processorpath', configurations.annotationProcessors.asPath,
-    "-Xbootclasspath/p:${configurations.checkerFrameworkAnnotatedJDK.asPath}"
-]
 
 task integrationTest(type: Test) {
   systemProperty "webdriver.chrome.driver", "/Users/kengo/bin/chromedriver"
@@ -94,7 +83,7 @@ lombok {
 }
 
 wrapper {
-  gradleVersion = '4.0'
+  gradleVersion = '4.8.1'
 }
 
 build.dependsOn integrationTest
