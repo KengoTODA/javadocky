@@ -12,6 +12,7 @@ buildscript {
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     classpath "io.franzbecker:gradle-lombok:1.14"
+    classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.14"
   }
 }
 
@@ -20,6 +21,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'io.franzbecker.gradle-lombok'
+apply plugin: "net.ltgt.errorprone"
 
 version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -69,6 +71,17 @@ dependencies {
   checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
   annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
   compile "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
+
+  // for errorprone
+  errorprone 'com.google.errorprone:error_prone_core:2.3.1'
+  annotationProcessor 'jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.2'
+}
+
+tasks.withType(JavaCompile) {
+  options.compilerArgs += [
+    // '-Xep:Slf4jLoggerShouldBeNonStatic:OFF',
+    '-Xep:ParameterName:OFF'
+  ]
 }
 
 task integrationTest(type: Test) {
