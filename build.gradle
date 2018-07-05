@@ -78,7 +78,7 @@ task integrationTest(type: Test) {
 }
 
 lombok {
-  version = '1.16.18'
+  version = '1.18.0'
   sha256 = ''
 }
 
