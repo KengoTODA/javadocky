@@ -20,40 +20,35 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DocTest {
-    @LocalServerPort
-    private int port;
+  @LocalServerPort private int port;
 
-    @Before
-    public void config() {
-        assumeThat("path of chromedriver is set to 'webdriver.chrome.driver'",
-                System.getProperty("webdriver.chrome.driver"), is(notNullValue()));
-        System.setProperty("selenide.browser", "Chrome");
-    }
+  @Before
+  public void config() {
+    assumeThat(
+        "path of chromedriver is set to 'webdriver.chrome.driver'",
+        System.getProperty("webdriver.chrome.driver"),
+        is(notNullValue()));
+    System.setProperty("selenide.browser", "Chrome");
+  }
 
-    /**
-     * Doc page should have {@code <iframe>} to display {@code index.html}.
-     */
-    @Test
-    public void testDocPageShouldHaveIframe() {
-        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
-        getElement(By.tagName("iframe")).should(exist);
-    }
+  /** Doc page should have {@code <iframe>} to display {@code index.html}. */
+  @Test
+  public void testDocPageShouldHaveIframe() {
+    open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+    getElement(By.tagName("iframe")).should(exist);
+  }
 
-    /**
-     * Doc page should have dropdown list to select {@code artifactId}.
-     */
-    @Test
-    public void testDocPageShouldHaveListOfArtifactId() {
-        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
-        $("li.dropdown#artifact-id").shouldHave(text("helper"));
-    }
+  /** Doc page should have dropdown list to select {@code artifactId}. */
+  @Test
+  public void testDocPageShouldHaveListOfArtifactId() {
+    open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+    $("li.dropdown#artifact-id").shouldHave(text("helper"));
+  }
 
-    /**
-     * Doc page should have dropdown list to select {@code version}.
-     */
-    @Test
-    public void testDocPageShouldHaveListOfVersion() {
-        open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
-        $("li.dropdown#version").shouldHave(text("1.0.1"));
-    }
+  /** Doc page should have dropdown list to select {@code version}. */
+  @Test
+  public void testDocPageShouldHaveListOfVersion() {
+    open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+    $("li.dropdown#version").shouldHave(text("1.0.1"));
+  }
 }
