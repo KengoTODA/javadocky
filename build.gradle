@@ -14,6 +14,7 @@ buildscript {
     classpath "io.franzbecker:gradle-lombok:1.14"
     classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.14"
     classpath "com.diffplug.spotless:spotless-plugin-gradle:3.13.0"
+    classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.20.1"
   }
 }
 
@@ -23,6 +24,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: "net.ltgt.errorprone"
+apply plugin: 'com.palantir.docker-run'
 apply from: "$rootDir/gradle/spotless.gradle"
 
 version = '0.3.0-SNAPSHOT'
@@ -84,8 +86,19 @@ tasks.withType(JavaCompile) {
   ]
 }
 
+dockerRun {
+  // docker-selenium image that contains both of Selenium Standalone Server with Google Chrome
+  // https://github.com/SeleniumHQ/docker-selenium/tree/master/StandaloneChrome#how-to-use-this-image
+  name 'javadocky_selenium'
+  image 'selenium/standalone-chrome'
+  ports '4444:4444'
+  clean true
+}
+
 task integrationTest(type: Test) {
-  systemProperty "webdriver.chrome.driver", "/Users/kengo/bin/chromedriver"
+  dependsOn tasks.dockerRun
+  finalizedBy tasks.dockerStop
+  systemProperty 'remote', 'http://localhost:4444/wd/hub'
   testClassesDirs = files(sourceSets.integrationTest.java.outputDir)
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
