@@ -49,6 +49,6 @@ public class DocTest {
   @Test
   public void testDocPageShouldHaveListOfVersion() {
     open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
-    $("li.dropdown#version").shouldHave(text("1.0.1"));
+    $("li.dropdown#version").shouldHave(text("1.0.6"));
   }
 }
