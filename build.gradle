@@ -49,6 +49,11 @@ configurations {
   }
 }
 
+ext {
+  checkerFrameworkVersion = '2.5.3'
+  jdkVersion = 'jdk8'
+}
+
 dependencies {
   compile('org.apache.maven:maven-artifact:3.5.4')
   compile('org.springframework.boot:spring-boot-starter-webflux')
@@ -57,19 +62,12 @@ dependencies {
   testCompile('com.codeborne:selenide:4.12.2')
   testCompile('io.projectreactor:reactor-test')
 
-  // for lombok
-  def lombok = "org.projectlombok:lombok:1.16.16"
-  compileOnly lombok
-  annotationProcessor lombok
-
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output
   integrationTestCompile configurations.testCompile
   integrationTestRuntime configurations.testRuntime
 
   // for checker-framework
-  ext.checkerFrameworkVersion = '2.5.3'
-  ext.jdkVersion = 'jdk8'
   checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
   annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
   compile "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
