@@ -13,6 +13,7 @@ buildscript {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     classpath "io.franzbecker:gradle-lombok:1.14"
     classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.14"
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:3.13.0"
   }
 }
 
@@ -22,6 +23,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: "net.ltgt.errorprone"
+apply from: "$rootDir/gradle/spotless.gradle"
 
 version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -100,3 +102,4 @@ wrapper {
 }
 
 build.dependsOn integrationTest
+defaultTasks 'spotlessApply', 'build'

@@ -1,0 +1,13 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        removeUnusedImports()
+        googleJavaFormat()
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        indentWithSpaces()
+    }
+    freshmark { target 'README.md'}
+}
