@@ -14,6 +14,8 @@ import java.util.zip.ZipFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.flogger.FluentLogger;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +27,11 @@ import reactor.util.function.Tuples;
 /**
  * This class is responsible to download javadoc.jar and unzip its contents onto {@link Storage}.
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class JavadocExtractor {
+    private static final FluentLogger LOGGER = FluentLogger.forEnclosingClass();
+
     @NonNull
     private final JavadocDownloader downloader;
 
@@ -96,7 +99,8 @@ public class JavadocExtractor {
                     try {
                         zip.close();
                     } catch (IOException e) {
-                        log.warn("Failed to close ZIP input stream", e);
+                        LOGGER.atWarning().withCause(e)
+                        .log("Failed to close InputStream from ZIP file");
                     }
                 }
             });
@@ -117,7 +121,8 @@ public class JavadocExtractor {
                             try {
                                 zip.close();
                             } catch (IOException e) {
-                                log.warn("Failed to close ZIP input stream", e);
+                                LOGGER.atWarning().withCause(e)
+                                .log("Failed to close InputStream from ZIP file");
                             }
                         }
                     });
@@ -148,7 +153,8 @@ public class JavadocExtractor {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    log.warn("Failed to close InputStream from ZIP file", e);
+                    LOGGER.atWarning().withCause(e)
+                        .log("Failed to close InputStream from ZIP file");
                 }
             }
             emitter.complete();

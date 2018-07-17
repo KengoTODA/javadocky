@@ -16,6 +16,8 @@ import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.google.common.flogger.FluentLogger;
+
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,9 +25,10 @@ import reactor.core.publisher.Mono;
 /**
  * <p>A {@link VersionRepository} implementation which refers XML in remote Maven repository.</p>
  */
-@Slf4j
 @Repository
 class RemoteRepoVersionReposiory implements VersionRepository {
+    private static final FluentLogger LOGGER = FluentLogger.forEnclosingClass();
+
     private static final String REPO_URL = "http://central.maven.org/maven2/";
     private static final String XML_NAME = "maven-metadata.xml";
 
@@ -34,7 +37,7 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     @Override
     public Mono<ArtifactVersion> findLatest(String groupId, String artifactId) {
         URI uri = URI.create(REPO_URL).resolve(groupId.replace('.', '/') + "/").resolve(artifactId + "/").resolve(XML_NAME);
-        log.info("Downloading metadata from {}", uri);
+        LOGGER.atInfo().log("Downloading metadata from %s", uri);
          Mono<ClientResponse> response = webClient.get()
             .uri(String.format("%s/%s/" + XML_NAME, groupId.replace('.', '/'), artifactId))
             .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
@@ -63,8 +66,8 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     @Override
     public Flux<ArtifactVersion> list(String groupId, String artifactId) {
         URI uri = URI.create(REPO_URL).resolve(groupId.replace('.', '/') + "/").resolve(artifactId + "/").resolve(XML_NAME);
-        log.info("Downloading metadata from {}", uri);
-         Mono<ClientResponse> response = webClient.get()
+        LOGGER.atInfo().log("Downloading metadata from %s", uri);
+        Mono<ClientResponse> response = webClient.get()
             .uri(String.format("%s/%s/" + XML_NAME, groupId.replace('.', '/'), artifactId))
             .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
             .exchange();

@@ -9,16 +9,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import com.google.common.flogger.FluentLogger;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Slf4j
 @RequiredArgsConstructor
 public class LocalStorage implements Storage {
+    private static final FluentLogger LOGGER = FluentLogger.forEnclosingClass();
+
     @NonNull
     @Getter
     private final Path root;
@@ -69,7 +71,7 @@ public class LocalStorage implements Storage {
                 .reduce((a, b) -> a + b)
                 .subscribe(
                         total -> {
-                            log.info("Written {} bytes data to {}",
+                            LOGGER.atInfo().log("Written {0:n0} bytes data to %s",
                                     total, file.getAbsolutePath());
                             subscriber.success(file);
                         }, subscriber::error);

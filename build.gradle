@@ -41,6 +41,12 @@ sourceSets {
   }
 }
 
+ext {
+  floggerVersion = '0.2'
+  checkerFrameworkVersion = '2.5.3'
+  jdkVersion = 'jdk8'
+}
+
 configurations {
   checkerFrameworkAnnotatedJDK {
     description = 'a copy of JDK classes with Checker Framework type qualifers inserted'
@@ -51,6 +57,8 @@ dependencies {
   compile('org.apache.maven:maven-artifact:3.5.4')
   compile('org.springframework.boot:spring-boot-starter-webflux')
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+  compile("com.google.flogger:flogger:${floggerVersion}")
+  compile("com.google.flogger:flogger-system-backend:${floggerVersion}")
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('com.codeborne:selenide:4.12.2')
   testCompile('io.projectreactor:reactor-test')
@@ -66,8 +74,6 @@ dependencies {
   integrationTestRuntime configurations.testRuntime
 
   // for checker-framework
-  ext.checkerFrameworkVersion = '2.5.3'
-  ext.jdkVersion = 'jdk8'
   checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
   annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
   compile "org.checkerframework:checker-qual:${checkerFrameworkVersion}"

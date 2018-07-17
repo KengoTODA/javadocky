@@ -14,16 +14,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import com.google.common.flogger.FluentLogger;
+
 import jp.skypencil.javadocky.VersionRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 class BadgeController {
+    private static final FluentLogger LOGGER = FluentLogger.forEnclosingClass();
+
     @NonNull
     private final VersionRepository versionRepo;
 
@@ -37,7 +40,7 @@ class BadgeController {
 
             String groupId = req.pathVariable("groupId");
             String artifactId = req.pathVariable("artifactId");
-            log.debug("Got access to badge for {}:{}", groupId, artifactId);
+            LOGGER.atFine().log("Got access to badge for %s:%s", groupId, artifactId);
 
             return versionRepo.findLatest(groupId, artifactId).flatMap(latestVersion -> {
                 URI shieldsUri = URI.create(String.format("https://img.shields.io/badge/%s-%s-%s.%s",

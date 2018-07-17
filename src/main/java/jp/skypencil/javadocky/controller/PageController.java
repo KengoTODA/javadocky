@@ -23,6 +23,8 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import com.google.common.flogger.FluentLogger;
+
 import jp.skypencil.javadocky.JavadocExtractor;
 import jp.skypencil.javadocky.Storage;
 import jp.skypencil.javadocky.VersionRepository;
@@ -31,11 +33,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 class PageController {
     private static final String URL_PATTERN = "/page/{groupId}/{artifactId}/{version}/**";
+
+    private static final FluentLogger LOGGER = FluentLogger.forEnclosingClass();
 
     @NonNull
     private final Storage storage;
@@ -58,7 +61,7 @@ class PageController {
             if ("latest".equals(version)) {
                 return versionRepo.findLatest(groupId, artifactId).flatMap(latestVersion -> {
                     URI uri = URI.create("/page/").resolve(groupId + "/").resolve(artifactId + "/").resolve(latestVersion.toString() + "/");
-                    log.info("Latest version for {}:{} is {}, redirecting to {}",
+                    LOGGER.atInfo().log("Latest version for %s:%s is %s, redirecting to %s",
                             groupId, artifactId, latestVersion, uri);
                     return seeOther(uri).build();
                 }).switchIfEmpty(notFound().cacheControl(CacheControl.noStore()).build());
@@ -89,9 +92,9 @@ class PageController {
     private Mono<ServerResponse> response(String groupId, String artifactId, String version, String path) {
         Mono<File> extract = extractor.extract(groupId, artifactId, version, path);
         return storage.find(groupId, artifactId, version, path).switchIfEmpty(extract.doOnSubscribe(subscription -> {
-            log.info("{} for {}:{}:{} not found, try to unzip", path, groupId, artifactId, version);
+            LOGGER.atInfo().log("%s for %s:%s:%s not found, try to unzip", path, groupId, artifactId, version);
         })).flatMap(file -> {
-            log.trace("Requested file found at {}", file.getAbsolutePath());
+            LOGGER.atFine().log("Requested file found at %s", file.getAbsolutePath());
             ZonedDateTime lastModified = ZonedDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
             ZonedDateTime expired = 
                     // according to RFC7234, 1 year is max value for Expires
