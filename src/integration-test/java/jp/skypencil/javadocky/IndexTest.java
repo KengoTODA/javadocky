@@ -18,22 +18,21 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IndexTest {
-    @LocalServerPort
-    private int port;
+  @LocalServerPort private int port;
 
-    @Before
-    public void config() {
-        assumeThat("path of chromedriver is set to 'webdriver.chrome.driver'",
-                System.getProperty("webdriver.chrome.driver"), is(notNullValue()));
-        System.setProperty("selenide.browser", "Chrome");
-    }
+  @Before
+  public void config() {
+    assumeThat(
+        "path of chromedriver is set to 'webdriver.chrome.driver'",
+        System.getProperty("webdriver.chrome.driver"),
+        is(notNullValue()));
+    System.setProperty("selenide.browser", "Chrome");
+  }
 
-    /**
-     * Doc page should have {@code <iframe>} to display {@code index.html}.
-     */
-    @Test
-    public void testTitleExplainsServiceName() {
-        open("http://localhost:" + port + "/");
-        getElement(By.tagName("h1")).shouldHave(text("Javadocky"));
-    }
+  /** Doc page should have {@code <iframe>} to display {@code index.html}. */
+  @Test
+  public void testTitleExplainsServiceName() {
+    open("http://localhost:" + port + "/");
+    getElement(By.tagName("h1")).shouldHave(text("Javadocky"));
+  }
 }
