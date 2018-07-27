@@ -1,0 +1,44 @@
+service: javadocky
+
+plugins:
+  - serverless-webpack
+
+custom:
+  bucket: javadocky
+  # https://github.com/serverless-heaven/serverless-webpack#aws-sdk
+  webpack:
+    includeModules:
+      forceExclude:
+        - aws-sdk
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: ap-northeast-1
+
+functions:
+  badge:
+    handler: handler.badge
+    events:
+      - http:
+          path: /badge/{groupId}/{artifactId}.{ext}
+          method: get
+          private: true
+    environment:
+      BUCKET: ${self:custom.bucket}
+  page:
+    handler: handler.page
+    events:
+      - http:
+          path: /page/{groupId}/{artifactId}/{version}/{page}
+          method: get
+          private: true
+    environment:
+      BUCKET: ${self:custom.bucket}
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucket}
