@@ -14,6 +14,7 @@ buildscript {
     classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.16"
     classpath "com.diffplug.spotless:spotless-plugin-gradle:3.14.0"
     classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.20.1"
+    classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
   }
 }
 
@@ -26,6 +27,7 @@ apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
 apply from: "$rootDir/gradle/checker-framework.gradle"
 apply from: "$rootDir/gradle/jacoco.gradle"
+apply from: "$rootDir/gradle/sonarqube.gradle"
 
 version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 1.8
