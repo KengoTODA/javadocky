@@ -2,8 +2,6 @@ package jp.skypencil.javadocky.repository;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +10,8 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -37,7 +37,7 @@ public class LocalStorage implements Storage {
 
   @Override
   public Mono<File> write(
-      String groupId, String artifactId, String version, String path, Flux<ByteBuffer> data) {
+      String groupId, String artifactId, String version, String path, Flux<DataBuffer> data) {
     File dir = root.resolve(groupId).resolve(artifactId).resolve(version).toFile();
     File file = new File(dir, path);
     File parent = file.getParentFile();
@@ -47,38 +47,27 @@ public class LocalStorage implements Storage {
       return Mono.error(new IOException("Failed to make directory at " + parent.getAbsolutePath()));
     }
 
-    return Mono.create(
-        subscriber -> {
-          try {
-            SeekableByteChannel channel =
-                Files.newByteChannel(
-                    file.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-            data.doFinally(
-                    signal -> {
-                      try {
-                        channel.close();
-                      } catch (IOException e) {
-                        subscriber.error(e);
-                      }
-                    })
-                .map(
-                    buffer -> {
-                      try {
-                        return channel.write(buffer);
-                      } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                      }
-                    })
-                .reduce((a, b) -> a + b)
-                .subscribe(
-                    total -> {
-                      log.info("Written {} bytes data to {}", total, file.getAbsolutePath());
-                      subscriber.success(file);
-                    },
-                    subscriber::error);
-          } catch (IOException | RuntimeException e) {
-            subscriber.error(e);
-          }
-        });
+    try {
+      SeekableByteChannel channel =
+          Files.newByteChannel(file.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+      return DataBufferUtils.write(data, channel)
+          .doFinally(
+              signal -> {
+                try {
+                  channel.close();
+                } catch (IOException e) {
+                  log.warn("failed to close ByteChannel", e);
+                }
+              })
+          .map(DataBuffer::capacity)
+          .reduce(Integer::sum)
+          .map(
+              total -> {
+                log.info("Written {} bytes data to {}", total, file.getAbsolutePath());
+                return file;
+              });
+    } catch (IOException | RuntimeException e) {
+      return Mono.error(e);
+    }
   }
 }
