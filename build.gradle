@@ -26,6 +26,7 @@ apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: "net.ltgt.errorprone"
 apply plugin: 'com.palantir.docker-run'
 apply from: "$rootDir/gradle/spotless.gradle"
+apply from: "$rootDir/gradle/checker-framework.gradle"
 
 version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -45,17 +46,6 @@ sourceSets {
   }
 }
 
-configurations {
-  checkerFrameworkAnnotatedJDK {
-    description = 'a copy of JDK classes with Checker Framework type qualifers inserted'
-  }
-}
-
-ext {
-  checkerFrameworkVersion = '2.5.4'
-  jdkVersion = 'jdk8'
-}
-
 dependencies {
   compile('org.apache.maven:maven-artifact:3.5.4')
   compile('org.springframework.boot:spring-boot-starter-webflux')
@@ -68,11 +58,6 @@ dependencies {
   integrationTestCompile sourceSets.test.output
   integrationTestCompile configurations.testCompile
   integrationTestRuntime configurations.testRuntime
-
-  // for checker-framework
-  checkerFrameworkAnnotatedJDK "org.checkerframework:${jdkVersion}:${checkerFrameworkVersion}"
-  annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
-  compile "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
 
   // for errorprone
   errorprone 'com.google.errorprone:error_prone_core:2.3.1'
