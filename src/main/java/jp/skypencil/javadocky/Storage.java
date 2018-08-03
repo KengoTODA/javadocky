@@ -2,7 +2,7 @@ package jp.skypencil.javadocky;
 
 import java.io.File;
 import java.nio.ByteBuffer;
-import lombok.NonNull;
+import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

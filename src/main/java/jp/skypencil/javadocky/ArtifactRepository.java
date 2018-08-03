@@ -1,6 +1,6 @@
 package jp.skypencil.javadocky;
 
-import lombok.NonNull;
+import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 
 /**

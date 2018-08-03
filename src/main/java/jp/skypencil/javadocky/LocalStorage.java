@@ -9,17 +9,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
-import lombok.Getter;
-import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class LocalStorage implements Storage {
   private final Logger log = LoggerFactory.getLogger(getClass());
-  @NonNull @Getter private final Path root;
+  @NonNull private final Path root;
 
   @Autowired
   LocalStorage(@NonNull Path root) {
