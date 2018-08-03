@@ -9,11 +9,11 @@ import static org.springframework.web.reactive.function.server.ServerResponse.se
 import java.net.URI;
 import java.util.Objects;
 import jp.skypencil.javadocky.VersionRepository;
-import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;

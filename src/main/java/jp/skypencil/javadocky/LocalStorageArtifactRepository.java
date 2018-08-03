@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
-import lombok.NonNull;
+import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 
 class LocalStorageArtifactRepository implements ArtifactRepository {

@@ -1,7 +1,7 @@
 package jp.skypencil.javadocky;
 
-import lombok.NonNull;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
