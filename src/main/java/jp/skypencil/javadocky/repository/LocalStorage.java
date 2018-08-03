@@ -2,7 +2,7 @@ package jp.skypencil.javadocky.repository;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.Channel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -47,27 +47,30 @@ public class LocalStorage implements Storage {
       return Mono.error(new IOException("Failed to make directory at " + parent.getAbsolutePath()));
     }
 
+    return Flux.using(
+            () ->
+                Files.newByteChannel(
+                    file.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE),
+            channel -> DataBufferUtils.write(data, channel),
+            this::closeChannel)
+        .map(DataBuffer::capacity)
+        .reduce(Integer::sum)
+        .map(
+            total -> {
+              log.info("Written {} bytes data to {}", total, file.getAbsolutePath());
+              return file;
+            });
+  }
+
+  private void closeChannel(@NonNull Channel channel) {
+    if (!channel.isOpen()) {
+      return;
+    }
+
     try {
-      SeekableByteChannel channel =
-          Files.newByteChannel(file.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-      return DataBufferUtils.write(data, channel)
-          .doFinally(
-              signal -> {
-                try {
-                  channel.close();
-                } catch (IOException e) {
-                  log.warn("failed to close ByteChannel", e);
-                }
-              })
-          .map(DataBuffer::capacity)
-          .reduce(Integer::sum)
-          .map(
-              total -> {
-                log.info("Written {} bytes data to {}", total, file.getAbsolutePath());
-                return file;
-              });
-    } catch (IOException | RuntimeException e) {
-      return Mono.error(e);
+      channel.close();
+    } catch (IOException e) {
+      log.warn("failed to close ByteChannel", e);
     }
   }
 }
