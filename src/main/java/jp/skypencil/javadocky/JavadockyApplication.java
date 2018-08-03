@@ -6,6 +6,7 @@ import jp.skypencil.javadocky.repository.ArtifactRepository;
 import jp.skypencil.javadocky.repository.LocalStorage;
 import jp.skypencil.javadocky.repository.LocalStorageArtifactRepository;
 import jp.skypencil.javadocky.repository.Storage;
+import jp.skypencil.javadocky.service.JavadocDownloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

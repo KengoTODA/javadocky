@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.service;
 
 import static org.junit.Assert.assertTrue;
 
