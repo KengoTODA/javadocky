@@ -12,11 +12,12 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+import javax.annotation.ParametersAreNonnullByDefault;
 import jp.skypencil.javadocky.JavadocExtractor;
 import jp.skypencil.javadocky.Storage;
 import jp.skypencil.javadocky.VersionRepository;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Controller
-@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 class PageController {
   private static final String URL_PATTERN = "/page/{groupId}/{artifactId}/{version}/**";
 
@@ -45,6 +45,14 @@ class PageController {
 
   private static final DateTimeFormatter FORMAT =
       DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz");
+
+  @Autowired
+  @ParametersAreNonnullByDefault
+  PageController(Storage storage, JavadocExtractor extractor, VersionRepository versionRepo) {
+    this.storage = Objects.requireNonNull(storage);
+    this.extractor = Objects.requireNonNull(extractor);
+    this.versionRepo = Objects.requireNonNull(versionRepo);
+  }
 
   @Bean
   public RouterFunction<ServerResponse> routeForPage() {

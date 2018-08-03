@@ -7,9 +7,9 @@ import static org.springframework.web.reactive.function.server.ServerResponse.no
 import static org.springframework.web.reactive.function.server.ServerResponse.seeOther;
 
 import java.net.URI;
+import java.util.Objects;
 import jp.skypencil.javadocky.VersionRepository;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,15 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Controller
-@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 class BadgeController {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   @NonNull private final VersionRepository versionRepo;
+
+  @Autowired
+  BadgeController(@NonNull VersionRepository versionRepo) {
+    this.versionRepo = Objects.requireNonNull(versionRepo);
+  }
 
   @Bean
   public RouterFunction<ServerResponse> routeForBadge() {

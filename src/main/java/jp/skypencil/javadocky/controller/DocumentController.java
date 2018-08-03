@@ -7,10 +7,11 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import javax.annotation.ParametersAreNonnullByDefault;
 import jp.skypencil.javadocky.ArtifactRepository;
 import jp.skypencil.javadocky.VersionRepository;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +22,17 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 
 @Controller
-@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 class DocumentController {
   @NonNull private final VersionRepository versionRepo;
 
   @NonNull private final ArtifactRepository artifactRepo;
+
+  @Autowired
+  @ParametersAreNonnullByDefault
+  DocumentController(VersionRepository versionRepo, ArtifactRepository artifactRepo) {
+    this.versionRepo = Objects.requireNonNull(versionRepo);
+    this.artifactRepo = Objects.requireNonNull(artifactRepo);
+  }
 
   @Bean
   public RouterFunction<ServerResponse> routeForDoc() {

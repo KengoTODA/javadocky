@@ -4,18 +4,21 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@RequiredArgsConstructor
 class LocalStorageVersionRepository implements VersionRepository {
 
   @NonNull private final Path root;
+
+  LocalStorageVersionRepository(@NonNull Path root) {
+    this.root = Objects.requireNonNull(root);
+  }
 
   @Override
   @SuppressWarnings("nullness")
