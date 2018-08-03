@@ -113,14 +113,13 @@ class PageController {
         .find(groupId, artifactId, version, path)
         .switchIfEmpty(
             extract.doOnSubscribe(
-                subscription -> {
-                  log.info(
-                      "{} for {}:{}:{} not found, try to unzip",
-                      path,
-                      groupId,
-                      artifactId,
-                      version);
-                }))
+                subscription ->
+                    log.info(
+                        "{} for {}:{}:{} not found, try to unzip",
+                        path,
+                        groupId,
+                        artifactId,
+                        version)))
         .flatMap(
             file -> {
               log.trace("Requested file found at {}", file.getAbsolutePath());

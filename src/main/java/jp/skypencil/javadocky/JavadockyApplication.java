@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class JavadockyApplication {
+  private static final String USER_HOME = "user.home";
+  private static final String JAVADOCKY_ROOT = ".javadocky";
+
   private static final String STORAGE_DIR = "storage";
   /** Name of directory to store downloaded javadoc.jar file. */
   private static final String JAVADOC_DIR = "javadoc";
@@ -27,7 +30,7 @@ public class JavadockyApplication {
 
   @Bean
   public Storage localStorage() {
-    Path home = Paths.get(System.getProperty("user.home"), ".javadocky", STORAGE_DIR);
+    Path home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, STORAGE_DIR);
     home.toFile().mkdirs();
     log.info("Making storage at {}", home.toFile().getAbsolutePath());
     return new LocalStorage(home);
@@ -35,7 +38,7 @@ public class JavadockyApplication {
 
   @Bean
   public ArtifactRepository artifactRepository() {
-    Path home = Paths.get(System.getProperty("user.home"), ".javadocky", JAVADOC_DIR);
+    Path home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, JAVADOC_DIR);
     home.toFile().mkdirs();
     log.info("Making storage at {}", home.toFile().getAbsolutePath());
     return new LocalStorageArtifactRepository(home);
@@ -43,7 +46,7 @@ public class JavadockyApplication {
 
   @Bean
   public JavadocDownloader javadocDownloader() {
-    Path home = Paths.get(System.getProperty("user.home"), ".javadocky", JAVADOC_DIR);
+    Path home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, JAVADOC_DIR);
     home.toFile().mkdirs();
     log.info("Making javadoc storage at {}", home.toFile().getAbsolutePath());
     return new JavadocDownloader(home);
