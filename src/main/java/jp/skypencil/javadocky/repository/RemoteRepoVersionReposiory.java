@@ -39,7 +39,7 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     Mono<ClientResponse> response =
         webClient
             .get()
-            .uri(String.format("%s/%s/" + XML_NAME, groupId.replace('.', '/'), artifactId))
+            .uri(String.format("%s/%s/%s", groupId.replace('.', '/'), artifactId, XML_NAME))
             .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
             .exchange();
     return response.flatMap(this::fetchResponse);
@@ -73,7 +73,7 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     Mono<ClientResponse> response =
         webClient
             .get()
-            .uri(String.format("%s/%s/" + XML_NAME, groupId.replace('.', '/'), artifactId))
+            .uri(String.format("%s/%s/%s", groupId.replace('.', '/'), artifactId, XML_NAME))
             .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
             .exchange();
     return response.flatMapMany(this::listVersions);
