@@ -3,13 +3,16 @@ package jp.skypencil.javadocky;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 
-@RequiredArgsConstructor
 class LocalStorageArtifactRepository implements ArtifactRepository {
   @NonNull private final Path root;
+
+  LocalStorageArtifactRepository(@NonNull Path root) {
+    this.root = Objects.requireNonNull(root);
+  }
 
   @Override
   @NonNull

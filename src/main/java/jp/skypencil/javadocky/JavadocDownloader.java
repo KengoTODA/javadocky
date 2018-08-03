@@ -9,26 +9,32 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@RequiredArgsConstructor
 class JavadocDownloader {
   private static final String REPO_URL = "http://central.maven.org/maven2/";
   private final WebClient webClient = WebClient.create(REPO_URL);
 
   private final Path root;
+
+  @Autowired
+  JavadocDownloader(@NonNull Path root) {
+    this.root = Objects.requireNonNull(root);
+  }
 
   Mono<Optional<File>> download(String groupId, String artifactId, String version) {
     Path path = pathFor(groupId, artifactId, version);

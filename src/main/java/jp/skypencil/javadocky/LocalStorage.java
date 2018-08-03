@@ -8,18 +8,23 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@RequiredArgsConstructor
 public class LocalStorage implements Storage {
   private final Logger log = LoggerFactory.getLogger(getClass());
   @NonNull @Getter private final Path root;
+
+  @Autowired
+  LocalStorage(@NonNull Path root) {
+    this.root = Objects.requireNonNull(root);
+  }
 
   @Override
   public Mono<File> find(String groupId, String artifactId, String version, String path) {

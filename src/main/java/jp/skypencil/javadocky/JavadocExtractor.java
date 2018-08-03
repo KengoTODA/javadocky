@@ -7,11 +7,12 @@ import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,19 @@ import reactor.util.function.Tuples;
  * This class is responsible to download javadoc.jar and unzip its contents onto {@link Storage}.
  */
 @Service
-@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class JavadocExtractor {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   @NonNull private final JavadocDownloader downloader;
 
   @NonNull private final Storage storage;
+
+  @Autowired
+  @ParametersAreNonnullByDefault
+  JavadocExtractor(JavadocDownloader downloader, Storage storage) {
+    this.downloader = Objects.requireNonNull(downloader);
+    this.storage = Objects.requireNonNull(storage);
+  }
 
   public Mono<File> extract(String groupId, String artifactId, String version, String path) {
     return downloader
