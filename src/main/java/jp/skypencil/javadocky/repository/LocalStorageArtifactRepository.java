@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,10 +7,10 @@ import java.util.Objects;
 import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 
-class LocalStorageArtifactRepository implements ArtifactRepository {
+public class LocalStorageArtifactRepository implements ArtifactRepository {
   @NonNull private final Path root;
 
-  LocalStorageArtifactRepository(@NonNull Path root) {
+  public LocalStorageArtifactRepository(@NonNull Path root) {
     this.root = Objects.requireNonNull(root);
   }
 

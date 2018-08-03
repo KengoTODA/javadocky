@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class LocalStorage implements Storage {
   @NonNull private final Path root;
 
   @Autowired
-  LocalStorage(@NonNull Path root) {
+  public LocalStorage(@NonNull Path root) {
     this.root = Objects.requireNonNull(root);
   }
 

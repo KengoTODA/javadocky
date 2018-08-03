@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;

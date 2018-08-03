@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
