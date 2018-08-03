@@ -1,15 +1,23 @@
-version: '3'
+version: '3.2'
 
 services:
   nginx:
     image: nginx:1.12-alpine
     links:
-      - javadocky
+      - app
     ports:
-      - '80:80'
+      - '8080:80'
     volumes:
       - './nginx.conf:/etc/nginx/nginx.conf:ro'
-  javadocky:
+  app:
     build: .
     expose:
       - '8080'
+    volumes:
+      - type: volume
+        source: storage
+        target: /home/user/.javadocky
+        volume:
+          nocopy: true
+volumes:
+  storage:
