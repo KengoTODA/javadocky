@@ -4,9 +4,10 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,12 +20,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /** A {@link VersionRepository} implementation which refers XML in remote Maven repository. */
-@Slf4j
 @Repository
 class RemoteRepoVersionReposiory implements VersionRepository {
   private static final String REPO_URL = "http://central.maven.org/maven2/";
   private static final String XML_NAME = "maven-metadata.xml";
 
+  private final Logger log = LoggerFactory.getLogger(getClass());
   private WebClient webClient = WebClient.create(REPO_URL);
 
   @Override

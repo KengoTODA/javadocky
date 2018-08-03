@@ -2,17 +2,19 @@ package jp.skypencil.javadocky;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@Slf4j
 public class JavadockyApplication {
   private static final String STORAGE_DIR = "storage";
   /** Name of directory to store downloaded javadoc.jar file. */
   private static final String JAVADOC_DIR = "javadoc";
+
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   public static void main(String[] args) {
     SpringApplication.run(JavadockyApplication.class, args);

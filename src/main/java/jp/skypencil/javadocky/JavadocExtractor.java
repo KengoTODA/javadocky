@@ -12,7 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -23,10 +24,11 @@ import reactor.util.function.Tuples;
 /**
  * This class is responsible to download javadoc.jar and unzip its contents onto {@link Storage}.
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class JavadocExtractor {
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
   @NonNull private final JavadocDownloader downloader;
 
   @NonNull private final Storage storage;

@@ -11,13 +11,14 @@ import java.nio.file.StandardOpenOption;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Slf4j
 @RequiredArgsConstructor
 public class LocalStorage implements Storage {
+  private final Logger log = LoggerFactory.getLogger(getClass());
   @NonNull @Getter private final Path root;
 
   @Override
