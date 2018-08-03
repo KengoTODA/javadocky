@@ -45,7 +45,6 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     return response.flatMap(this::fetchResponse);
   }
 
-  @SuppressWarnings("nullness")
   private Mono<ArtifactVersion> fetchResponse(ClientResponse res) {
     HttpStatus status = res.statusCode();
     if (status == HttpStatus.NOT_FOUND) {
@@ -80,7 +79,6 @@ class RemoteRepoVersionReposiory implements VersionRepository {
     return response.flatMapMany(this::listVersions);
   }
 
-  @SuppressWarnings("nullness")
   private Flux<ArtifactVersion> listVersions(ClientResponse res) {
     HttpStatus status = res.statusCode();
     if (status == HttpStatus.NOT_FOUND) {
