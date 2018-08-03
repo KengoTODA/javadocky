@@ -1,7 +1,7 @@
 package jp.skypencil.javadocky.repository;
 
 import java.io.File;
-import java.nio.ByteBuffer;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,5 +41,5 @@ public interface Storage {
       @NonNull String artifactId,
       @NonNull String version,
       @NonNull String path,
-      @NonNull Flux<ByteBuffer> data);
+      @NonNull Flux<DataBuffer> data);
 }

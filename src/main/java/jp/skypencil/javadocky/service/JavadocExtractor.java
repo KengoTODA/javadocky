@@ -2,15 +2,17 @@ package jp.skypencil.javadocky.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.annotation.ParametersAreNonnullByDefault;
 import jp.skypencil.javadocky.repository.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferFactory;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -21,6 +23,8 @@ import reactor.core.publisher.Mono;
  */
 @Service
 public class JavadocExtractor {
+  @NonNull private final DataBufferFactory dataBufferFactory = new DefaultDataBufferFactory();
+
   @NonNull private final JavadocDownloader downloader;
 
   @NonNull private final Storage storage;
@@ -43,12 +47,12 @@ public class JavadocExtractor {
                         "Javadoc.jar not found for %s:%s:%s", groupId, artifactId, version);
                 return Mono.error(new IllegalArgumentException(message));
               }
-              Flux<ByteBuffer> flux = unzip(downloaded.get(), groupId, artifactId, version, path);
+              Flux<DataBuffer> flux = unzip(downloaded.get(), groupId, artifactId, version, path);
               return storage.write(groupId, artifactId, version, path, flux);
             });
   }
 
-  private Flux<ByteBuffer> unzip(
+  private Flux<DataBuffer> unzip(
       File jar, String groupId, String artifactId, String version, String path) {
     try {
       ZipFile zip = new ZipFile(jar);
@@ -60,19 +64,8 @@ public class JavadocExtractor {
                 "%s not found in javadoc.jar of %s:%s:%s", path, groupId, artifactId, version);
         return Flux.error(new IllegalArgumentException(message));
       }
-      return Flux.<ByteBuffer>create(
-              sink -> {
-                byte[] bytes = new byte[8 * 1024];
-                try (InputStream input = zip.getInputStream(entry)) {
-                  int len;
-                  while ((len = input.read(bytes)) != -1) {
-                    sink.next(ByteBuffer.wrap(bytes, 0, len));
-                  }
-                } catch (IOException e) {
-                  sink.error(e);
-                }
-                sink.complete();
-              })
+      return DataBufferUtils.readInputStream(
+              () -> zip.getInputStream(entry), dataBufferFactory, 8 * 1024)
           .doFinally(
               signal -> {
                 try {
