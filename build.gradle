@@ -23,8 +23,8 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'io.franzbecker.gradle-lombok'
-apply plugin: "net.ltgt.errorprone"
 apply plugin: 'com.palantir.docker-run'
+apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
 apply from: "$rootDir/gradle/checker-framework.gradle"
 
@@ -58,17 +58,6 @@ dependencies {
   integrationTestCompile sourceSets.test.output
   integrationTestCompile configurations.testCompile
   integrationTestRuntime configurations.testRuntime
-
-  // for errorprone
-  errorprone 'com.google.errorprone:error_prone_core:2.3.1'
-  annotationProcessor 'jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.2'
-}
-
-tasks.withType(JavaCompile) {
-  options.compilerArgs += [
-    // '-Xep:Slf4jLoggerShouldBeNonStatic:OFF',
-    '-Xep:ParameterName:OFF'
-  ]
 }
 
 dockerRun {
