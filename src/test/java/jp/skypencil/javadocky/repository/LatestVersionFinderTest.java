@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;

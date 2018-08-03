@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.springframework.lang.NonNull;

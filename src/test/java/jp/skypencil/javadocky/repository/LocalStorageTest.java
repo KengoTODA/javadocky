@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

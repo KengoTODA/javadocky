@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import java.io.File;
 import java.nio.file.Path;

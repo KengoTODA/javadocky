@@ -8,7 +8,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.se
 
 import java.net.URI;
 import java.util.Objects;
-import jp.skypencil.javadocky.VersionRepository;
+import jp.skypencil.javadocky.repository.VersionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

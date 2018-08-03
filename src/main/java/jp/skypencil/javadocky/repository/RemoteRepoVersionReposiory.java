@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky;
+package jp.skypencil.javadocky.repository;
 
 import java.net.URI;
 import java.util.Collections;
