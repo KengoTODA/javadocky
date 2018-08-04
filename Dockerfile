@@ -1,6 +1,6 @@
 # https://spring.io/guides/gs/spring-boot-docker/
 
-FROM openjdk:8-alpine
+FROM openjdk:9-alpine
 RUN addgroup user && adduser -D -G user -h /home/user -s /bin/bash user && mkdir /home/user/.javadocky && chown -R user:user /home/user/.javadocky
 WORKDIR /home/user
 USER user

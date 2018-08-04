@@ -9,7 +9,7 @@ ext {
 }
 
 dependencies {
-  checkerFrameworkAnnotatedJDK "org.checkerframework:jdk8:${checkerFrameworkVersion}"
+  checkerFrameworkAnnotatedJDK "org.checkerframework:jdk9:${checkerFrameworkVersion}"
   annotationProcessor "org.checkerframework:checker:${checkerFrameworkVersion}"
   compileOnly "org.checkerframework:checker-qual:${checkerFrameworkVersion}"
 }

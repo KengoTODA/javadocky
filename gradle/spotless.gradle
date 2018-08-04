@@ -9,5 +9,6 @@ spotless {
         target '**/*.gradle'
         indentWithSpaces()
     }
-    freshmark { target 'README.md'}
+    // freshmark does not work on Java 9
+    // freshmark { target 'README.md'}
 }

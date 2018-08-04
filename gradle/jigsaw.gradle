@@ -1,0 +1,39 @@
+ext {
+  targetJavaVersion = JavaVersion.VERSION_1_9
+  moduleName = 'jp.skypencil.javadocky'
+  junitModuleName = 'junit'
+}
+
+sourceCompatibility = 1.9
+
+tasks.withType(JavaCompile) {
+  doFirst {
+    options.compilerArgs += [
+      "--module-path", classpath.asPath
+    ]
+    classpath = files()
+  }
+}
+
+compileTestJava {
+  doFirst {
+    options.compilerArgs += [
+        "--add-modules", junitModuleName,
+        "--patch-module", "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+        "--add-reads", "$moduleName=$junitModuleName"
+    ]
+  }
+}
+
+test {
+    inputs.property('moduleName', moduleName)
+    doFirst {
+        jvmArgs = [
+            '--module-path', classpath.asPath,
+            '--add-modules', 'ALL-MODULE-PATH',
+            '--add-reads', "$moduleName=junit",
+            '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+        ]
+        classpath = files()
+    }
+}
