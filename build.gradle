@@ -50,6 +50,7 @@ dependencies {
   compile('org.springframework.boot:spring-boot-starter-webflux')
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
   compileOnly('com.google.code.findbugs:jsr305:3.0.2')
+  compile('org.codehaus.janino:janino:3.0.8')
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('com.codeborne:selenide:4.12.3')
   testCompile('io.projectreactor:reactor-test')
