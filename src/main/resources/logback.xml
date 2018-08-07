@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <include resource="org/springframework/boot/logging/logback/base.xml"/>
-  <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
-    <syslogHost>${PAPERTRAIL_HOST}</syslogHost>
-    <port>${PAPERTRAIL_PORT}</port>
-    <facility>USER</facility>
-    <suffixPattern>${PAPERTRAIL_APP:-app} %highlight([%.-1level]) %35.35logger{35}:\t%m\t%cyan%ex{5}</suffixPattern>
-    <throwableExcluded>true</throwableExcluded>
-  </appender>
-  <root level="INFO">
-    <appender-ref ref="CONSOLE" />
-    <appender-ref ref="SYSLOG" />
-  </root>
+  <if condition='isDefined("PAPERTRAIL_HOST")'>
+    <then>
+      <!-- Enable papertrail only on Heroku environment -->
+      <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>${PAPERTRAIL_HOST}</syslogHost>
+        <port>${PAPERTRAIL_PORT}</port>
+        <facility>USER</facility>
+        <suffixPattern>${PAPERTRAIL_APP:-app} %highlight([%.-1level]) %35.35logger{35}:\t%m\t%cyan%ex{5}</suffixPattern>
+        <throwableExcluded>true</throwableExcluded>
+      </appender>
+      <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="SYSLOG" />
+      </root>
+    </then>
+  </if>
 </configuration>
