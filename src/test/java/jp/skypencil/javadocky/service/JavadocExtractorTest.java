@@ -13,12 +13,14 @@ import org.junit.rules.TemporaryFolder;
 import reactor.test.StepVerifier;
 
 public class JavadocExtractorTest {
+  private static final String MAVEN_REPO = "http://central.maven.org/maven2/";
+
   @Rule public TemporaryFolder folder = new TemporaryFolder();
 
   @Test
   public void test() throws IOException {
     JavadocDownloader downloader =
-        new JavadocDownloader(folder.newFolder("javadocky-javadoc").toPath());
+        new JavadocDownloader(folder.newFolder("javadocky-javadoc").toPath(), MAVEN_REPO);
     Path root = folder.newFolder("javadocky").toPath();
     Storage storage = new LocalStorage(root);
     JavadocExtractor extractor = new JavadocExtractor(downloader, storage);

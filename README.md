@@ -15,6 +15,14 @@ $ ./gradlew build && docker-compose up --build
 You can visit [http://localhost:8080/](http://localhost:8080/) to enjoy service.
 
 
+### How to configure
+
+You can [set environment variable](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html), to configure Javadocky.
+
+|name                      |default value                     |note    |
+|--------------------------|----------------------------------|--------|
+|javadocky.maven.repository|http://central.maven.org/maven2/  |URL of the Maven repository to download javadoc.jar|
+
 ## License
 
 Copyright 2017-2018 Kengo TODA
