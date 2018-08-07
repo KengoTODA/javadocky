@@ -26,14 +26,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class JavadocDownloader {
-  private static final String REPO_URL = "http://central.maven.org/maven2/";
-  private final WebClient webClient = WebClient.create(REPO_URL);
+  private final WebClient webClient;
 
   private final Path root;
 
   @Autowired
-  public JavadocDownloader(@NonNull Path root) {
+  public JavadocDownloader(@NonNull Path root, @NonNull String repoURL) {
     this.root = Objects.requireNonNull(root);
+    this.webClient = WebClient.create(Objects.requireNonNull(repoURL));
   }
 
   Mono<Optional<File>> download(String groupId, String artifactId, String version) {

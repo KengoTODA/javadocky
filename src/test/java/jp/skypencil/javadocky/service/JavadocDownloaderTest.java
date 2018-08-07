@@ -11,13 +11,16 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 public class JavadocDownloaderTest {
+  private static final String MAVEN_REPO = "http://central.maven.org/maven2/";
+
   @Rule public TemporaryFolder folder = new TemporaryFolder();
 
   @Test
   public void testDownload() throws IOException {
     Path root = folder.newFolder("javadocky-javadoc").toPath();
     Mono<Optional<File>> downloaded =
-        new JavadocDownloader(root).download("com.github.spotbugs", "spotbugs", "3.1.0-RC3");
+        new JavadocDownloader(root, MAVEN_REPO)
+            .download("com.github.spotbugs", "spotbugs", "3.1.0-RC3");
     StepVerifier.create(downloaded)
         .expectNextMatches(optional -> optional.get().length() == 7268250L)
         .expectComplete()
@@ -28,7 +31,8 @@ public class JavadocDownloaderTest {
   public void testDownloadingMissingJavadoc() throws IOException {
     Path root = folder.newFolder("javadocky-javadoc").toPath();
     Mono<Optional<File>> downloaded =
-        new JavadocDownloader(root).download("com.github.spotbugs", "spotbugs", "3.1.0-RC0");
+        new JavadocDownloader(root, MAVEN_REPO)
+            .download("com.github.spotbugs", "spotbugs", "3.1.0-RC0");
     StepVerifier.create(downloaded)
         .expectNextMatches(optional -> !optional.isPresent())
         .expectComplete()

@@ -1,17 +1,17 @@
 package jp.skypencil.javadocky.repository;
 
-import java.net.URI;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.xml.XmlEventDecoder;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -22,20 +22,17 @@ import reactor.core.publisher.Mono;
 /** A {@link VersionRepository} implementation which refers XML in remote Maven repository. */
 @Repository
 class RemoteRepoVersionReposiory implements VersionRepository {
-  private static final String REPO_URL = "http://central.maven.org/maven2/";
   private static final String XML_NAME = "maven-metadata.xml";
 
-  private final Logger log = LoggerFactory.getLogger(getClass());
-  private WebClient webClient = WebClient.create(REPO_URL);
+  private final WebClient webClient;
+
+  @Autowired
+  RemoteRepoVersionReposiory(@NonNull @Value("${javadocky.maven.repository}") String repoURL) {
+    this.webClient = WebClient.create(repoURL);
+  }
 
   @Override
   public Mono<ArtifactVersion> findLatest(String groupId, String artifactId) {
-    URI uri =
-        URI.create(REPO_URL)
-            .resolve(groupId.replace('.', '/') + "/")
-            .resolve(artifactId + "/")
-            .resolve(XML_NAME);
-    log.info("Downloading metadata from {}", uri);
     Mono<ClientResponse> response =
         webClient
             .get()
@@ -64,12 +61,6 @@ class RemoteRepoVersionReposiory implements VersionRepository {
 
   @Override
   public Flux<ArtifactVersion> list(String groupId, String artifactId) {
-    URI uri =
-        URI.create(REPO_URL)
-            .resolve(groupId.replace('.', '/') + "/")
-            .resolve(artifactId + "/")
-            .resolve(XML_NAME);
-    log.info("Downloading metadata from {}", uri);
     Mono<ClientResponse> response =
         webClient
             .get()

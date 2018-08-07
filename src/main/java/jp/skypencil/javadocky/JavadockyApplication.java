@@ -9,6 +9,7 @@ import jp.skypencil.javadocky.repository.Storage;
 import jp.skypencil.javadocky.service.JavadocDownloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -45,10 +46,11 @@ public class JavadockyApplication {
   }
 
   @Bean
-  public JavadocDownloader javadocDownloader() {
+  public JavadocDownloader javadocDownloader(
+      @Value("${javadocky.maven.repository}") String repoURL) {
     Path home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, JAVADOC_DIR);
     home.toFile().mkdirs();
     log.info("Making javadoc storage at {}", home.toFile().getAbsolutePath());
-    return new JavadocDownloader(home);
+    return new JavadocDownloader(home, repoURL);
   }
 }
