@@ -29,3 +29,7 @@ deploy:
   script: docker push kengotoda/javadocky
   on:
     branch: master
+
+cache:
+  directories:
+  - $HOME/.gradle
