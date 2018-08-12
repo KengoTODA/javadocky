@@ -6,9 +6,10 @@ sudo: required
 services:
   - docker
 before_install:
-  - docker login -u kengotoda -p "$DOCKER_HUB_PASSWORD"
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u kengotoda --password-stdin
 script:
   - ./gradlew
+before_deploy:
   - docker build --tag kengotoda/javadocky .
 jobs:
   include:
