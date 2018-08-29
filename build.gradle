@@ -55,7 +55,7 @@ dependencies {
   compileOnly('com.google.code.findbugs:jsr305:3.0.2')
   compile('org.codehaus.janino:janino:3.0.9')
   testCompile('org.springframework.boot:spring-boot-starter-test')
-  testCompile('com.codeborne:selenide:4.12.3')
+  testCompile('com.codeborne:selenide:4.14.0')
   testCompile('io.projectreactor:reactor-test')
 
   integrationTestCompile sourceSets.main.output
