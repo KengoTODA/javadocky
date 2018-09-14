@@ -2,12 +2,11 @@ apply plugin: "net.ltgt.errorprone"
 
 dependencies {
   errorprone 'com.google.errorprone:error_prone_core:2.3.1'
-  annotationProcessor 'jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.2'
+  errorprone 'jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.2'
+  errorproneJavac "com.google.errorprone:javac:9+181-r4173-1"
 }
 
 tasks.withType(JavaCompile) {
-  options.compilerArgs += [
-    // '-Xep:Slf4jLoggerShouldBeNonStatic:OFF',
-    '-Xep:ParameterName:OFF'
-  ]
+  options.errorprone.errorproneArgs << '-Xep:ParameterName:OFF'
+  // options.errorprone.errorproneArgs << '-Xep:Slf4jLoggerShouldBeNonStatic:OFF'
 }
