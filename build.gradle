@@ -17,6 +17,8 @@ buildscript {
   }
 }
 
+ext['selenium.version'] = '3.14.0'
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
