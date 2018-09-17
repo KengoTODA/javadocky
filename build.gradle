@@ -55,7 +55,7 @@ dependencies {
   runtimeOnly 'org.springframework.boot:spring-boot-starter-undertow'
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
   compileOnly('com.google.code.findbugs:jsr305:3.0.2')
-  compile('org.codehaus.janino:janino:3.0.9')
+  compile('org.codehaus.janino:janino:3.0.10')
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('com.codeborne:selenide:4.14.1')
   testCompile('io.projectreactor:reactor-test')
