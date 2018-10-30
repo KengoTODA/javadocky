@@ -48,7 +48,7 @@ sourceSets {
 }
 
 dependencies {
-  compile('org.apache.maven:maven-artifact:3.5.4')
+  compile('org.apache.maven:maven-artifact:3.6.0')
   compile('org.springframework.boot:spring-boot-starter-webflux'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
   }
