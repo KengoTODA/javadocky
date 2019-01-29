@@ -17,7 +17,7 @@ You can visit [http://localhost:8080/](http://localhost:8080/) to enjoy service.
 
 ### How to configure
 
-You can [set environment variable](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html), to configure Javadocky.
+You can [set property](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html), to configure Javadocky.
 
 |name                      |default value                     |note    |
 |--------------------------|----------------------------------|--------|
