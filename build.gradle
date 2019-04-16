@@ -11,7 +11,7 @@ buildscript {
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.7.1"
+    classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.8"
     classpath "com.diffplug.spotless:spotless-plugin-gradle:3.22.0"
     classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.0.1622"
   }
