@@ -7,6 +7,8 @@ dependencies {
 }
 
 tasks.withType(JavaCompile) {
-  options.errorprone.errorproneArgs << '-Xep:ParameterName:OFF'
-  // options.errorprone.errorproneArgs << '-Xep:Slf4jLoggerShouldBeNonStatic:OFF'
+  options.errorprone {
+    option("parameterName", "OFF")
+    // options.errorprone.errorproneArgs << '-Xep:Slf4jLoggerShouldBeNonStatic:OFF'
+  }
 }
