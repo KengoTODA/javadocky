@@ -9,5 +9,4 @@ spotless {
         target '**/*.gradle'
         indentWithSpaces()
     }
-    freshmark { target 'README.md'}
 }
