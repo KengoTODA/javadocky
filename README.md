@@ -1,7 +1,7 @@
 # javadocky
 
 This project is a clone of [javadoc.io](http://javadoc.io/).
-This is also a sandbox project to play with spring-boot v2.0, spring-webflux v5.0 and selenide v4.5.
+This is also a sandbox project to play with spring-boot v2.1, spring-webflux v5.0 and selenide v5.2.
 
 [![Build Status](https://travis-ci.org/KengoTODA/javadocky.svg?branch=master)](https://travis-ci.org/KengoTODA/javadocky)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=javadocky&metric=coverage)](https://sonarcloud.io/dashboard?id=javadocky)
@@ -25,7 +25,7 @@ You can [set property](https://docs.spring.io/spring-boot/docs/current/reference
 
 ## License
 
-Copyright 2017-2018 Kengo TODA
+Copyright 2017-2019 Kengo TODA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
