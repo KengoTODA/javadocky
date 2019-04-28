@@ -9,7 +9,7 @@ This is also a sandbox project to play with spring-boot v2.1, spring-webflux v5.
 ## How to build
 
 ```sh
-$ ./gradlew build && docker-compose up --build
+$ docker-compose up --build
 ```
 
 You can visit [http://localhost:8080/](http://localhost:8080/) to enjoy service.
