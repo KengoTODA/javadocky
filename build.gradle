@@ -1,4 +1,4 @@
-ext.targetJavaVersion = JavaVersion.VERSION_1_8
+ext.targetJavaVersion = JavaVersion.VERSION_11
 
 buildscript {
   ext {
