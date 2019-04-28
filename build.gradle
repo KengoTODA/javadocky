@@ -25,12 +25,11 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
-apply from: "$rootDir/gradle/checker-framework.gradle"
 apply from: "$rootDir/gradle/jacoco.gradle"
 apply from: "$rootDir/gradle/sonarqube.gradle"
 
 version = '0.3.0-SNAPSHOT'
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 repositories {
   mavenCentral()
