@@ -3,14 +3,8 @@ jdk:
   - oraclejdk8
 sudo: required
 
-services:
-  - docker
-before_install:
-  - echo "$DOCKER_HUB_PASSWORD" | docker login -u kengotoda --password-stdin
 script:
   - ./gradlew
-before_deploy:
-  - docker build --tag kengotoda/javadocky .
 jobs:
   include:
     - stage: analysis
@@ -23,13 +17,6 @@ addons:
     organization: "kengotoda-github"
     token:
       secure: "EWPkBtY4AzvId1eRAweDxB6jvUJkdaHJe8FYVSa5p067c04yJ+s1MCQLFUKLC/UkuWxXyQFsTNsfINpgvJ0LJ6foYreSGSJNmC/bPXnSGywi++5Rq9Y4puFz+opqelxslAfvhPKkGTmats/BFPq0pOrMFnQULh4WuOzBMaQiESAIHRbPAjuO4chT0ykpJTojKYvRaMebTwyGCIna0K4bkEt8K1fekxs+a5zbz3FwCU5ZEOkQQHALpX3mphKeXPR5nWfU8A6iivIGzkHK1QuBp9/MLMQH5k1i4HI5n2KzMO1A1qdSyFC+Mz7C97o9G8MF+mjs1M/rjuv+D9mBk1Il8jhR6MWoK3gtYOxLM29OltyuDvbW1ptCH0GPPG9v+XAnV3TUjDGXdYnKpSLGlqq9DeIFTM4Uo6L9xptks+r00qiM9CA4f8p8x4KKLQBwBxUo6GfV8HAHKT4a/ReMiBwbyR0I59CVhoLbi1x4tpZenocg/yM3ykY+YleIO8kNtdHxSZ7ij21Cs+ZfO/TNkU8ksxzGKY1G/28yLqd4w22+Dz1T2JpK5JQ3Kol55sPmR2ML3zO2Uv7K8tYBaXJLg1RbykHEe7+cWJHniTFQW/YUAl5+XYt4ExQvRQb1ZsQN3SGRtOfqGaVv8Vy9RooK+SUd/yB599BRxqdZOhMHN+pHl5A="
-
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: docker push kengotoda/javadocky
-  on:
-    branch: master
 
 cache:
   directories:
