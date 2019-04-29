@@ -5,19 +5,21 @@ FROM adoptopenjdk/openjdk11:alpine
 COPY . /javadocky/
 RUN cd /javadocky && ./gradlew assemble
 
-FROM adoptopenjdk/openjdk11:alpine as runtime
+FROM amazoncorretto:11 as jlink
 RUN jlink \
     --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql \
     --strip-debug \
     --compress 2 \
     --no-header-files \
     --no-man-pages \
-    --output /jlink && \
-    rm -rf ${JAVA_HOME} && \
-    mv -f /jlink ${JAVA_HOME}
-RUN addgroup user && adduser -D -G user -h /home/user -s /bin/bash user && mkdir /home/user/.javadocky && chown -R user:user /home/user/.javadocky
-WORKDIR /home/user
-USER user
-VOLUME /home/user/.javadocky
-COPY --from=0 --chown=user:user /javadocky/build/libs/javadocky-*.jar /home/user/javadocky.jar
-ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /home/user/javadocky.jar" ]
+    --output /jlink
+
+FROM amazonlinux:2
+RUN mkdir -p /javadocky/.javadocky
+WORKDIR /javadocky
+ENV JAVA_HOME=/opt/jre
+ENV PATH=${PATH}:${JAVA_HOME}/bin
+VOLUME /javadocky/.javadocky
+COPY --from=0 /javadocky/build/libs/javadocky-*.jar /javadocky/javadocky.jar
+COPY --from=1 /jlink $JAVA_HOME
+ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /javadocky/javadocky.jar" ]
