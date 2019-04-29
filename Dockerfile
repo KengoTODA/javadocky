@@ -44,8 +44,9 @@ RUN apk add --no-cache --virtual .build-deps curl binutils \
     && apk del --purge .build-deps \
     && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /tmp/libz /tmp/libz.tar.xz /var/cache/apk/*
 
-RUN mkdir -p /javadocky/.javadocky
+RUN addgroup user && adduser -D -G user -h /home/user -s /bin/bash user && mkdir /home/user/.javadocky && chown -R user:user /home/user/.javadocky
 WORKDIR /javadocky
+USER user
 VOLUME /javadocky/.javadocky
 COPY --from=0 /javadocky/build/libs/javadocky-*.jar /javadocky/javadocky.jar
 COPY --from=1 /jlink $JAVA_HOME
