@@ -2,7 +2,7 @@ ext.targetJavaVersion = JavaVersion.VERSION_11
 
 buildscript {
   ext {
-    springBootVersion = '2.1.4.RELEASE'
+    springBootVersion = '2.1.5.RELEASE'
   }
   repositories {
     mavenCentral()
