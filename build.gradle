@@ -51,7 +51,6 @@ dependencies {
   compile('org.springframework.boot:spring-boot-starter-webflux'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
   }
-  runtimeOnly 'org.springframework.boot:spring-boot-starter-undertow'
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
   compileOnly('com.google.code.findbugs:jsr305:3.0.2')
   compile('org.codehaus.janino:janino:3.0.12')
