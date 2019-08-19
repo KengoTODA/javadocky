@@ -1,7 +1,7 @@
 package jp.skypencil.javadocky;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.getElement;
+import static com.codeborne.selenide.Selenide.element;
 import static com.codeborne.selenide.Selenide.open;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -33,6 +33,6 @@ public class IndexTest {
   @Test
   public void testTitleExplainsServiceName() {
     open("http://localhost:" + port + "/");
-    getElement(By.tagName("h1")).shouldHave(text("Javadocky"));
+    element(By.tagName("h1")).shouldHave(text("Javadocky"));
   }
 }
