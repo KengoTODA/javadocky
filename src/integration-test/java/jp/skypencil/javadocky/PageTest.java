@@ -1,11 +1,11 @@
 package jp.skypencil.javadocky;
 
+import static com.codeborne.selenide.Selenide.element;
 import static com.codeborne.selenide.Selenide.open;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
-import static com.codeborne.selenide.Selenide.element;
 
 import com.codeborne.selenide.Selenide;
 import java.util.Objects;
