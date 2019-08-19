@@ -22,7 +22,7 @@ class BrowserStack implements TestRule {
 
   @Override
   public Statement apply(Statement base, Description description) {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     String userName = dotenv.get("BROWSERSTACK_USERNAME");
     String accessKey = dotenv.get("BROWSERSTACK_ACCESS_KEY");
     String id = dotenv.get("BROWSERSTACK_LOCAL_IDENTIFIER");
