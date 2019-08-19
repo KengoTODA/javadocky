@@ -3,7 +3,7 @@ jdk:
   - oraclejdk11
 
 script:
-  - ./gradlew
+  - ./gradlew spotlessCheck build
 jobs:
   include:
     - stage: analysis
@@ -16,7 +16,10 @@ addons:
     organization: "kengotoda-github"
     token:
       secure: "EWPkBtY4AzvId1eRAweDxB6jvUJkdaHJe8FYVSa5p067c04yJ+s1MCQLFUKLC/UkuWxXyQFsTNsfINpgvJ0LJ6foYreSGSJNmC/bPXnSGywi++5Rq9Y4puFz+opqelxslAfvhPKkGTmats/BFPq0pOrMFnQULh4WuOzBMaQiESAIHRbPAjuO4chT0ykpJTojKYvRaMebTwyGCIna0K4bkEt8K1fekxs+a5zbz3FwCU5ZEOkQQHALpX3mphKeXPR5nWfU8A6iivIGzkHK1QuBp9/MLMQH5k1i4HI5n2KzMO1A1qdSyFC+Mz7C97o9G8MF+mjs1M/rjuv+D9mBk1Il8jhR6MWoK3gtYOxLM29OltyuDvbW1ptCH0GPPG9v+XAnV3TUjDGXdYnKpSLGlqq9DeIFTM4Uo6L9xptks+r00qiM9CA4f8p8x4KKLQBwBxUo6GfV8HAHKT4a/ReMiBwbyR0I59CVhoLbi1x4tpZenocg/yM3ykY+YleIO8kNtdHxSZ7ij21Cs+ZfO/TNkU8ksxzGKY1G/28yLqd4w22+Dz1T2JpK5JQ3Kol55sPmR2ML3zO2Uv7K8tYBaXJLg1RbykHEe7+cWJHniTFQW/YUAl5+XYt4ExQvRQb1ZsQN3SGRtOfqGaVv8Vy9RooK+SUd/yB599BRxqdZOhMHN+pHl5A="
-
+  browserstack:
+    username: "kengotoda1"
+    access_key:
+      secure: "wIxnWbLVuLdxdSQCr4lH5PCe9gTP8R6tnPDVzGwJ8F9dlgAlG2fv5xDvImgBXDWWt0x4gSbkI52Emw4R3xx6tSQnDZ2XVxUvQTD51uukg4XRJ0PKJbj5iK513gT9QOJFhl1Pf7Dqh+b8C4Ua/TLx2YoUxYa9XXtKKzyXgiLlseEyEhECN5AshmdxKUeyvRzHMccqy6eclWVxI1G7U0E59vEjAYx2NNv77iyTh45ljtIWm+PP5VDEAvMqw1gB4r1J/Cj4kGwSf/ZxdxKuhBp7UtGPH70zAz3mxG/o6NomWDSzx4zObNukeiE2IJCoLVUa8VXregCmSQDPg3vl4ZyZw5t6KiTsXsbj9MdG8PcjovZwwUddLnhUVmj8R4X1EGAcD72jitYZDMESzgV9KuQoW0BUvsxzhDmjKMzUNcX5Y2F2ORZxBmRwBB254aQKWd1gZtY53FCMlhqa4oAMsf8qkjO6cebE7uQ0WE/imUCo6mroN7+gavBi7LHG5YqFLQ2ruU5KGMUA638i2VsxNSU7U3I0zrC19Pqd0NY84ogkBT3ZuV4M/rSzO2dI6QzZxXSL9rwDODaEyJCwQepXvJNZzI72UeUfDg6/uMVBD99Ba/Ms6HyuAQcFDXXGMsSMd/mUMVqa0qctcWpDMzzNn6pbfjW2QMv+WPpmxagQygUlhUY="
 cache:
   directories:
   - $HOME/.gradle

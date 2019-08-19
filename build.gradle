@@ -57,6 +57,9 @@ dependencies {
   testCompile('org.springframework.boot:spring-boot-starter-test')
   testCompile('com.codeborne:selenide:5.2.8')
   testCompile('io.projectreactor:reactor-test')
+  testCompile('io.github.cdimascio:java-dotenv:5.1.1')
+  testCompile('com.browserstack:browserstack-local-java:0.1.0')
+  testCompile('com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9')
 
   integrationTestCompile sourceSets.main.output
   integrationTestCompile sourceSets.test.output
