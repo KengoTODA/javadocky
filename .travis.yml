@@ -3,7 +3,7 @@ jdk:
   - oraclejdk11
 
 script:
-  - ./gradlew
+  - ./gradlew spotlessCheck build
 jobs:
   include:
     - stage: analysis
