@@ -68,7 +68,6 @@ dependencies {
 }
 
 task integrationTest(type: Test) {
-  systemProperty 'remote', 'http://localhost:4444/wd/hub'
   testClassesDirs = files(sourceSets.integrationTest.java.outputDir)
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
