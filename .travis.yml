@@ -9,7 +9,7 @@ jobs:
     - stage: analysis
       if: fork = false
       script:
-        - ./gradlew build sonarqube
+        - ./gradlew build sonarqube -S
 
 addons:
   sonarcloud:
