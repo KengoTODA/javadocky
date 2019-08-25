@@ -1,35 +1,29 @@
 package jp.skypencil.javadocky.repository;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import reactor.test.StepVerifier;
 
-public class LocalStorageArtifactRepositoryTest {
-  @Rule public TemporaryFolder folder = new TemporaryFolder();
-
+class LocalStorageArtifactRepositoryTest {
   @Test
-  public void testNoDir() throws IOException {
-    File root = folder.newFolder();
+  void testNoDir(@TempDir File root) throws IOException {
     LocalStorageArtifactRepository repo = new LocalStorageArtifactRepository(root.toPath());
     StepVerifier.create(repo.list("foo")).expectComplete().verify();
   }
 
   @Test
-  public void testEmpty() throws IOException {
-    File root = folder.newFolder();
+  void testEmpty(@TempDir File root) throws IOException {
     LocalStorageArtifactRepository repo = new LocalStorageArtifactRepository(root.toPath());
     assertTrue(new File(root, "foo").mkdir());
     StepVerifier.create(repo.list("foo")).expectComplete().verify();
   }
 
   @Test
-  public void test() throws IOException {
-    File root = folder.newFolder();
+  void test(@TempDir File root) throws IOException {
     LocalStorageArtifactRepository repo = new LocalStorageArtifactRepository(root.toPath());
     File groupDir = new File(root, "group");
     assertTrue(groupDir.mkdir());

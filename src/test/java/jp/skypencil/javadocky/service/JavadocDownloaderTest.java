@@ -4,20 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-public class JavadocDownloaderTest {
+class JavadocDownloaderTest {
   private static final String MAVEN_REPO = "http://central.maven.org/maven2/";
 
-  @Rule public TemporaryFolder folder = new TemporaryFolder();
-
   @Test
-  public void testDownload() throws IOException {
-    Path root = folder.newFolder("javadocky-javadoc").toPath();
+  void testDownload(@TempDir Path root) throws IOException {
     Mono<Optional<File>> downloaded =
         new JavadocDownloader(root, MAVEN_REPO)
             .download("com.github.spotbugs", "spotbugs", "3.1.0-RC3");
@@ -28,8 +24,7 @@ public class JavadocDownloaderTest {
   }
 
   @Test
-  public void testDownloadingMissingJavadoc() throws IOException {
-    Path root = folder.newFolder("javadocky-javadoc").toPath();
+  void testDownloadingMissingJavadoc(@TempDir Path root) throws IOException {
     Mono<Optional<File>> downloaded =
         new JavadocDownloader(root, MAVEN_REPO)
             .download("com.github.spotbugs", "spotbugs", "3.1.0-RC0");

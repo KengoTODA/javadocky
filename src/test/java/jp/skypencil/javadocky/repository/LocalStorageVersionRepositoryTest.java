@@ -1,22 +1,18 @@
 package jp.skypencil.javadocky.repository;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import reactor.test.StepVerifier;
 
-public class LocalStorageVersionRepositoryTest {
-  @Rule public TemporaryFolder folder = new TemporaryFolder();
-
+class LocalStorageVersionRepositoryTest {
   @Test
-  public void test() throws IOException {
-    Path root = folder.newFolder("javadocky").toPath();
+  void test(@TempDir Path root) throws IOException {
     LocalStorageVersionRepository repository = new LocalStorageVersionRepository(root);
     StepVerifier.create(repository.findLatest("g", "a")).expectComplete().verify();
 

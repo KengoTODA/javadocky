@@ -2,13 +2,10 @@ test {
   useJUnitPlatform()
 }
 
-dependencies {
-  def junit4Version   = '4.12'
-  def junitBomVersion = '5.5.1'
+// https://docs.spring.io/spring-boot/docs/2.1.7.RELEASE/gradle-plugin/reference/html/#managing-dependencies-customizing
+ext['junit-jupiter.version'] = '5.5.1'
 
-  testImplementation platform("org.junit:junit-bom:$junitBomVersion")
+dependencies {
   testImplementation "org.junit.jupiter:junit-jupiter"
-  testImplementation "junit:junit:${junit4Version}"
-  testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
   testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }

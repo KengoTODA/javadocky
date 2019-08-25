@@ -3,14 +3,14 @@ package jp.skypencil.javadocky.repository;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import javax.xml.stream.events.XMLEvent;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.codec.xml.XmlEventDecoder;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-public class LatestVersionFinderTest {
+class LatestVersionFinderTest {
   private static final String XML =
       "<metadata>"
           + "<groupId>com.github.spotbugs</groupId>"
@@ -28,7 +28,7 @@ public class LatestVersionFinderTest {
           + "</metadata>";
 
   @Test
-  public void test() {
+  void test() {
     Flux<XMLEvent> events =
         new XmlEventDecoder()
             .decode(Flux.just(stringBuffer(XML)), null, null, Collections.emptyMap());

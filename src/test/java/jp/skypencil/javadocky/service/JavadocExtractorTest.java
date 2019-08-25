@@ -1,27 +1,22 @@
 package jp.skypencil.javadocky.service;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import jp.skypencil.javadocky.repository.LocalStorage;
 import jp.skypencil.javadocky.repository.Storage;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import reactor.test.StepVerifier;
 
-public class JavadocExtractorTest {
+class JavadocExtractorTest {
   private static final String MAVEN_REPO = "http://central.maven.org/maven2/";
 
-  @Rule public TemporaryFolder folder = new TemporaryFolder();
-
   @Test
-  public void test() throws IOException {
-    JavadocDownloader downloader =
-        new JavadocDownloader(folder.newFolder("javadocky-javadoc").toPath(), MAVEN_REPO);
-    Path root = folder.newFolder("javadocky").toPath();
+  void test(@TempDir Path root, @TempDir Path javadoc) throws IOException {
+    JavadocDownloader downloader = new JavadocDownloader(javadoc, MAVEN_REPO);
     Storage storage = new LocalStorage(root);
     JavadocExtractor extractor = new JavadocExtractor(downloader, storage);
 
