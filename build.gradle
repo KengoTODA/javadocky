@@ -7,14 +7,13 @@ plugins {
   id "org.springframework.boot" version "2.1.7.RELEASE"
 }
 
-ext.targetJavaVersion = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_11
 ext['selenium.version'] = '3.141.59'
 
 apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
 apply from: "$rootDir/gradle/jacoco.gradle"
 
-sourceCompatibility = 11
 
 repositories {
   mavenCentral()
