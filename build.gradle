@@ -13,7 +13,6 @@ ext['selenium.version'] = '3.141.59'
 apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
 apply from: "$rootDir/gradle/jacoco.gradle"
-apply from: "$rootDir/gradle/sonarqube.gradle"
 
 version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 11
