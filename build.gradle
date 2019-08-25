@@ -14,7 +14,6 @@ apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
 apply from: "$rootDir/gradle/jacoco.gradle"
 
-version = '0.3.0-SNAPSHOT'
 sourceCompatibility = 11
 
 repositories {
