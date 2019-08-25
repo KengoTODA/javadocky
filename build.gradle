@@ -57,9 +57,5 @@ task integrationTest(type: Test) {
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
-wrapper {
-  gradleVersion = '5.4.1'
-}
-
 build.dependsOn integrationTest
 defaultTasks 'spotlessApply', 'build'
