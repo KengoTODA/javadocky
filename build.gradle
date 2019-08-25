@@ -7,17 +7,16 @@ plugins {
   id "org.springframework.boot" version "2.1.7.RELEASE"
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-ext['selenium.version'] = '3.141.59'
-
-apply from: "$rootDir/gradle/errorprone.gradle"
-apply from: "$rootDir/gradle/spotless.gradle"
-apply from: "$rootDir/gradle/jacoco.gradle"
-
-
 repositories {
   mavenCentral()
 }
+
+ext.sourceCompatibility = JavaVersion.VERSION_11
+
+apply from: "$rootDir/gradle/errorprone.gradle"
+apply from: "$rootDir/gradle/spotless.gradle"
+apply from: "$rootDir/gradle/junit.gradle"
+apply from: "$rootDir/gradle/jacoco.gradle"
 
 sourceSets {
   integrationTest {
@@ -35,7 +34,9 @@ dependencies {
   compile('org.springframework.boot:spring-boot-starter-thymeleaf')
   compileOnly('com.google.code.findbugs:jsr305:3.0.2')
   compile('org.codehaus.janino:janino:3.1.0')
-  testCompile('org.springframework.boot:spring-boot-starter-test')
+  testCompile('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'junit', module: 'junit'
+  }
   testCompile('com.codeborne:selenide:5.2.8')
   testCompile('io.projectreactor:reactor-test')
   testCompile('io.github.cdimascio:java-dotenv:5.1.1')

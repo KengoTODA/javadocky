@@ -1,0 +1,14 @@
+test {
+  useJUnitPlatform()
+}
+
+dependencies {
+  def junit4Version   = '4.12'
+  def junitBomVersion = '5.5.1'
+
+  testImplementation platform("org.junit:junit-bom:$junitBomVersion")
+  testImplementation "org.junit.jupiter:junit-jupiter"
+  testImplementation "junit:junit:${junit4Version}"
+  testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
+  testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
