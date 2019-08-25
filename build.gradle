@@ -36,6 +36,7 @@ dependencies {
   compile('org.codehaus.janino:janino:3.1.0')
   testCompile('org.springframework.boot:spring-boot-starter-test') {
     exclude group: 'junit', module: 'junit'
+    exclude group: 'org.junit.jupiter'
   }
   testCompile('com.codeborne:selenide:5.2.8')
   testCompile('io.projectreactor:reactor-test')
@@ -47,6 +48,8 @@ dependencies {
   integrationTestCompile sourceSets.test.output
   integrationTestCompile configurations.testCompile
   integrationTestRuntime configurations.testRuntime
+  integrationTestCompile "junit:junit:4.12"
+  integrationTestRuntime "org.junit.vintage:junit-vintage-engine"
 }
 
 task integrationTest(type: Test) {
