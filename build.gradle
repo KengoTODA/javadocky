@@ -38,10 +38,7 @@ dependencies {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.jupiter'
   }
-  testCompile('com.codeborne:selenide:5.2.8')
   testCompile('io.projectreactor:reactor-test')
-  testCompile('io.github.cdimascio:java-dotenv:5.1.1')
-  testCompile('com.browserstack:browserstack-local-java:0.1.0')
   testCompile('com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0.pr1')
 
   integrationTestCompile sourceSets.main.output
@@ -50,6 +47,9 @@ dependencies {
   integrationTestRuntime configurations.testRuntime
   integrationTestCompile "junit:junit:4.12"
   integrationTestCompile "io.github.bonigarcia:selenium-jupiter:3.3.0"
+  integrationTestCompile 'com.browserstack:browserstack-local-java:0.1.0'
+  integrationTestCompile 'io.github.cdimascio:java-dotenv:5.1.1'
+  integrationTestCompile 'com.codeborne:selenide:5.2.8'
   integrationTestRuntime "org.junit.vintage:junit-vintage-engine"
 }
 
