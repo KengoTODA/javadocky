@@ -49,6 +49,7 @@ dependencies {
   integrationTestCompile configurations.testCompile
   integrationTestRuntime configurations.testRuntime
   integrationTestCompile "junit:junit:4.12"
+  integrationTestCompile "io.github.bonigarcia:selenium-jupiter:3.3.0"
   integrationTestRuntime "org.junit.vintage:junit-vintage-engine"
 }
 
