@@ -32,7 +32,6 @@ dependencies {
     exclude group: 'org.junit.jupiter'
   }
   testCompile('io.projectreactor:reactor-test')
-  testCompile('com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0.pr1')
 }
 
 defaultTasks 'spotlessApply', 'build'
