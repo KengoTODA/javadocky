@@ -16,21 +16,23 @@ configurations {
 }
 
 dependencies {
-  integrationTestCompileOnly "junit:junit:4.12"
-  integrationTestCompile "io.github.bonigarcia:selenium-jupiter:3.3.0"
-  integrationTestCompile 'com.browserstack:browserstack-local-java:0.1.0'
-  integrationTestCompile 'io.github.cdimascio:java-dotenv:5.1.1'
+  integrationTestImplementation "org.junit.jupiter:junit-jupiter-api"
+  integrationTestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  integrationTestImplementation "io.github.bonigarcia:selenium-jupiter:3.3.0"
   integrationTestCompile 'com.codeborne:selenide:5.2.8'
-  integrationTestRuntimeOnly "org.junit.vintage:junit-vintage-engine"
+
+  // https://github.com/spotify/docker-client/issues/1030
+  integrationTestRuntimeOnly 'org.glassfish.jersey.inject:jersey-hk2:2.27'
 }
 
 task integrationTest(type: Test) {
   description = 'Runs integration tests.'
   group = 'verification'
 
-  // useJUnitPlatform()
+  useJUnitPlatform()
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
+
   shouldRunAfter test
 }
 

@@ -1,15 +1,17 @@
 language: java
 jdk:
   - oraclejdk11
+services:
+  - docker
 
 script:
-  - ./gradlew spotlessCheck build
+  - ./gradlew spotlessCheck build -S
 jobs:
   include:
     - stage: analysis
       if: fork = false
       script:
-        - ./gradlew build sonarqube
+        - ./gradlew build sonarqube -S
 
 addons:
   sonarcloud:

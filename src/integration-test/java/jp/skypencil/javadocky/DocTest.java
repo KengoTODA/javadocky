@@ -6,38 +6,41 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.element;
 import static com.codeborne.selenide.Selenide.open;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.codeborne.selenide.Browsers;
+import com.codeborne.selenide.SelenideDriver;
+import io.github.bonigarcia.seljup.SelenideConfiguration;
+import io.github.bonigarcia.seljup.SeleniumExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DocTest {
+@ExtendWith(SeleniumExtension.class)
+class DocTest {
   @LocalServerPort private int port;
-
-  @Rule public BrowserStack browserStack = new BrowserStack();
 
   /** Doc page should have {@code <iframe>} to display {@code index.html}. */
   @Test
-  public void testDocPageShouldHaveIframe() {
+  void testDocPageShouldHaveIframe(
+      @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
     open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
     element(By.tagName("iframe")).should(exist);
   }
 
   /** Doc page should have dropdown list to select {@code artifactId}. */
   @Test
-  public void testDocPageShouldHaveListOfArtifactId() {
+  void testDocPageShouldHaveListOfArtifactId(
+      @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
     open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
     $("li.dropdown#artifact-id").shouldHave(text("helper"));
   }
 
   /** Doc page should have dropdown list to select {@code version}. */
   @Test
-  public void testDocPageShouldHaveListOfVersion() {
+  void testDocPageShouldHaveListOfVersion(
+      @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
     open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
     $("li.dropdown#version").shouldHave(text("1.2.0"));
   }
