@@ -25,7 +25,7 @@ class PageTest {
   @Test
   void testPageShouldHaveFrameset(
       @SelenideConfiguration(browser = CHROME, headless = true) SelenideDriver driver) {
-    driver.open("http://localhost:" + port + "/page/jp.skypencil.guava/helper/1.0.1/");
+    driver.open("http://172.17.0.1:" + port + "/page/jp.skypencil.guava/helper/1.0.1/");
     assertTrue(driver.$(By.tagName("frameset")).exists());
   }
 
