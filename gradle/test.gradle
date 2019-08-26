@@ -1,5 +1,12 @@
+// refs https://docs.gradle.org/current/userguide/java_testing.html
+
 test {
   useJUnitPlatform()
+  finalizedBy(jacocoTestReport)
+}
+
+jacoco {
+    toolVersion = "0.8.4"
 }
 
 // https://docs.spring.io/spring-boot/docs/2.1.7.RELEASE/gradle-plugin/reference/html/#managing-dependencies-customizing
