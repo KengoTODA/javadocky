@@ -1,0 +1,37 @@
+// refs https://docs.gradle.org/current/userguide/java_testing.html
+
+sourceSets {
+  integrationTest {
+    java {
+      srcDir 'src/integration-test/java'
+    }
+    compileClasspath += sourceSets.main.output
+    runtimeClasspath += sourceSets.main.output
+  }
+}
+
+configurations {
+  integrationTestCompile.extendsFrom testCompile
+  integrationTestRuntime.extendsFrom testRuntime
+}
+
+dependencies {
+  integrationTestCompileOnly "junit:junit:4.12"
+  integrationTestCompile "io.github.bonigarcia:selenium-jupiter:3.3.0"
+  integrationTestCompile 'com.browserstack:browserstack-local-java:0.1.0'
+  integrationTestCompile 'io.github.cdimascio:java-dotenv:5.1.1'
+  integrationTestCompile 'com.codeborne:selenide:5.2.8'
+  integrationTestRuntimeOnly "org.junit.vintage:junit-vintage-engine"
+}
+
+task integrationTest(type: Test) {
+  description = 'Runs integration tests.'
+  group = 'verification'
+
+  // useJUnitPlatform()
+  testClassesDirs = sourceSets.integrationTest.output.classesDirs
+  classpath = sourceSets.integrationTest.runtimeClasspath
+  shouldRunAfter test
+}
+
+check.dependsOn integrationTest
