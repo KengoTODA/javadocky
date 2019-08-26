@@ -25,7 +25,7 @@ class DocTest {
   @Test
   void testDocPageShouldHaveIframe(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+    open("http://172.17.0.1:" + port + "/doc/jp.skypencil.guava/helper/");
     element(By.tagName("iframe")).should(exist);
   }
 
@@ -33,7 +33,7 @@ class DocTest {
   @Test
   void testDocPageShouldHaveListOfArtifactId(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+    open("http://172.17.0.1:" + port + "/doc/jp.skypencil.guava/helper/");
     $("li.dropdown#artifact-id").shouldHave(text("helper"));
   }
 
@@ -41,7 +41,7 @@ class DocTest {
   @Test
   void testDocPageShouldHaveListOfVersion(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+    open("http://172.17.0.1:" + port + "/doc/jp.skypencil.guava/helper/");
     $("li.dropdown#version").shouldHave(text("1.2.0"));
   }
 }

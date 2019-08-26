@@ -23,7 +23,7 @@ class IndexTest {
   @Test
   void testTitleExplainsServiceName(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    open("http://localhost:" + port + "/");
+    open("http://172.17.0.1:" + port + "/");
     element(By.tagName("h1")).shouldHave(text("Javadocky"));
   }
 }
