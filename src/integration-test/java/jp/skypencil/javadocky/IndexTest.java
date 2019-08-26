@@ -1,8 +1,6 @@
 package jp.skypencil.javadocky;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.element;
-import static com.codeborne.selenide.Selenide.open;
 
 import com.codeborne.selenide.Browsers;
 import com.codeborne.selenide.SelenideDriver;
@@ -23,7 +21,7 @@ class IndexTest {
   @Test
   void testTitleExplainsServiceName(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    open("http://172.17.0.1:" + port + "/");
-    element(By.tagName("h1")).shouldHave(text("Javadocky"));
+    driver.open("http://172.17.0.1:" + port + "/");
+    driver.$(By.tagName("h1")).shouldHave(text("Javadocky"));
   }
 }
