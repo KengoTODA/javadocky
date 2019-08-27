@@ -6,15 +6,23 @@ import static com.codeborne.selenide.Condition.text;
 import com.codeborne.selenide.Browsers;
 import com.codeborne.selenide.SelenideDriver;
 import io.github.bonigarcia.seljup.SelenideConfiguration;
+import io.github.bonigarcia.seljup.SeleniumExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
-class DocTest extends SelenideTest {
+@ExtendWith(SeleniumExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class DocTest {
+  @LocalServerPort private int port;
+
   /** Doc page should have {@code <iframe>} to display {@code index.html}. */
   @Test
   void testDocPageShouldHaveIframe(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    driver.open("/doc/jp.skypencil.guava/helper/");
+    driver.open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
     driver.$(By.tagName("iframe")).should(exist);
   }
 
@@ -22,7 +30,7 @@ class DocTest extends SelenideTest {
   @Test
   void testDocPageShouldHaveListOfArtifactId(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    driver.open("/doc/jp.skypencil.guava/helper/");
+    driver.open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
     driver.$("li.dropdown#artifact-id").shouldHave(text("helper"));
   }
 
@@ -30,7 +38,7 @@ class DocTest extends SelenideTest {
   @Test
   void testDocPageShouldHaveListOfVersion(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    driver.open("/doc/jp.skypencil.guava/helper/");
+    driver.open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
     driver.$("li.dropdown#version").shouldHave(text("1.2.0"));
   }
 }

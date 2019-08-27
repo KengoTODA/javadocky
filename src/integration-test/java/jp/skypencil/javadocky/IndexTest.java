@@ -5,15 +5,23 @@ import static com.codeborne.selenide.Condition.text;
 import com.codeborne.selenide.Browsers;
 import com.codeborne.selenide.SelenideDriver;
 import io.github.bonigarcia.seljup.SelenideConfiguration;
+import io.github.bonigarcia.seljup.SeleniumExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
-class IndexTest extends SelenideTest {
+@ExtendWith(SeleniumExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class IndexTest {
+  @LocalServerPort private int port;
+
   /** Doc page should have {@code <iframe>} to display {@code index.html}. */
   @Test
   void testTitleExplainsServiceName(
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
-    driver.open("/");
+    driver.open("http://localhost:" + port + "/");
     driver.$(By.tagName("h1")).shouldHave(text("Javadocky"));
   }
 }

@@ -4,21 +4,28 @@ import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideDriver;
 import io.github.bonigarcia.seljup.SelenideConfiguration;
+import io.github.bonigarcia.seljup.SeleniumExtension;
 import java.util.Objects;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
-class PageTest extends SelenideTest {
+@ExtendWith(SeleniumExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class PageTest {
+  @LocalServerPort private int port;
+
   /** Page page should have {@code <frameset>} to display javadoc. */
   @Test
   void testPageShouldHaveFrameset(
       @SelenideConfiguration(browser = CHROME, headless = true) SelenideDriver driver) {
-    driver.open("/page/jp.skypencil.guava/helper/1.0.1/");
+    driver.open("http://localhost:" + port + "/page/jp.skypencil.guava/helper/1.0.1/");
     assertTrue(driver.$(By.tagName("frameset")).exists());
   }
 
@@ -26,12 +33,12 @@ class PageTest extends SelenideTest {
   @Test
   @Disabled("Not sure how to test redirect with Selenium/Selenide")
   void testLatestPageRedirectsToSpecificVersion() {
-    open("/page/jp.skypencil.guava/helper/latest/");
+    open("http://localhost:" + port + "/page/jp.skypencil.guava/helper/latest/");
     Selenide.Wait()
         .until(
             driver ->
                 Objects.equals(
                     driver.getCurrentUrl(),
-                    Configuration.baseUrl + "/page/jp.skypencil.guava/helper/1.0.1/"));
+                    "http://localhost:" + port + "/page/jp.skypencil.guava/helper/1.0.1/"));
   }
 }
