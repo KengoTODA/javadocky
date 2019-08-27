@@ -20,18 +20,13 @@ apply from: "$rootDir/gradle/test.gradle"
 apply from: "$rootDir/gradle/integration-test.gradle"
 
 dependencies {
-  compile('org.apache.maven:maven-artifact:3.6.1')
+  compile 'org.apache.maven:maven-artifact:3.6.1'
   compile('org.springframework.boot:spring-boot-starter-webflux'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
   }
-  compile('org.springframework.boot:spring-boot-starter-thymeleaf')
-  compileOnly('com.google.code.findbugs:jsr305:3.0.2')
-  compile('org.codehaus.janino:janino:3.1.0')
-  testCompile('org.springframework.boot:spring-boot-starter-test') {
-    exclude group: 'junit', module: 'junit'
-    exclude group: 'org.junit.jupiter'
-  }
-  testCompile('io.projectreactor:reactor-test')
+  compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  compile 'org.codehaus.janino:janino:3.1.0'
+  compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 defaultTasks 'spotlessApply', 'build'

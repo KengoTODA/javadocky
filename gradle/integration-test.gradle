@@ -10,16 +10,15 @@ sourceSets {
   }
 }
 
-configurations {
-  integrationTestCompile.extendsFrom testCompile
-  integrationTestRuntime.extendsFrom testRuntime
-}
-
 dependencies {
-  integrationTestImplementation "org.junit.jupiter:junit-jupiter-api"
+  integrationTestImplementation 'org.junit.jupiter:junit-jupiter-api'
+  integrationTestImplementation 'io.github.bonigarcia:selenium-jupiter:3.3.0'
+  integrationTestImplementation 'com.codeborne:selenide:5.2.8'
+  integrationTestImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'junit', module: 'junit'
+    exclude group: 'org.junit.jupiter'
+  }
   integrationTestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-  integrationTestImplementation "io.github.bonigarcia:selenium-jupiter:3.3.0"
-  integrationTestCompile 'com.codeborne:selenide:5.2.8'
 }
 
 task integrationTest(type: Test) {

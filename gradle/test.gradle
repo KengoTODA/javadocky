@@ -6,13 +6,18 @@ test {
 }
 
 jacoco {
-    toolVersion = "0.8.4"
+  toolVersion = '0.8.4'
 }
 
 // https://docs.spring.io/spring-boot/docs/2.1.7.RELEASE/gradle-plugin/reference/html/#managing-dependencies-customizing
 ext['junit-jupiter.version'] = '5.5.1'
 
 dependencies {
-  testImplementation "org.junit.jupiter:junit-jupiter"
-  testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+  testImplementation 'org.junit.jupiter:junit-jupiter-api'
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'junit', module: 'junit'
+    exclude group: 'org.junit.jupiter'
+  }
+  testImplementation 'io.projectreactor:reactor-test'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
