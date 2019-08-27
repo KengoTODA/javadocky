@@ -5,13 +5,7 @@ services:
   - docker
 
 script:
-  - ./gradlew spotlessCheck build -S
-jobs:
-  include:
-    - stage: analysis
-      if: fork = false
-      script:
-        - ./gradlew build sonarqube -S
+  - ./gradlew spotlessCheck build sonarqube -S
 
 addons:
   sonarcloud:
