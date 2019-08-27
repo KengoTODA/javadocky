@@ -8,6 +8,7 @@ script:
   - ./gradlew spotlessCheck build sonarqube -S
 
 addons:
+  chrome: stable
   sonarcloud:
     organization: "kengotoda-github"
     token:
