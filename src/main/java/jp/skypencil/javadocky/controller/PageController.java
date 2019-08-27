@@ -128,7 +128,7 @@ class PageController {
                       Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
               ZonedDateTime expired =
                   // according to RFC7234, 1 year is max value for Expires
-                  ZonedDateTime.now().plusYears(1L);
+                  ZonedDateTime.now(ZoneId.systemDefault()).plusYears(1L);
               return ok().header("Last-Modifed", lastModified.format(FORMAT))
                   // all data are immutable, does not depend on session state
                   .header("Cache-Control", "public")
