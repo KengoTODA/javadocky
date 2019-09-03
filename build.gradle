@@ -20,7 +20,7 @@ apply from: "$rootDir/gradle/test.gradle"
 apply from: "$rootDir/gradle/integration-test.gradle"
 
 dependencies {
-  compile 'org.apache.maven:maven-artifact:3.6.1'
+  compile 'org.apache.maven:maven-artifact:3.6.2'
   compile('org.springframework.boot:spring-boot-starter-webflux'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
   }
