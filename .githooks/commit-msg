@@ -1,4 +1,2 @@
 #!/usr/bin/env bash
-if [ "false" == ${CI:-false} ]; then
-  git secrets --commit_msg_hook -- "$@"
-fi
+git secrets --commit_msg_hook -- "$@"

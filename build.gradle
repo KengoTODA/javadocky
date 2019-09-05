@@ -39,4 +39,10 @@ sonarqube {
   }
 }
 
+// Install git-hooks into development environment
+// TODO configure git-secrets automatically
+tasks.installGitHooks.onlyIf {
+  System.getenv('CI') != 'true'
+}
+
 defaultTasks 'spotlessApply', 'build'
