@@ -1,4 +1,2 @@
 #!/usr/bin/env bash
-if [ "false" == ${CI:-false} ]; then
-  git secrets --pre_commit_hook -- "$@"
-fi
+git secrets --pre_commit_hook -- "$@"
