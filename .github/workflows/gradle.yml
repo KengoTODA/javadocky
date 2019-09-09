@@ -12,12 +12,14 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew spotlessCheck build -x integrationTest
     - name: Report Branch Analysis to SonarCloud
-      run: ./gradlew sonarqube -x integrationTest -Psonar.login=${{ secrets.SONARCLOUD_TOKEN }} -Psonar.branch=$GITHUB_REF
+      run: ./gradlew sonarqube -x integrationTest -Psonar.login=$SONARCLOUD_TOKEN -Psonar.branch=$GITHUB_REF
       if: github.event_name	== 'pull_request'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     - name: Report Analysis to SonarCloud
-      run: ./gradlew sonarqube -x integrationTest -Psonar.login=${{ secrets.SONARCLOUD_TOKEN }}
+      run: ./gradlew sonarqube -x integrationTest -Psonar.login=$SONARCLOUD_TOKEN
       if: github.event_name	== 'push'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
