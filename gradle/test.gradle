@@ -9,6 +9,12 @@ jacoco {
   toolVersion = '0.8.4'
 }
 
+jacocoTestReport {
+  reports {
+    xml.enabled true
+  }
+}
+
 // https://docs.spring.io/spring-boot/docs/2.1.7.RELEASE/gradle-plugin/reference/html/#managing-dependencies-customizing
 ext['junit-jupiter.version'] = '5.5.1'
 

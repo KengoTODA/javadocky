@@ -34,6 +34,7 @@ sonarqube {
     property "sonar.host.url", "https://sonarcloud.io/"
     property "sonar.organization", "kengotoda-github"
     property "sonar.projectKey", "javadocky"
+    property "sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.reports.xml.destination
   }
 }
 
