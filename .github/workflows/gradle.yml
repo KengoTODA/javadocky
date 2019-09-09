@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build with Gradle
       run: ./gradlew spotlessCheck build -x integrationTest
-    - name: Report Branch Analysis to SonarCloud
+    - name: Report Pull-Request Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest -Psonar.login=$SONARCLOUD_TOKEN -Psonar.pullrequest.key=${{ github.event.id }} -Psonar.pullrequest.branch=${{ github.event.head.ref }} -Psonar.pullrequest.base=${{ github.event.base.ref }}
       if: github.event_name	== 'pull_request'
       env:
@@ -22,7 +22,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Print Debug 2
-      run: echo $SONARCLOUD_TOKEN | wc -c
+      run: echo $SONARCLOUD_TOKEN
       env:
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     - name: Report Analysis to SonarCloud
