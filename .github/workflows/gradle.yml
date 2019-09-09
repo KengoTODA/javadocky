@@ -18,6 +18,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Report Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest -Psonar.login=${{ secrets.SONARCLOUD_TOKEN }}
-      if: github.event_name	== push
+      if: github.event_name	== 'push'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
