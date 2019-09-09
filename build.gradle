@@ -29,4 +29,13 @@ dependencies {
   compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
+sonarqube {
+  properties {
+    property "sonar.host.url", "https://sonarcloud.io/"
+    property "sonar.organization", "kengotoda-github"
+    property "sonar.projectKey", "javadocky"
+    property "sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.reports.xml.destination
+  }
+}
+
 defaultTasks 'spotlessApply', 'build'
