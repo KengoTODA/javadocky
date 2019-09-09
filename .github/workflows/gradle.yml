@@ -10,4 +10,4 @@ jobs:
         java-version: 11
     - uses: actions/checkout@v1
     - name: Build with Gradle
-      run: ./gradlew spotlessCheck build sonarqube -x integrationTest
+      run: ./gradlew spotlessCheck build sonarqube -x integrationTest -Psonar.login=${{ secrets.SONARCLOUD_TOKEN }}
