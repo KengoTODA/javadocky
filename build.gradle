@@ -29,4 +29,11 @@ dependencies {
   compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
+sonarqube {
+  properties {
+    property "sonar.organization", "kengotoda-github"
+    property "sonar.projectKey", "javadocky"
+  }
+}
+
 defaultTasks 'spotlessApply', 'build'
