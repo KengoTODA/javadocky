@@ -17,11 +17,16 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+    - name: Print Debug
+      run: echo $GITHUB_TOKEN | wc -c
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Print Debug 2
+      run: echo $SONARCLOUD_TOKEN | wc -c
+      env:
+        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     - name: Report Analysis to SonarCloud
-      run:
-        - echo $GITHUB_TOKEN | wc -c
-        - echo $SONARCLOUD_TOKEN | wc -c
-        - ./gradlew sonarqube -x integrationTest -Psonar.login=$SONARCLOUD_TOKEN -Psonar.branch=$GITHUB_REF
+      run: ./gradlew sonarqube -x integrationTest -Psonar.login=$SONARCLOUD_TOKEN -Psonar.branch=$GITHUB_REF
       if: github.event_name	== 'push'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
