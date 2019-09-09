@@ -13,7 +13,7 @@ jobs:
       run: ./gradlew spotlessCheck build -x integrationTest
     - name: Report Branch Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest -Psonar.login=${{ secrets.SONARCLOUD_TOKEN }} -Psonar.branch=$GITHUB_REF
-      if: github.event_name	== pull_request
+      if: github.event_name	== 'pull_request'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Report Analysis to SonarCloud
