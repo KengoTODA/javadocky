@@ -9,25 +9,23 @@ jobs:
       with:
         java-version: 11
     - uses: actions/checkout@v1
-    - name: Print Debug
-      run: echo $GITHUB_TOKEN | wc -c
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Print Debug 2
-      run: echo $SONARCLOUD_TOKEN | wc -c
-      env:
-        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     - name: Build with Gradle
       run: ./gradlew spotlessCheck build -x integrationTest
+    - name: Report Regular Analysis to SonarCloud
+      run: ./gradlew sonarqube -x integrationTest -Dsonar.login=$SONARCLOUD_TOKEN
+      if: github.event_name	== 'push' && github.ref == 'master'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+    - name: Report Branch Analysis to SonarCloud
+      run: ./gradlew sonarqube -x integrationTest -Dsonar.login=$SONARCLOUD_TOKEN -Dsonar.branch=$GITHUB_REF
+      if: github.event_name	== 'push' && github.ref != 'master'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     - name: Report Pull-Request Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest -Dsonar.login=$SONARCLOUD_TOKEN -Dsonar.pullrequest.key=${{ github.event.id }} -Dsonar.pullrequest.branch=${{ github.event.head.ref }} -Dsonar.pullrequest.base=${{ github.event.base.ref }}
       if: github.event_name	== 'pull_request'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-    - name: Report Analysis to SonarCloud
-      run: ./gradlew sonarqube -x integrationTest -Dsonar.login=$SONARCLOUD_TOKEN -Dsonar.branch=$GITHUB_REF
-      if: github.event_name	== 'push'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
