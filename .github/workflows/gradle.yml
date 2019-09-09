@@ -13,13 +13,13 @@ jobs:
       run: ./gradlew spotlessCheck build -x integrationTest
     - name: Report Regular Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest -Dsonar.login=$SONARCLOUD_TOKEN
-      if: github.event_name	== 'push' && github.ref == 'master'
+      if: github.event_name == 'push' && github.event.base.ref == 'refs/heads/master'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     - name: Report Branch Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest -Dsonar.login=$SONARCLOUD_TOKEN -Dsonar.branch=$GITHUB_REF
-      if: github.event_name	== 'push' && github.ref != 'master'
+      if: github.event_name == 'push' && github.event.base.ref != 'refs/heads/master'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
