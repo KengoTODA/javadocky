@@ -14,7 +14,7 @@ const url = core.getInput('host_url');
 const organization = core.getInput('organization');
 const projectKey = core.getInput('project_key');
 const params = {
-    'sonar.login': token
+    'sonar.login': token,
 };
 if (url) {
     params['sonar.host.url'] = url;
@@ -30,6 +30,7 @@ if (github.context.eventName == 'push' && github.context.ref != 'refs/heads/mast
     params['sonar.branch.name'] = github.context.ref;
 }
 else if (github.context.eventName == 'pull_request') {
+    params['sonar.pullrequest.provider'] = 'GitHub';
     const pr = github.context.payload.pull_request;
     if (pr) {
         params['sonar.pullrequest.key'] = '' + pr.number;

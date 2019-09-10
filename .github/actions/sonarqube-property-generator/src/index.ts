@@ -11,7 +11,7 @@ interface IParam {
 }
 
 const params: IParam = {
-  'sonar.login': token
+  'sonar.login': token,
 };
 if (url) {
   params['sonar.host.url'] = url;
@@ -26,6 +26,8 @@ if (github.context.eventName == 'push' && github.context.ref != 'refs/heads/mast
   // TODO remove needless 'refs/heads/'
   params['sonar.branch.name'] = github.context.ref;
 } else if (github.context.eventName == 'pull_request') {
+  params['sonar.pullrequest.provider'] = 'GitHub';
+
   const pr = github.context.payload.pull_request;
   if (pr) {
     params['sonar.pullrequest.key'] = '' + pr.number;
