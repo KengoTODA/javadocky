@@ -23,8 +23,7 @@ if (projectKey) {
   params['sonar.projectKey'] = projectKey;
 }
 if (github.context.eventName == 'push' && github.context.ref != 'refs/heads/master') {
-  // TODO remove needless 'refs/heads/'
-  params['sonar.branch.name'] = github.context.ref;
+  params['sonar.branch.name'] = github.context.ref.substr('refs/heads/'.length);
 } else if (github.context.eventName == 'pull_request') {
   params['sonar.pullrequest.provider'] = 'GitHub';
 
