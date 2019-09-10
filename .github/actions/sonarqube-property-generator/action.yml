@@ -14,8 +14,9 @@ inputs:
   project_key:
     description: value for sonar.projectKey
     required: false
-using: 'node12'
-main: 'lib/index.js'
+runs:
+  using: 'node12'
+  main: 'lib/index.js'
 branding:
   icon: 'cloud'
   color: 'orange'
