@@ -15,6 +15,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     - name: Upload Test Report
       uses: actions/upload-artifact@v1
+      if: always()
       with:
         name: build reports
         path: build/reports
@@ -36,6 +37,7 @@ jobs:
       run: ./gradlew integrationTest
     - name: Upload Test Report
       uses: actions/upload-artifact@v1
+      if: always()
       with:
         name: test results
         path: build/test-results/integrationTest
