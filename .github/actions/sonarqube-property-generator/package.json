@@ -1,0 +1,27 @@
+{
+  "name": "sonarqube-property-generator",
+  "version": "1.0.0",
+  "description": "Generate SONARQUBE_SCANNER_PARAMS environment variable from the context of GitHub Actions",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "actions",
+    "sonarqube"
+  ],
+  "engines": {
+    "node": ">= 12.0",
+    "yarn": ">=  1.17"
+  },
+  "dependencies": {
+    "@actions/core": "^1.1.0",
+    "@actions/github": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.4",
+    "typescript": "^3.6.2"
+  }
+}
