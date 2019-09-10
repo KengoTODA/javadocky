@@ -1,14 +1,18 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __importDefault(require("@actions/core"));
-const github_1 = __importDefault(require("@actions/github"));
-const token = core_1.default.getInput('token', { required: true });
-const url = core_1.default.getInput('host_url');
-const organization = core_1.default.getInput('organization');
-const projectKey = core_1.default.getInput('project_key');
+const core = __importStar(require("@actions/core"));
+const github = __importStar(require("@actions/github"));
+const token = core.getInput('token', { required: true });
+const url = core.getInput('host_url');
+const organization = core.getInput('organization');
+const projectKey = core.getInput('project_key');
 const params = {
     'sonar.login': token
 };
@@ -21,12 +25,12 @@ if (organization) {
 if (projectKey) {
     params['sonar.projectKey'] = projectKey;
 }
-if (github_1.default.context.eventName == 'push' && github_1.default.context.ref != 'refs/heads/master') {
-    params['sonar.branch.name'] = github_1.default.context.ref;
+if (github.context.eventName == 'push' && github.context.ref != 'refs/heads/master') {
+    params['sonar.branch.name'] = github.context.ref;
 }
-else if (github_1.default.context.eventName == 'pull_request') {
-    params['sonar.pullrequest.key'] = github_1.default.context.payload.id;
-    params['sonar.pullrequest.branch'] = github_1.default.context.payload.head.ref;
-    params['sonar.pullrequest.base'] = github_1.default.context.payload.base.ref;
+else if (github.context.eventName == 'pull_request') {
+    params['sonar.pullrequest.key'] = github.context.payload.id;
+    params['sonar.pullrequest.branch'] = github.context.payload.head.ref;
+    params['sonar.pullrequest.base'] = github.context.payload.base.ref;
 }
-core_1.default.exportVariable('SONARQUBE_SCANNER_PARAMS', JSON.stringify(params));
+core.exportVariable('SONARQUBE_SCANNER_PARAMS', JSON.stringify(params));

@@ -1,5 +1,5 @@
-import core from '@actions/core';
-import github from '@actions/github';
+import * as core from '@actions/core';
+import * as github from '@actions/github';
 
 const token = core.getInput('token', { required: true });
 const url = core.getInput('host_url');
