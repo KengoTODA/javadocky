@@ -9,6 +9,8 @@ jobs:
       with:
         java-version: 11
     - uses: actions/checkout@v1
+    - name: Build with Gradle
+      run: ./gradlew spotlessCheck build -x integrationTest
     - name: Report Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io
       env:
