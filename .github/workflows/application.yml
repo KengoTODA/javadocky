@@ -1,4 +1,4 @@
-name: Build
+name: Application
 on: [push, pull_request]
 jobs:
   build:
