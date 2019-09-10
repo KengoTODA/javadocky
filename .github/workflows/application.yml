@@ -10,12 +10,15 @@ jobs:
         java-version: 11
     - uses: actions/checkout@v1
     - name: Build with Gradle
-      run: ./gradlew spotlessCheck build -x integrationTest
-    - name: Report Analysis to SonarCloud
-      run: ./gradlew sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io
+      run: ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v1
+      with:
+        name: build reports
+        path: build/reports
   integrationTest:
     runs-on: ubuntu-18.04
     steps:
@@ -32,3 +35,8 @@ jobs:
         sudo apt-get install google-chrome-stable
     - name: Run Integration Test
       run: ./gradlew integrationTest
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v1
+      with:
+        name: test results
+        path: build/test-results/integrationTest
