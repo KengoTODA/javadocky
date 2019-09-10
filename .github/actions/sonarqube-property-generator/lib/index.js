@@ -26,11 +26,15 @@ if (projectKey) {
     params['sonar.projectKey'] = projectKey;
 }
 if (github.context.eventName == 'push' && github.context.ref != 'refs/heads/master') {
+    // TODO remove needless 'refs/heads/'
     params['sonar.branch.name'] = github.context.ref;
 }
 else if (github.context.eventName == 'pull_request') {
-    params['sonar.pullrequest.key'] = github.context.payload.id;
-    params['sonar.pullrequest.branch'] = github.context.payload.head.ref;
-    params['sonar.pullrequest.base'] = github.context.payload.base.ref;
+    const pr = github.context.payload.pull_request;
+    if (pr) {
+        params['sonar.pullrequest.key'] = '' + pr.number;
+        params['sonar.pullrequest.branch'] = pr.head.ref;
+        params['sonar.pullrequest.base'] = pr.base.ref;
+    }
 }
 core.exportVariable('SONARQUBE_SCANNER_PARAMS', JSON.stringify(params));
