@@ -15,6 +15,8 @@ jobs:
       uses: ./.github/actions/sonarqube-property-generator
       with:
         token: ${{ secrets.SONARCLOUD_TOKEN }}
+        organization: kengotoda-github
+        project_key: javadocky
     - name: Report Analysis to SonarCloud
       run: ./gradlew sonarqube -x integrationTest
       env:
