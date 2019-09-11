@@ -42,4 +42,27 @@ tasks.installGitHooks.onlyIf {
   System.getenv('CI') != 'true' && System.getenv('GITHUB_WORKFLOW') == null
 }
 
+def getBranch() {
+  def process = 'git branch --show-current'.execute()
+  process.waitFor()
+  return process.text.trim()
+}
+
+def getHash() {
+  def process = 'git rev-parse HEAD'.execute()
+  process.waitFor()
+  return process.text.trim()
+}
+
+bootJar {
+  manifest {
+    attributes (
+      'Build-Jdk': "${System.properties['java.vendor']} ${System.properties['java.vm.version']}",
+      'Created-By': "Gradle ${gradle.gradleVersion}",
+      'Git-Branch': getBranch(),
+      'Git-Hash': getHash()
+    )
+  }
+}
+
 defaultTasks 'spotlessApply', 'build'
