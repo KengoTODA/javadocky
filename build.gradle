@@ -55,13 +55,15 @@ def getHash() {
 }
 
 bootJar {
-  manifest {
-    attributes (
-      'Build-Jdk': "${System.properties['java.vendor']} ${System.properties['java.vm.version']}",
-      'Created-By': "Gradle ${gradle.gradleVersion}",
-      'Git-Branch': getBranch(),
-      'Git-Hash': getHash()
-    )
+  doFirst {
+    manifest {
+      attributes (
+        'Build-Jdk': "${System.properties['java.vendor']} ${System.properties['java.vm.version']}",
+        'Created-By': "Gradle ${gradle.gradleVersion}",
+        'Git-Branch': getBranch(),
+        'Git-Hash': getHash()
+      )
+    }
   }
 }
 
