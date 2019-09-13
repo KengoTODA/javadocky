@@ -12,24 +12,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const io_1 = require("@actions/io");
 const core_1 = require("@actions/core");
 const tool_cache_1 = require("@actions/tool-cache");
+const TOOL_NAME = 'gradle-cache';
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const mode = core_1.getInput('mode');
         if (mode == 'extract') {
             core_1.debug('extract mode');
-            const cached = tool_cache_1.find('gradle/caches', '1.0.0');
+            const cached = tool_cache_1.find(TOOL_NAME, '1.0.0');
             if (cached) {
                 core_1.warning(`copy ${cached} to ${process.env.HOME}/.gradle/caches`);
                 yield io_1.cp(cached, `${process.env.HOME}/.gradle/caches`);
             }
             else {
-                core_1.warning('no cache found for gradle/caches');
+                core_1.warning('no cache found for gradle');
             }
         }
         else {
-            core_1.debug('cache mode');
             core_1.warning(`caching ${process.env.HOME}/.gradle/caches`);
-            tool_cache_1.cacheDir(`${process.env.HOME}/.gradle/caches`, 'gradle/caches', '1.0.0');
+            tool_cache_1.cacheDir(`${process.env.HOME}/.gradle/caches`, TOOL_NAME, '1.0.0');
         }
     });
 }
