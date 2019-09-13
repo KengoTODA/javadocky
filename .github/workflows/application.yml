@@ -9,6 +9,11 @@ jobs:
       with:
         java-version: 11
     - uses: actions/checkout@v1
+    - uses: ./.github/actions/gradle-cache
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        mode: 'extract'
     - name: Build with Gradle
       run: ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io
       env:

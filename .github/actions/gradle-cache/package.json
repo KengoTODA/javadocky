@@ -1,0 +1,28 @@
+{
+  "name": "gradle-cache",
+  "version": "1.0.0",
+  "description": "Action to cache ~/.gradle",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "actions",
+    "gradle"
+  ],
+  "engines": {
+    "node": ">= 10.0",
+    "yarn": ">=  1.17"
+  },
+  "dependencies": {
+    "@actions/core": "^1.1.0",
+    "@actions/github": "^1.1.0",
+    "@actions/tool-cache": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.4",
+    "typescript": "^3.6.2"
+  }
+}

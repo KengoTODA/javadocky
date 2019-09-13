@@ -1,0 +1,5 @@
+name: Gradle Cache Action
+description: Action to cache ~/.gradle
+runs:
+  using: 'node10'
+  main: 'lib/index.js'
