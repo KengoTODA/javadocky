@@ -19,4 +19,6 @@ jobs:
         with:
           mode: 'cache'
       - name: check cache result
-        run: ls /opt/hostedtoolcache/gradle/caches/1.0.0/x64
+        run: |
+          ls /opt/hostedtoolcache/gradle/caches/1.0.0/x64
+          ls $HOME/.gradle/caches
