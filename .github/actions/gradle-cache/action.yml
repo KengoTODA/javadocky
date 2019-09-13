@@ -1,5 +1,5 @@
 name: Gradle Cache Action
 description: Action to cache ~/.gradle
 runs:
-  using: 'node10'
+  using: 'node12'
   main: 'lib/index.js'
