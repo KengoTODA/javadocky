@@ -22,6 +22,9 @@ function main() {
                 core_1.warning(`copy ${cached} to ${process.env.HOME}/.gradle/caches`);
                 yield io_1.cp(cached, `${process.env.HOME}/.gradle/caches`);
             }
+            else {
+                core_1.warning('no cache found for gradle/caches');
+            }
         }
         else {
             core_1.debug('cache mode');

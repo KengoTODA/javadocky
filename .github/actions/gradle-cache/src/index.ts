@@ -11,6 +11,8 @@ async function main() {
     if (cached) {
       warning(`copy ${cached} to ${process.env.HOME}/.gradle/caches`)
       await cp(cached, `${process.env.HOME}/.gradle/caches`);
+    } else {
+      warning('no cache found for gradle/caches');
     }
   } else {
     debug('cache mode');
