@@ -18,10 +18,12 @@ function main() {
         if (mode == 'extract') {
             const cached = tool_cache_1.find('gradle dir', '1.0.0');
             if (cached) {
+                core_1.debug('extracting...');
                 yield io_1.cp(cached, `${process.env.HOME}/.gradle`);
             }
         }
         else {
+            core_1.debug('caching...gst');
             tool_cache_1.cacheDir(`${process.env.HOME}/.gradle`, 'gradle dir', '1.0.0');
         }
     });
