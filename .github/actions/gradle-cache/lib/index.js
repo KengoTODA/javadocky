@@ -16,15 +16,17 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const mode = core_1.getInput('mode');
         if (mode == 'extract') {
-            const cached = tool_cache_1.find('gradle dir', '1.0.0');
+            core_1.debug('extract mode');
+            const cached = tool_cache_1.find('gradle/caches', '1.0.0');
             if (cached) {
-                core_1.debug('extracting...');
-                yield io_1.cp(cached, `${process.env.HOME}/.gradle`);
+                core_1.warning(`copy ${cached} to ${process.env.HOME}/.gradle/caches`);
+                yield io_1.cp(cached, `${process.env.HOME}/.gradle/caches`);
             }
         }
         else {
-            core_1.debug('caching...gst');
-            tool_cache_1.cacheDir(`${process.env.HOME}/.gradle`, 'gradle dir', '1.0.0');
+            core_1.debug('cache mode');
+            core_1.warning(`caching ${process.env.HOME}/.gradle/caches`);
+            tool_cache_1.cacheDir(`${process.env.HOME}/.gradle/caches`, 'gradle/caches', '1.0.0');
         }
     });
 }
