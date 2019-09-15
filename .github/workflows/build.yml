@@ -23,6 +23,7 @@ jobs:
   docker:
     runs-on: ubuntu-18.04
     steps:
+    - uses: actions/checkout@v1
     - name: Login to Docker Hub
       uses: actions/docker/login@master
       env:
