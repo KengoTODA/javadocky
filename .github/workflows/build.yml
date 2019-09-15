@@ -24,12 +24,12 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - name: Login to Docker Hub
-      uses: docker/login@master
+      uses: actions/docker/login@master
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build Image
-      uses: docker/cli@master
+      uses: actions/docker/cli@master
       with:
         args: build -t kengotoda/javadocky .
   integrationTest:
