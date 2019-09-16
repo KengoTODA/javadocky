@@ -2,6 +2,8 @@
 
 # build the jar file to use
 FROM adoptopenjdk/openjdk11:alpine
+RUN apk update && apk upgrade && \
+    apk add --no-cache git
 COPY . /javadocky/
 RUN cd /javadocky && ./gradlew assemble
 
