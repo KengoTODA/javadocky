@@ -25,14 +25,14 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Login to Docker Hub
-      uses: actions/docker/login@master
+      run: |
+        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build Image
-      uses: actions/docker/cli@master
-      with:
-        args: build -t kengotoda/javadocky .
+      run: |
+        docker build -t kengotoda/javadocky .
   integrationTest:
     runs-on: ubuntu-18.04
     steps:
