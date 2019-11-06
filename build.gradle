@@ -1,6 +1,7 @@
 plugins {
   id "java"
   id 'jacoco'
+  id "org.jetbrains.kotlin.jvm" version "1.3.50"
   id "com.diffplug.gradle.spotless" version "3.24.3"
   id "io.spring.dependency-management" version "1.0.8.RELEASE"
   id "net.ltgt.errorprone" version "0.8.1"
@@ -21,6 +22,7 @@ apply from: "$rootDir/gradle/test.gradle"
 apply from: "$rootDir/gradle/integration-test.gradle"
 
 dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
   compile 'org.apache.maven:maven-artifact:3.6.2'
   compile('org.springframework.boot:spring-boot-starter-webflux'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
@@ -28,6 +30,12 @@ dependencies {
   compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
   compile 'org.codehaus.janino:janino:3.1.0'
   compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+  kotlinOptions {
+    jvmTarget = "11"
+  }
 }
 
 sonarqube {
