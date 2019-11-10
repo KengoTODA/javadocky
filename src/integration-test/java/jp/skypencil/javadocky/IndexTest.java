@@ -24,7 +24,7 @@ class IndexTest {
       @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
     driver.open("http://localhost:" + port + "/");
     driver.$(By.tagName("h1")).shouldHave(text("Javadocky"));
-    Percy percy = new Percy(driver);
+    Percy percy = new Percy(driver.getWebDriver());
     percy.snapshot("Index Page");
   }
 }
