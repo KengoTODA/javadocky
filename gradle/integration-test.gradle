@@ -19,6 +19,7 @@ dependencies {
   integrationTestImplementation 'org.junit.jupiter:junit-jupiter-api'
   integrationTestImplementation 'io.github.bonigarcia:selenium-jupiter:3.3.0'
   integrationTestImplementation 'com.codeborne:selenide:5.2.8'
+  integrationTestImplementation 'io.percy:percy-java-selenium:0.0.6'
   integrationTestImplementation('org.springframework.boot:spring-boot-starter-test') {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.jupiter'

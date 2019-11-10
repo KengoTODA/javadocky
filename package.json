@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@percy/agent": "^0.20.0"
+  }
+}
