@@ -47,6 +47,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up NodeJS 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
     - uses: actions/checkout@v1
     - name: Install google-chrome-stable
       run: |
@@ -54,8 +58,12 @@ jobs:
         echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
         sudo apt-get update
         sudo apt-get install google-chrome-stable
+    - name: Install NodeJS dependencies for percy.io
+      run: yarn
     - name: Run Integration Test
-      run: ./gradlew integrationTest
+      run: npx percy exec -- ./gradlew integrationTest
+      env:
+        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
     - name: Upload Test Report
       uses: actions/upload-artifact@v1
       if: always()

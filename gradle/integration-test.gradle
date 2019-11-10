@@ -24,6 +24,7 @@ dependencies {
     exclude group: 'org.junit.jupiter'
   }
   integrationTestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  integrationTestRuntimeOnly 'io.percy:percy-java-selenium:0.0.6'
 }
 
 task integrationTest(type: Test) {
