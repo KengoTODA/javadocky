@@ -25,7 +25,7 @@ class PageTest {
   @Test
   void testScreenShot(
       @SelenideConfiguration(browser = CHROME, headless = true) SelenideDriver driver) {
-    driver.open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/1.0.1/");
+    driver.open("http://localhost:" + port + "/page/jp.skypencil.guava/helper/1.0.1/");
     Percy percy = new Percy(driver.getWebDriver());
     percy.snapshot("Page for an artifact");
   }
