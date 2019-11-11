@@ -7,6 +7,7 @@ import com.codeborne.selenide.Browsers;
 import com.codeborne.selenide.SelenideDriver;
 import io.github.bonigarcia.seljup.SelenideConfiguration;
 import io.github.bonigarcia.seljup.SeleniumExtension;
+import io.percy.selenium.Percy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
@@ -17,6 +18,14 @@ import org.springframework.boot.web.server.LocalServerPort;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DocTest {
   @LocalServerPort private int port;
+
+  @Test
+  void testScreenShot(
+      @SelenideConfiguration(browser = Browsers.CHROME, headless = true) SelenideDriver driver) {
+    driver.open("http://localhost:" + port + "/doc/jp.skypencil.guava/helper/");
+    Percy percy = new Percy(driver.getWebDriver());
+    percy.snapshot("Doc Page");
+  }
 
   /** Doc page should have {@code <iframe>} to display {@code index.html}. */
   @Test
