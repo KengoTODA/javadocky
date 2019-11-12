@@ -8,6 +8,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideDriver;
 import io.github.bonigarcia.seljup.SelenideConfiguration;
 import io.github.bonigarcia.seljup.SeleniumExtension;
+import io.percy.selenium.Percy;
 import java.util.Objects;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,14 @@ import org.springframework.boot.web.server.LocalServerPort;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PageTest {
   @LocalServerPort private int port;
+
+  @Test
+  void testScreenShot(
+      @SelenideConfiguration(browser = CHROME, headless = true) SelenideDriver driver) {
+    driver.open("http://localhost:" + port + "/page/jp.skypencil.guava/helper/1.0.1/");
+    Percy percy = new Percy(driver.getWebDriver());
+    percy.snapshot("Page for an artifact");
+  }
 
   /** Page page should have {@code <frameset>} to display javadoc. */
   @Test
