@@ -24,6 +24,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        JACOCO_SOURCE_PATH: 'src/main/java src/main/kotlin'
     - name: Upload Test Report
       uses: actions/upload-artifact@v1
       if: always()
