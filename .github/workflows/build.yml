@@ -17,7 +17,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
     - name: Build with Gradle
-      uses: paambaati/codeclimate-action@v2.3.0
+      uses: KengoTODA/codeclimate-action@master
       with:
         coverageCommand: ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io
       env:
