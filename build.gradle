@@ -23,7 +23,7 @@ apply from: "$rootDir/gradle/integration-test.gradle"
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-  compile 'org.apache.maven:maven-artifact:3.6.2'
+  compile 'org.apache.maven:maven-artifact:3.6.3'
   compile('org.springframework.boot:spring-boot-starter-webflux'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
   }
