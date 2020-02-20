@@ -22,7 +22,7 @@ You can [set property](https://docs.spring.io/spring-boot/docs/current/reference
 
 |name                      |default value                     |note    |
 |--------------------------|----------------------------------|--------|
-|javadocky.maven.repository|http://central.maven.org/maven2/  |URL of the Maven repository to download javadoc.jar|
+|javadocky.maven.repository|https://repo.maven.apache.org/maven2/  |URL of the Maven repository to download javadoc.jar|
 
 ## License
 
