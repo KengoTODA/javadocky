@@ -12,7 +12,7 @@ import org.junit.jupiter.api.io.TempDir;
 import reactor.test.StepVerifier;
 
 class JavadocExtractorTest {
-  private static final String MAVEN_REPO = "http://central.maven.org/maven2/";
+  private static final String MAVEN_REPO = "https://repo.maven.apache.org/maven2/";
 
   @Test
   void test(@TempDir Path root, @TempDir Path javadoc) throws IOException {
