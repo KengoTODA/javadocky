@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 class JavadocDownloaderTest {
-  private static final String MAVEN_REPO = "http://central.maven.org/maven2/";
+  private static final String MAVEN_REPO = "https://repo.maven.apache.org/maven2/";
 
   @Test
   void testDownload(@TempDir Path root) throws IOException {
