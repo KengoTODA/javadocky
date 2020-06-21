@@ -57,7 +57,7 @@ jobs:
         node-version: '12.x'
     - uses: actions/checkout@v1
     - name: Start Tunnel
-      uses: KengoTODA/LambdaTest-tunnel-action@530eeff
+      uses: KengoTODA/LambdaTest-tunnel-action@da41e01
       id: tunnel
       with:
         user: "skypencil@gmail.com"
