@@ -1,39 +1,35 @@
 package jp.skypencil.javadocky;
 
-import static com.codeborne.selenide.Browsers.CHROME;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideDriver;
-import io.github.bonigarcia.seljup.SelenideConfiguration;
-import io.github.bonigarcia.seljup.SeleniumExtension;
-import io.percy.selenium.Percy;
 import java.util.Objects;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.openqa.selenium.By;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-@ExtendWith(SeleniumExtension.class)
+@ExtendWith(WebDriverCleaner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PageTest {
   @LocalServerPort private int port;
 
-  @Test
-  void testScreenShot(
-      @SelenideConfiguration(browser = CHROME, headless = true) SelenideDriver driver) {
+  @ParameterizedTest
+  @ArgumentsSource(RemoteWebDriverProvider.class)
+  void testScreenShot(SelenideDriver driver) {
     driver.open("http://localhost:" + port + "/page/jp.skypencil.guava/helper/1.0.1/");
-    Percy percy = new Percy(driver.getWebDriver());
-    percy.snapshot("Page for an artifact");
   }
 
   /** Page page should have {@code <frameset>} to display javadoc. */
-  @Test
-  void testPageShouldHaveFrameset(
-      @SelenideConfiguration(browser = CHROME, headless = true) SelenideDriver driver) {
+  @ParameterizedTest
+  @ArgumentsSource(RemoteWebDriverProvider.class)
+  void testPageShouldHaveFrameset(SelenideDriver driver) {
     driver.open("http://localhost:" + port + "/page/jp.skypencil.guava/helper/1.0.1/");
     assertTrue(driver.$(By.tagName("frameset")).exists());
   }

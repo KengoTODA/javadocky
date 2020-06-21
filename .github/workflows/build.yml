@@ -56,19 +56,24 @@ jobs:
       with:
         node-version: '12.x'
     - uses: actions/checkout@v1
-    - name: Install google-chrome-stable
-      run: |
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
-        sudo apt-get update
-        sudo apt-get install google-chrome-stable
+    - name: Start Tunnel
+      uses: LambdaTest/LambdaTest-tunnel-action@v1.0.0
+      id: tunnel
+      with:
+        user: "skypencil@gmail.com"
+        accessKey: ${{ secrets.LT_ACCESS_KEY }}
+        tunnelName: "'GitHub Actions'"
     - name: Run Integration Test
-      run: npx percy exec -- ./gradlew integrationTest
+      run: ./gradlew integrationTest
       env:
-        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        LT_USERNAME: skypencil
+        LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
     - name: Upload Test Report
       uses: actions/upload-artifact@v1
       if: always()
       with:
         name: test results
         path: build/test-results/integrationTest
+    - name: Gracefully stop the LambdaTest tunnel
+      run: curl -X DELETE http://127.0.0.1:${{ steps.tunnel.outputs.port }}/api/v1.0/stop
+      if: always()
