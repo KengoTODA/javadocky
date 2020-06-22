@@ -62,7 +62,7 @@ jobs:
       with:
         user: "skypencil@gmail.com"
         accessKey: ${{ secrets.LT_ACCESS_KEY }}
-        tunnelName: format('GitHub Actions ({0})', ${{ github.run_id	}})
+        tunnelName: ${{ format('GitHub Actions ({0})', github.run_id) }}
     - name: Run Integration Test
       run: ./gradlew integrationTest
       env:
