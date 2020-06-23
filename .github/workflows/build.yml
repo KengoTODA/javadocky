@@ -65,7 +65,7 @@ jobs:
     - name: Run Integration Test
       run: ./gradlew integrationTest
       env:
-        SAUCE_USERNAME: ${{ secrets.skypencil }}
+        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         SAUCE_TUNNEL_ID: ${{ format('GitHub Actions ({0})', github.run_id) }}
     - name: Upload Test Report
