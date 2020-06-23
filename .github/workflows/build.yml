@@ -61,13 +61,13 @@ jobs:
       with:
         username: ${{ secrets.SAUCE_USERNAME }}
         accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
-        tunnelIdentifier: ${{ format('GitHub Actions ({0})', github.run_id) }}
+        tunnelIdentifier: ${{ format('github-action-tunnel-{0}', github.run_id) }}
     - name: Run Integration Test
       run: ./gradlew integrationTest
       env:
         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        SAUCE_TUNNEL_ID: ${{ format('GitHub Actions ({0})', github.run_id) }}
+        SAUCE_TUNNEL_ID: ${{ format('github-action-tunnel-{0}', github.run_id) }}
     - name: Upload Test Report
       uses: actions/upload-artifact@v1
       if: always()
