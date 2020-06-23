@@ -26,31 +26,29 @@ class RemoteWebDriverProvider implements ArgumentsProvider {
   private Capabilities buildCapabilities(Condition condition) {
     DesiredCapabilities capabilities = new DesiredCapabilities();
 
+    String sauceUserName = System.getenv("SAUCE_USERNAME");
+    String sauceAccessKey = System.getenv("SAUCE_ACCESS_KEY");
+    String sauceTunnelId = System.getenv("SAUCE_TUNNEL_ID");
+    capabilities.setCapability("username", sauceUserName);
+    capabilities.setCapability("accessKey", sauceAccessKey);
+    capabilities.setCapability("tunnelIdentifier", sauceTunnelId);
+
     capabilities.setCapability("browserName", condition.browserName);
     capabilities.setCapability("console", true);
     capabilities.setCapability("name", condition.testName);
     capabilities.setCapability("network", true);
     capabilities.setCapability("platformName", condition.platformName);
     capabilities.setCapability("timezone", "UTC+08:00");
-    capabilities.setCapability("tunnel", true);
-    capabilities.setCapability("visual", true);
 
     return capabilities;
   }
 
   private RemoteWebDriver init(Capabilities capabilities) {
-    String username = System.getenv("LT_USERNAME");
-    String accessKey = System.getenv("LT_ACCESS_KEY");
-
     try {
-      URL hub =
-          new URL(String.format("https://%s:%s@hub.lambdatest.com/wd/hub", username, accessKey));
+      URL hub = new URL("https://ondemand.saucelabs.com/wd/hub");
       return new RemoteWebDriver(hub, capabilities);
     } catch (MalformedURLException e) {
-      throw new RuntimeException(
-          "Failed to construct the URL of WebDriver hub, "
-              + "check LT_USERNAME and LT_ACCESS_KEY environment variables.",
-          e);
+      throw new RuntimeException("Failed to construct the URL of WebDriver hub.", e);
     }
   }
 

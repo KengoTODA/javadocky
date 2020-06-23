@@ -57,17 +57,17 @@ jobs:
         node-version: '12.x'
     - uses: actions/checkout@v1
     - name: Start Tunnel
-      uses: LambdaTest/LambdaTest-tunnel-action@v1
-      id: tunnel
+      uses: saucelabs/sauce-connect-action@v1.0.0
       with:
-        user: "skypencil@gmail.com"
-        accessKey: ${{ secrets.LT_ACCESS_KEY }}
-        tunnelName: ${{ format('GitHub Actions ({0})', github.run_id) }}
+        username: ${{ secrets.SAUCE_USERNAME }}
+        accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+        tunnelIdentifier: ${{ format('GitHub Actions ({0})', github.run_id) }}
     - name: Run Integration Test
       run: ./gradlew integrationTest
       env:
-        LT_USERNAME: skypencil
-        LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+        SAUCE_USERNAME: ${{ secrets.skypencil }}
+        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        SAUCE_TUNNEL_ID: ${{ format('GitHub Actions ({0})', github.run_id) }}
     - name: Upload Test Report
       uses: actions/upload-artifact@v1
       if: always()

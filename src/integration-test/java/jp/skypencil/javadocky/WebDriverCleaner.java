@@ -35,7 +35,7 @@ class WebDriverCleaner implements TestWatcher {
       return;
     }
 
-    ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
+    ((JavascriptExecutor) driver).executeScript("sauce:job-result=" + status ? "passed" : "failed");
     driver.quit();
   }
 }
