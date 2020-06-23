@@ -38,7 +38,6 @@ class RemoteWebDriverProvider implements ArgumentsProvider {
     capabilities.setCapability("name", condition.testName);
     capabilities.setCapability("network", true);
     capabilities.setCapability("platformName", condition.platformName);
-    capabilities.setCapability("timezone", "UTC+08:00");
 
     return capabilities;
   }
