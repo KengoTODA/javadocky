@@ -35,8 +35,8 @@ class WebDriverCleaner implements TestWatcher {
       return;
     }
 
-    ((JavascriptExecutor) driver)
-        .executeScript("sauce:job-result=" + (status ? "passed" : "failed"));
+    // https://wiki.saucelabs.com/display/DOCS/Annotating+Tests+with+Selenium%27s+JavaScript+Executor
+    ((JavascriptExecutor) driver).executeScript("sauce:job-result=" + status);
     driver.quit();
   }
 }
