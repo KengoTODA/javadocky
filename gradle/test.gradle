@@ -23,6 +23,7 @@ dependencies {
   testImplementation('org.springframework.boot:spring-boot-starter-test') {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.jupiter'
+    exclude group: 'org.junit.vintage'
   }
   testImplementation 'io.projectreactor:reactor-test'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
