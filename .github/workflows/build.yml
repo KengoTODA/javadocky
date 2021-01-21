@@ -8,25 +8,28 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Restore Gradle cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
     - name: Build with Gradle
-      uses: KengoTODA/codeclimate-action@master
+      uses: paambaati/codeclimate-action@v2.7.5
       with:
         coverageCommand: ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io
+        coverageLocations: ${{github.workspace}}/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        JACOCO_SOURCE_PATH: 'src/main/java src/main/kotlin'
+        JACOCO_SOURCE_PATH: "${{github.workspace}}/src/main/java ${{github.workspace}}/src/main/kotlin"
     - name: Upload Test Report
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: always()
       with:
         name: build reports
@@ -34,7 +37,7 @@ jobs:
   docker:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Login to Docker Hub
       run: |
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
@@ -55,7 +58,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Install google-chrome-stable
       run: |
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -67,7 +70,7 @@ jobs:
       env:
         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
     - name: Upload Test Report
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: always()
       with:
         name: test results
