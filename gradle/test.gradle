@@ -5,18 +5,11 @@ test {
   finalizedBy(jacocoTestReport)
 }
 
-jacoco {
-  toolVersion = '0.8.5'
-}
-
 jacocoTestReport {
   reports {
     xml.enabled true
   }
 }
-
-// https://docs.spring.io/spring-boot/docs/2.1.7.RELEASE/gradle-plugin/reference/html/#managing-dependencies-customizing
-ext['junit-jupiter.version'] = '5.5.1'
 
 dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter-api'
