@@ -5,12 +5,12 @@ FROM adoptopenjdk/openjdk15:alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache git
 COPY . /javadocky/
-RUN cd /javadocky && ./gradlew assemble
+RUN cd /javadocky && ./gradlew assemble --no-daemon
 
 FROM adoptopenjdk/openjdk15:alpine as jlink
 RUN jlink \
     --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql \
-    --strip-debug \
+    --strip-java-debug-attributes \
     --compress 2 \
     --no-header-files \
     --no-man-pages \
