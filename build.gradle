@@ -70,4 +70,13 @@ bootJar {
   }
 }
 
+bootBuildImage {
+  builder = "paketobuildpacks/builder:tiny"
+  imageName = 'docker.io/library/kengotoda/javadocky'
+  environment = [
+          "BP_BOOT_NATIVE_IMAGE" : "1",
+          "BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS": "-Dspring.spel.ignore=true -Dspring.native.remove-yaml-support=true"
+  ]
+}
+
 defaultTasks 'spotlessApply', 'build'
