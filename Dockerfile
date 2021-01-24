@@ -1,13 +1,13 @@
 # https://spring.io/guides/gs/spring-boot-docker/
 
 # build the jar file to use
-FROM adoptopenjdk/openjdk15:alpine
+FROM adoptopenjdk/openjdk14:alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache git
 COPY . /javadocky/
 RUN cd /javadocky && ./gradlew assemble --no-daemon
 
-FROM adoptopenjdk/openjdk15:alpine as jlink
+FROM adoptopenjdk/openjdk14:alpine as jlink
 RUN jlink \
     --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql \
     --strip-java-debug-attributes \
@@ -20,7 +20,7 @@ FROM alpine:3.12
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 ENV JAVA_HOME=/opt/jre
 ENV PATH=${PATH}:${JAVA_HOME}/bin
-# copied from https://github.com/AdoptOpenJDK/openjdk-docker/blob/master/15/jdk/alpine/Dockerfile.hotspot.releases.slim
+# copied from https://github.com/AdoptOpenJDK/openjdk-docker/blob/master/14/jdk/alpine/Dockerfile.hotspot.releases.slim
 RUN apk add --no-cache tzdata --virtual .build-deps curl binutils zstd \
     && GLIBC_VER="2.31-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \

@@ -30,12 +30,12 @@ dependencies {
 }
 
 tasks.withType(JavaCompile).all {
-  options.release = 15
+  options.release = 14
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
   kotlinOptions {
-    jvmTarget = "15"
+    jvmTarget = "14"
   }
 }
 
