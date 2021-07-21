@@ -4,11 +4,14 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Set up JDK 15
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 15
-    - uses: actions/checkout@v2
+        distribution: adopt
     - name: Restore Gradle cache
       uses: actions/cache@v2
       with:
@@ -35,17 +38,18 @@ jobs:
         name: build reports
         path: build/reports
   integrationTest:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Set up JDK 15
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 15
+        distribution: adopt
     - name: Set up NodeJS 12
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: '12.x'
-    - uses: actions/checkout@v2
     - name: Install google-chrome-stable
       run: |
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
