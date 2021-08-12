@@ -5,7 +5,7 @@ FROM adoptopenjdk/openjdk15:alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache git
 COPY . /javadocky/
-RUN cd /javadocky && ./gradlew assemble --no-daemon -x javadoc
+RUN cd /javadocky && ./gradlew assemble --no-daemon
 
 FROM adoptopenjdk/openjdk15:alpine as jlink
 RUN jlink \

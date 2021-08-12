@@ -70,4 +70,8 @@ bootJar {
   }
 }
 
+jar {
+  enabled = false
+}
+
 defaultTasks 'spotlessApply', 'build'
