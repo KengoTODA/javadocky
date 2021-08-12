@@ -73,10 +73,6 @@ jobs:
         path: build/test-results/integrationTest
   docker:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    needs:
-      - build
-      - integrationTest
     steps:
     - uses: actions/checkout@v2
     - name: Login to Docker Hub
