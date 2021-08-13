@@ -20,12 +20,12 @@ apply from: "$rootDir/gradle/integration-test.gradle"
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-  compile 'org.apache.maven:maven-artifact:3.8.1'
-  compile('org.springframework.boot:spring-boot-starter-webflux'){
+  implementation 'org.apache.maven:maven-artifact:3.8.1'
+  implementation('org.springframework.boot:spring-boot-starter-webflux'){
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
   }
-  compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
-  compile 'org.codehaus.janino:janino'
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  implementation 'org.codehaus.janino:janino'
   compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
