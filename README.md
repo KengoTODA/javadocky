@@ -1,7 +1,7 @@
 # javadocky
 
 This project is a clone of [javadoc.io](http://javadoc.io/).
-This is also a sandbox project to play with spring-boot v2.1, spring-webflux v5.0 and selenide v5.2.
+This is also a sandbox project to play with spring-boot v2.5.2, spring-webflux v5.3.8 and selenide v5.2.8.
 
 ![Build Status](https://github.com/KengoTODA/javadocky/workflows/Build/badge.svg)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=javadocky&metric=coverage)](https://sonarcloud.io/dashboard?id=javadocky)
