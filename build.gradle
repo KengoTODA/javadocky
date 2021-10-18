@@ -30,7 +30,13 @@ dependencies {
 }
 
 tasks.withType(JavaCompile).all {
-  options.release = 17
+  options.release = 16
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+  kotlinOptions {
+    jvmTarget = "16"
+  }
 }
 
 sonarqube {
