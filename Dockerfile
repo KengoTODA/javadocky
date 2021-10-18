@@ -7,7 +7,7 @@ RUN apk update && apk upgrade && \
 COPY . /javadocky/
 RUN cd /javadocky && ./gradlew assemble --no-daemon
 
-FROM eclipse-temurin:17-alpine as jlink
+FROM eclipse-temurin:16-alpine as jlink
 RUN jlink \
     --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql,java.instrument \
     --strip-java-debug-attributes \
