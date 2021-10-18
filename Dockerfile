@@ -1,13 +1,13 @@
 # https://spring.io/guides/gs/spring-boot-docker/
 
 # build the jar file to use
-FROM adoptopenjdk/openjdk15:alpine
+FROM eclipse-temurin:17-alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache git
 COPY . /javadocky/
 RUN cd /javadocky && ./gradlew assemble --no-daemon
 
-FROM adoptopenjdk/openjdk15:alpine as jlink
+FROM eclipse-temurin:17-alpine as jlink
 RUN jlink \
     --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql \
     --strip-java-debug-attributes \
@@ -16,7 +16,7 @@ RUN jlink \
     --no-man-pages \
     --output /jlink
 
-FROM alpine:3.12
+FROM alpine:3.14
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 ENV JAVA_HOME=/opt/jre
 ENV PATH=${PATH}:${JAVA_HOME}/bin
