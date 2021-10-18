@@ -81,10 +81,11 @@ task downloadNewrelic(type: Download) {
 }
 
 task unzipNewrelic(type: Copy) {
+    dependsOn downloadNewrelic
     from zipTree(file("$buildDir/newrelic-java.zip"))
     into "$buildDir"
 }
 
-tasks.build.dependsOn downloadNewrelic, unzipNewrelic
+tasks.build.dependsOn unzipNewrelic
 
 defaultTasks 'spotlessApply', 'build'
