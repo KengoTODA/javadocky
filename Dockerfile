@@ -9,7 +9,7 @@ RUN cd /javadocky && ./gradlew assemble --no-daemon
 
 FROM eclipse-temurin:17-alpine as jlink
 RUN jlink \
-    --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql \
+    --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql,java.instrument \
     --strip-java-debug-attributes \
     --compress 2 \
     --no-header-files \
@@ -58,6 +58,14 @@ RUN addgroup user && adduser -D -G user -h /home/user -s /bin/bash user && mkdir
 WORKDIR /javadocky
 USER user
 VOLUME /javadocky/.javadocky
+
+# for New Relic
+ENV NEW_RELIC_APP_NAME="javadocky"
+ENV NEW_RELIC_LOG_FILE_NAME="STDOUT"
+RUN cd /home/user/.javadocky && \
+    wget https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
+    unzip newrelic-java.zip && rm newrelic-java.zip
+
 COPY --from=0 /javadocky/build/libs/javadocky-*.jar /javadocky/javadocky.jar
 COPY --from=1 /jlink $JAVA_HOME
-ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /javadocky/javadocky.jar" ]
+ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -javaagent:/home/user/.javadocky/newrelic/newrelic.jar -jar /javadocky/javadocky.jar" ]
