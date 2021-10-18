@@ -1,1 +1,1 @@
-web: java -javaagent:build/newrelic/newrelic.jar build/libs/*.jar
+web: java -javaagent:build/newrelic/newrelic.jar -jar build/libs/*.jar
