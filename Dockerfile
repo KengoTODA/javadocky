@@ -9,7 +9,7 @@ RUN cd /javadocky && ./gradlew assemble --no-daemon
 
 FROM eclipse-temurin:16-alpine as jlink
 RUN jlink \
-    --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql,java.instrument \
+    --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql,java.instrument,jdk.unsupported \
     --strip-java-debug-attributes \
     --compress 2 \
     --no-header-files \
