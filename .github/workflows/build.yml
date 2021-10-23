@@ -21,7 +21,7 @@ jobs:
     - name: Build with Gradle
       uses: paambaati/codeclimate-action@v2.7.5
       with:
-        coverageCommand: ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io
+        coverageCommand: ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io --no-daemon
         coverageLocations: ${{github.workspace}}/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
