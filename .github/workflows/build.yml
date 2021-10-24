@@ -2,8 +2,16 @@ name: Build
 on:
   push:
     branches: master
-  pull_request_target:
+  pull_request:
     branches: master
+
+# set necessary permissions for SQ's GitHub integration
+# https://docs.sonarqube.org/latest/analysis/github-integration/#header-2
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+  statuses: read
 
 jobs:
   build:
