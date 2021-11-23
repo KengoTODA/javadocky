@@ -77,7 +77,7 @@ task downloadNewrelic(type: Download) {
 task unzipNewrelic(type: Copy) {
     dependsOn downloadNewrelic
     from zipTree(file("$buildDir/newrelic-java.zip"))
-    into "$buildDir"
+    into "$buildDir/newrelic"
 }
 
 tasks.build.dependsOn unzipNewrelic
