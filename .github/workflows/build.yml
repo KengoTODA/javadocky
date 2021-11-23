@@ -36,7 +36,7 @@ jobs:
         distribution: temurin
     - run: >
         ./gradlew spotlessCheck build sonarqube
-        -x integrationTest --no-daemon
+        -x integrationTest --no-daemon --scan
         -Dsonar.organization=kengotoda-github
         -Dsonar.projectKey=javadocky
         -Dsonar.host.url=https://sonarcloud.io
