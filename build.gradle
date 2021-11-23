@@ -49,7 +49,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 sonarqube {
   properties {
     property "sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.reports.xml.destination
-    property "sonar.junit.reportPaths", tasks.test.reports.junitXml.outputLocation.files("*.xml").asPath
+    property "sonar.junit.reportPaths", tasks.test.reports.junitXml.outputLocation
   }
 }
 
