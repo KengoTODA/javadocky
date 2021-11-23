@@ -26,16 +26,11 @@ jobs:
       with:
         java-version: 17
         distribution: temurin
-    - name: Build with Gradle
-      uses: paambaati/codeclimate-action@v2.7.5
-      with:
-        coverageCommand: ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io --no-daemon
-        coverageLocations: ${{github.workspace}}/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
+    - run: |
+        ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io --no-daemon
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        JACOCO_SOURCE_PATH: "${{github.workspace}}/src/main/java ${{github.workspace}}/src/main/kotlin"
     - name: Upload Test Report
       uses: actions/upload-artifact@v2
       if: always()

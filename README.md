@@ -5,7 +5,6 @@ This is also a sandbox project to play with spring-boot v2.5.2, spring-webflux v
 
 ![Build Status](https://github.com/KengoTODA/javadocky/workflows/Build/badge.svg)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=javadocky&metric=coverage)](https://sonarcloud.io/dashboard?id=javadocky)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f021dc49dcefcb5fd337/maintainability)](https://codeclimate.com/github/KengoTODA/javadocky/maintainability)
 
 ## How to build
 
