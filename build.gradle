@@ -5,19 +5,13 @@ plugins {
   id "com.diffplug.spotless" version "6.0.0" apply false
   id "io.spring.dependency-management" version "1.0.11.RELEASE"
   id "net.ltgt.errorprone" version "2.0.2"
-  id "org.sonarqube" version "3.3"
   id "org.springframework.boot" version "2.6.0"
   id "de.undercouch.download" version "4.1.2"
+  id "convention-plugin"
 }
 
 repositories {
   mavenCentral()
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
 }
 
 apply from: "$rootDir/gradle/errorprone.gradle"
@@ -43,13 +37,6 @@ tasks.withType(JavaCompile).all {
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
   kotlinOptions {
     jvmTarget = "17"
-  }
-}
-
-sonarqube {
-  properties {
-    property "sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.reports.xml.destination
-    property "sonar.junit.reportPaths", tasks.test.reports.junitXml.outputLocation
   }
 }
 
