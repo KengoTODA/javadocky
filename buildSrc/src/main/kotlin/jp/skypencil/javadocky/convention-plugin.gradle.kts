@@ -12,7 +12,7 @@ java {
 
 sonarqube {
   properties {
-    property("sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.get().reports.xml.outputLocation)
-    property("sonar.junit.reportPaths", tasks.test.get().reports.junitXml.outputLocation)
+    property("sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.get().reports.xml.outputLocation.get())
+    property("sonar.junit.reportPaths", tasks.test.get().reports.junitXml.outputLocation.get())
   }
 }
