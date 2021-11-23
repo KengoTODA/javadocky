@@ -26,6 +26,7 @@ jobs:
       with:
         java-version: 17
         distribution: temurin
+        cache: gradle
     - run: |
         ./gradlew spotlessCheck build sonarqube -x integrationTest -Dsonar.organization=kengotoda-github -Dsonar.projectKey=javadocky -Dsonar.host.url=https://sonarcloud.io --no-daemon
       env:
@@ -46,6 +47,7 @@ jobs:
       with:
         java-version: 17
         distribution: temurin
+        cache: gradle
     - name: Set up NodeJS 12
       uses: actions/setup-node@v2
       with:
