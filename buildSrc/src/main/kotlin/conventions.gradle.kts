@@ -1,6 +1,5 @@
 import de.undercouch.gradle.tasks.download.Download
 import net.ltgt.gradle.errorprone.errorprone
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarqube.gradle.SonarQubeTask
 
 plugins {
@@ -9,7 +8,6 @@ plugins {
     id("com.diffplug.spotless")
     id("de.undercouch.download")
     id("net.ltgt.errorprone")
-    id("org.jetbrains.kotlin.jvm")
     id("org.sonarqube")
 }
 
@@ -49,9 +47,6 @@ tasks {
     withType<JavaCompile> {
         options.release.set(17)
     }
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
-    }
     withType<SonarQubeTask> {
         dependsOn(jacocoTestReport)
     }
@@ -68,6 +63,12 @@ dependencies {
     }
     testImplementation("io.projectreactor:reactor-test")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 spotless {

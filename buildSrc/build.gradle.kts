@@ -25,6 +25,12 @@ tasks {
     }
 }
 
+kotlin {
+    jvmToolchain {
+        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 spotless {
     kotlinGradle {
         target("**/*.gradle.kts")
