@@ -1,5 +1,6 @@
 import de.undercouch.gradle.tasks.download.Download
 import net.ltgt.gradle.errorprone.errorprone
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarqube.gradle.SonarQubeTask
 
 plugins {
@@ -48,10 +49,8 @@ tasks {
     withType<JavaCompile> {
         options.release.set(17)
     }
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "17"
-        }
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "17"
     }
     withType<SonarQubeTask> {
         dependsOn(jacocoTestReport)

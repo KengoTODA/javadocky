@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `kotlin-dsl`
     id("com.diffplug.spotless") version "6.2.1"
@@ -15,6 +17,12 @@ dependencies {
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:2.0.2")
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+}
+
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "17"
+    }
 }
 
 spotless {
