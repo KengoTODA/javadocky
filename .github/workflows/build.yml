@@ -34,8 +34,9 @@ jobs:
       with:
         java-version: 17
         distribution: temurin
+        cache: gradle
     - run: >
-        ./gradlew spotlessCheck build sonarqube
+        ./gradlew spotlessCheck build ${SONAR_TOKEN:+sonarqube}
         -x integrationTest --no-daemon
         -Dsonar.organization=kengotoda-github
         -Dsonar.projectKey=javadocky
@@ -62,13 +63,10 @@ jobs:
         java-version: 17
         distribution: temurin
         cache: gradle
-    - name: Read .nvmrc
-      run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-      id: nvm
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '${{ steps.nvm.outputs.NVMRC }}'
+        node-version-file: '.nvmrc'
     - name: Install google-chrome-stable
       run: |
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
