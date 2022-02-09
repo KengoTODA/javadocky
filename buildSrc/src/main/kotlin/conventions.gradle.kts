@@ -37,9 +37,6 @@ tasks {
     check {
         dependsOn(jacocoTestReport)
     }
-    jar {
-        enabled = false
-    }
     test {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
