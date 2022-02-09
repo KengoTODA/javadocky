@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache git
 COPY . /javadocky/
-RUN cd /javadocky && ./gradlew assemble --no-daemon
+RUN cd /javadocky && ./gradlew assemble --no-daemon -x jar
 
 FROM eclipse-temurin:17-alpine as jlink
 RUN jlink \
