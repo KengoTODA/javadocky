@@ -71,10 +71,10 @@ jobs:
         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
     - name: Upload Test Report
       uses: actions/upload-artifact@v2
-      if: always()
+      if: failure()
       with:
-        name: test results
-        path: build/test-results/integrationTest
+        name: integration test reports
+        path: build/reports
   docker:
     runs-on: ubuntu-latest
     steps:
