@@ -4,5 +4,11 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-    time: "21:00"
-  open-pull-requests-limit: 10
+  commit-message:
+    prefix: "fix"
+- package-ecosystem: gradle
+  directory: "/buildSrc"
+  schedule:
+    interval: daily
+  commit-message:
+    prefix: "build"
