@@ -54,7 +54,7 @@ tasks {
 
 dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.11.0")
-    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.5")
+    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.6")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude("junit", "junit")
