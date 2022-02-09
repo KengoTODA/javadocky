@@ -41,6 +41,10 @@ tasks {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
     }
+    withType<AbstractArchiveTask> {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
     withType<JavaCompile> {
         options.release.set(17)
     }
