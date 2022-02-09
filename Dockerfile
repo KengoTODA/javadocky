@@ -2,8 +2,7 @@
 
 # build the jar file to use
 FROM eclipse-temurin:17-alpine
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
+RUN apk update && apk upgrade
 COPY . /javadocky/
 RUN cd /javadocky && ./gradlew assemble --no-daemon -x jar
 
