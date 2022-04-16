@@ -18,12 +18,12 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - uses: gradle/wrapper-validation-action@v1
     - name: Set up JDK 17
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: 17
         distribution: temurin
@@ -41,7 +41,7 @@ jobs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
         PR_BRANCH: ${{ github.event.pull_request.head.ref }}
     - name: Upload Test Report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: build reports
@@ -49,15 +49,15 @@ jobs:
   integrationTest:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up JDK 17
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: 17
         distribution: temurin
         cache: gradle
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version-file: '.nvmrc'
     - name: Install google-chrome-stable
@@ -71,7 +71,7 @@ jobs:
       env:
         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
     - name: Upload Test Report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: failure()
       with:
         name: integration test reports
@@ -81,7 +81,7 @@ jobs:
     env:
       IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
