@@ -16,7 +16,7 @@ dependencies {
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:2.0.2")
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
 }
 
 tasks {
