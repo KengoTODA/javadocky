@@ -32,7 +32,7 @@ class BadgeController {
     }
 
     @Bean
-    fun RouterFunction<ServerResponse> routeForBadge()
+    fun routeForBadge(): RouterFunction<ServerResponse>
     {
         return route(
             GET("/badge/{groupId}/{artifactId}.{ext}"),

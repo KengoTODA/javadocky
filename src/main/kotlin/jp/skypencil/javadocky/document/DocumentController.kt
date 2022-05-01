@@ -34,7 +34,7 @@ class DocumentController {
   }
 
   @Bean
-  public RouterFunction<ServerResponse> routeForDoc() {
+  fun routeForDoc(): RouterFunction<ServerResponse> {
     return route(
         GET("/doc/{groupId}/{artifactId}"),
         req -> {

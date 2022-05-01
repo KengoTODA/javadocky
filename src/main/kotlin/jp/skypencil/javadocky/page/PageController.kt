@@ -52,7 +52,7 @@ class PageController {
   }
 
   @Bean
-  public RouterFunction<ServerResponse> routeForPage() {
+  fun routeForPage(): RouterFunction<ServerResponse> {
     return route(
         GET(PageController.URL_PATTERN),
         req -> {
@@ -86,7 +86,7 @@ class PageController {
         });
   }
 
-  private String findFilePath(req: ServerRequest) {
+  private fun findFilePath(req: ServerRequest): String {
     String path = findRawFilePath(req);
     if (path == null || path.isEmpty()) {
       path = "index.html";
@@ -99,12 +99,12 @@ class PageController {
    *     "https://stackoverflow.com/questions/3686808/spring-3-requestmapping-get-path-value">related
    *     SO post</a>
    */
-  private String findRawFilePath(req: ServerRequest) {
+  private fun findRawFilePath(req: ServerRequest): String {
     return new AntPathMatcher().extractPathWithinPattern(URL_PATTERN, req.path());
   }
 
-  private Mono<ServerResponse> response(
-    groupId: String, artifactId: String, version: String, path: String) {
+  private fun response(
+    groupId: String, artifactId: String, version: String, path: String): Mono<ServerResponse> {
     Mono<File> extract = extractor.extract(groupId, artifactId, version, path);
     return storage
         .find(groupId, artifactId, version, path)
