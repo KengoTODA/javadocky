@@ -1,54 +1,51 @@
-package jp.skypencil.javadocky.controller;
+package jp.skypencil.javadocky.page
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RouterFunctions.route;
-import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
-import static org.springframework.web.reactive.function.server.ServerResponse.seeOther;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET
+import static org.springframework.web.reactive.function.server.RouterFunctions.route
+import static org.springframework.web.reactive.function.server.ServerResponse.notFound
+import static org.springframework.web.reactive.function.server.ServerResponse.ok
+import static org.springframework.web.reactive.function.server.ServerResponse.seeOther
 
-import java.io.File;
-import java.net.URI;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-import javax.annotation.ParametersAreNonnullByDefault;
-import jp.skypencil.javadocky.repository.Storage;
-import jp.skypencil.javadocky.repository.VersionRepository;
-import jp.skypencil.javadocky.service.JavadocExtractor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.CacheControl;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.ServerRequest;
-import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Mono;
+import java.io.File
+import java.net.URI
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Objects
+import javax.annotation.ParametersAreNonnullByDefault
+import jp.skypencil.javadocky.repository.Storage
+import jp.skypencil.javadocky.repository.VersionRepository
+import jp.skypencil.javadocky.service.JavadocExtractor
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
+import org.springframework.core.io.FileSystemResource
+import org.springframework.http.CacheControl
+import org.springframework.lang.NonNull
+import org.springframework.stereotype.Controller
+import org.springframework.util.AntPathMatcher
+import org.springframework.web.reactive.function.server.RouterFunction
+import org.springframework.web.reactive.function.server.ServerRequest
+import org.springframework.web.reactive.function.server.ServerResponse
+import reactor.core.publisher.Mono
+
+object PageController {
+  const URL_PATTERN = "/page/{groupId}/{artifactId}/{version}/**"
+  const FORMAT = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz")
+}
 
 @Controller
 class PageController {
-  private static final String URL_PATTERN = "/page/{groupId}/{artifactId}/{version}/**";
-
-  private final Logger log = LoggerFactory.getLogger(getClass());
-
-  @NonNull private final Storage storage;
-
-  @NonNull private final JavadocExtractor extractor;
-
-  @NonNull private final VersionRepository versionRepo;
-
-  private static final DateTimeFormatter FORMAT =
-      DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz");
+  private val log: Logger = LoggerFactory.getLogger(getClass())
+  private val storage: Storage
+  private val extractor: JavadocExtractor
+  private val versionRepo: VersionRepository
 
   @Autowired
   @ParametersAreNonnullByDefault
-  PageController(Storage storage, JavadocExtractor extractor, VersionRepository versionRepo) {
+  PageController(storage: Storage, extractor: JavadocExtractor, versionRepo: VersionRepository) {
     this.storage = Objects.requireNonNull(storage);
     this.extractor = Objects.requireNonNull(extractor);
     this.versionRepo = Objects.requireNonNull(versionRepo);
@@ -89,7 +86,7 @@ class PageController {
         });
   }
 
-  private String findFilePath(ServerRequest req) {
+  private String findFilePath(req: ServerRequest) {
     String path = findRawFilePath(req);
     if (path == null || path.isEmpty()) {
       path = "index.html";
@@ -102,12 +99,12 @@ class PageController {
    *     "https://stackoverflow.com/questions/3686808/spring-3-requestmapping-get-path-value">related
    *     SO post</a>
    */
-  private String findRawFilePath(ServerRequest req) {
+  private String findRawFilePath(req: ServerRequest) {
     return new AntPathMatcher().extractPathWithinPattern(URL_PATTERN, req.path());
   }
 
   private Mono<ServerResponse> response(
-      String groupId, String artifactId, String version, String path) {
+    groupId: String, artifactId: String, version: String, path: String) {
     Mono<File> extract = extractor.extract(groupId, artifactId, version, path);
     return storage
         .find(groupId, artifactId, version, path)
