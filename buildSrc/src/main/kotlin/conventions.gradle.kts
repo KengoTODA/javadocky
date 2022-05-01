@@ -82,4 +82,8 @@ spotless {
         ktlint()
         indentWithSpaces()
     }
+    kotlin {
+        ktlint()
+        indentWithSpaces()
+    }
 }
