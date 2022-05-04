@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:6.5.1")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:6.5.2")
     implementation("de.undercouch:gradle-download-task:5.0.5")
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:2.0.2")
