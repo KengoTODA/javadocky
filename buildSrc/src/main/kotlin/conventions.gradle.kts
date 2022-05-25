@@ -9,8 +9,11 @@ plugins {
     id("de.undercouch.download")
     id("net.ltgt.errorprone")
     id("org.sonarqube")
+    id("com.google.cloud.tools.jib")
 }
 
+val jibExtraDirectory = "$buildDir/jib-agents"
+val newRelicAgentPath = "newrelic"
 val jacocoTestReport = tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
@@ -27,7 +30,7 @@ val downloadNewrelic by tasks.registering(Download::class) {
 val unzipNewrelic by tasks.registering(Copy::class) {
     dependsOn(downloadNewrelic)
     from(zipTree(file("$buildDir/newrelic-java.zip")))
-    into("$buildDir")
+    into("$jibExtraDirectory/$newRelicAgentPath")
 }
 
 tasks {
@@ -81,5 +84,21 @@ spotless {
         target("*.gradle.kts")
         ktlint()
         indentWithSpaces()
+    }
+}
+
+jib {
+    extraDirectories {
+        paths {
+            path {
+                setFrom("$jibExtraDirectory/$newRelicAgentPath")
+                into = newRelicAgentPath
+            }
+        }
+    }
+    container {
+        jvmFlags = listOf(
+            "-javaagent:$newRelicAgentPath/newrelic.jar",
+        )
     }
 }
