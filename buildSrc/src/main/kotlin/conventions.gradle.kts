@@ -12,7 +12,7 @@ plugins {
     id("com.google.cloud.tools.jib")
 }
 
-val jibExtraDirectory = "$buildDir/jib-agents"
+val jibExtraDirectory = "build/jib-agents"
 val newRelicAgentPath = "newrelic"
 val jacocoTestReport = tasks.jacocoTestReport {
     dependsOn(tasks.test)
@@ -54,6 +54,12 @@ tasks {
     withType<SonarQubeTask> {
         dependsOn(jacocoTestReport)
     }
+    jib {
+        dependsOn(unzipNewrelic)
+    }
+    jibDockerBuild {
+        dependsOn(unzipNewrelic)
+    }
 }
 
 dependencies {
@@ -91,14 +97,14 @@ jib {
     extraDirectories {
         paths {
             path {
-                setFrom("$jibExtraDirectory/$newRelicAgentPath")
-                into = newRelicAgentPath
+                setFrom("$jibExtraDirectory/$newRelicAgentPath/newrelic")
+                into = "/$newRelicAgentPath"
             }
         }
     }
     container {
         jvmFlags = listOf(
-            "-javaagent:$newRelicAgentPath/newrelic.jar",
+            "-javaagent:/$newRelicAgentPath/newrelic.jar",
         )
     }
 }
