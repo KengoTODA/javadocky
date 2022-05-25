@@ -1,3 +1,4 @@
+import com.google.cloud.tools.jib.gradle.JibTask
 import de.undercouch.gradle.tasks.download.Download
 import net.ltgt.gradle.errorprone.errorprone
 import org.sonarqube.gradle.SonarQubeTask
@@ -54,10 +55,7 @@ tasks {
     withType<SonarQubeTask> {
         dependsOn(jacocoTestReport)
     }
-    jib {
-        dependsOn(unzipNewrelic)
-    }
-    jibDockerBuild {
+    withType<JibTask> {
         dependsOn(unzipNewrelic)
     }
 }
@@ -106,5 +104,8 @@ jib {
         jvmFlags = listOf(
             "-javaagent:/$newRelicAgentPath/newrelic.jar",
         )
+    }
+    to {
+        image = "ghcr.io/kengotoda/javadocky"
     }
 }
