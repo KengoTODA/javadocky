@@ -3,7 +3,6 @@ package jp.skypencil.javadocky;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
-
 import jp.skypencil.javadocky.repository.ArtifactRepository;
 import jp.skypencil.javadocky.repository.LocalStorage;
 import jp.skypencil.javadocky.repository.LocalStorageArtifactRepository;
@@ -31,8 +30,7 @@ public class JavadockyApplication {
     String port = System.getenv("PORT");
     SpringApplication app = new SpringApplication(JavadockyApplication.class);
     if (port != null) {
-      app.setDefaultProperties(Collections
-              .singletonMap("server.port", port));
+      app.setDefaultProperties(Collections.singletonMap("server.port", port));
     }
     app.run(args);
   }
