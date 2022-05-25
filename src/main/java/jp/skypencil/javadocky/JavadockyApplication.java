@@ -2,6 +2,8 @@ package jp.skypencil.javadocky;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+
 import jp.skypencil.javadocky.repository.ArtifactRepository;
 import jp.skypencil.javadocky.repository.LocalStorage;
 import jp.skypencil.javadocky.repository.LocalStorageArtifactRepository;
@@ -26,7 +28,13 @@ public class JavadockyApplication {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   public static void main(String[] args) {
-    SpringApplication.run(JavadockyApplication.class, args);
+    String port = System.getenv("PORT");
+    SpringApplication app = new SpringApplication(JavadockyApplication.class);
+    if (port != null) {
+      app.setDefaultProperties(Collections
+              .singletonMap("server.port", port));
+    }
+    app.run(args);
   }
 
   @Bean
