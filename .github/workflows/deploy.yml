@@ -1,0 +1,30 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+      - introduce-jib
+
+permissions:
+  packages: write # for jib
+
+env:
+  HEROKU_APP: calm-escarpment-99854
+
+jobs:
+  heroku:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: temurin
+        cache: gradle
+    - run: |
+        heroku container:login
+        ./gradlew jib -Djib.to.image=registry.heroku.com/$HEROKU_APP/web
+        heroku container:release web --app $HEROKU_APP
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
