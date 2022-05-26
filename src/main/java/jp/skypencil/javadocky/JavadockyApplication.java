@@ -2,6 +2,7 @@ package jp.skypencil.javadocky;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
 import jp.skypencil.javadocky.repository.ArtifactRepository;
 import jp.skypencil.javadocky.repository.LocalStorage;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -27,12 +29,21 @@ public class JavadockyApplication {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   public static void main(String[] args) {
+    final boolean isAppCds = Arrays.asList(args).contains("--appcds");
     String port = System.getenv("PORT");
     SpringApplication app = new SpringApplication(JavadockyApplication.class);
     if (port != null) {
+      // for Heroku, respect the given PORT environment variable
       app.setDefaultProperties(Collections.singletonMap("server.port", port));
     }
-    app.run(args);
+
+    ConfigurableApplicationContext ctx = app.run(args);
+
+    // TODO consider the best timing to stop the process
+    if (isAppCds) {
+      System.err.println("Beans construction complete, so going to exit the process");
+      ctx.close();
+    }
   }
 
   @Bean

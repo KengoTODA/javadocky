@@ -18,6 +18,7 @@ dependencies {
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
     implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.1")
+    implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
 }
 
 tasks {
