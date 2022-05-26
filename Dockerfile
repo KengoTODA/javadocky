@@ -18,7 +18,8 @@ RUN cd /home/user/.javadocky && \
     unzip newrelic-java.zip && rm newrelic-java.zip
 
 COPY --from=0 /javadocky/build/libs/javadocky-*.jar /app/javadocky.jar
-RUN java -XX:DumpLoadedClassList=/home/user/classes.lst -jar /app/javadocky.jar --appcds
-RUN java -Xshare:dump -XX:SharedClassListFile=/home/user/classes.lst -XX:SharedArchiveFile=/home/user/appcds.jsa --class-path /app/javadocky.jar
+RUN java -XX:DumpLoadedClassList=/home/user/classes.lst -jar /app/javadocky.jar --appcds && \
+    java -Xshare:dump -XX:SharedClassListFile=/home/user/classes.lst -XX:SharedArchiveFile=/home/user/appcds.jsa --class-path /app/javadocky.jar && \
+    rm /home/user/classes.lst
 
 ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -Xshare:on -XX:SharedArchiveFile=/home/user/appcds.jsa -javaagent:/home/user/.javadocky/newrelic/newrelic.jar -jar /app/javadocky.jar" ]
