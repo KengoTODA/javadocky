@@ -125,7 +125,4 @@ jib {
             "-javaagent:/$newRelicAgentPath/newrelic.jar",
         )
     }
-    to {
-        image = "ghcr.io/kengotoda/javadocky"
-    }
 }
