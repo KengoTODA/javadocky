@@ -12,7 +12,6 @@ permissions:
   contents: read
   pull-requests: write
   statuses: read
-  packages: write # for jib
 
 jobs:
   build:
@@ -76,15 +75,3 @@ jobs:
       with:
         name: integration test reports
         path: build/reports
-  docker:
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build Image
-      run: |
-        echo $GITHUB_TOKEN | docker login https://ghcr.io -u $USER_NAME --password-stdin
-        ./gradlew jib
-      env:
-        USER_NAME: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

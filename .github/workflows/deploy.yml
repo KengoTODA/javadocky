@@ -28,3 +28,14 @@ jobs:
         heroku container:release web --app $HEROKU_APP
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  ghcr:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Image
+      run: |
+        echo $GITHUB_TOKEN | docker login https://ghcr.io -u $USER_NAME --password-stdin
+        ./gradlew jib -Djib.to.image=ghcr.io/kengotoda/javadocky
+      env:
+        USER_NAME: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
