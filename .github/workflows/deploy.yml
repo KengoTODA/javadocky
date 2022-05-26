@@ -1,0 +1,42 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  packages: write
+
+env:
+  HEROKU_APP: calm-escarpment-99854
+
+jobs:
+  heroku:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: temurin
+        cache: gradle
+    - run: |
+        heroku container:login
+        docker build -t registry.heroku.com/$HEROKU_APP/web .
+        docker push registry.heroku.com/$HEROKU_APP/web
+        heroku container:release web --app $HEROKU_APP
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  ghcr:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Image
+      run: |
+        echo $GITHUB_TOKEN | docker login https://ghcr.io -u $USER_NAME --password-stdin
+        docker build -t ghcr.io/kengotoda/javadocky .
+        docker push ghcr.io/kengotoda/javadocky
+      env:
+        USER_NAME: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

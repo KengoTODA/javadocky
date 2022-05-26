@@ -12,7 +12,6 @@ permissions:
   contents: read
   pull-requests: write
   statuses: read
-  id-token: write # for google-github-actions/setup-gcloud
 
 jobs:
   build:
@@ -46,6 +45,11 @@ jobs:
       with:
         name: build reports
         path: build/reports
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker build .
   integrationTest:
     runs-on: ubuntu-latest
     steps:
@@ -67,7 +71,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install google-chrome-stable
     - name: Run Integration Test
-      run: npx @percy/cli exec -- ./gradlew integrationTest
+      run: npx @percy/cli exec -- ./gradlew integrationTest --no-build-cache
       env:
         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
     - name: Upload Test Report
@@ -76,23 +80,3 @@ jobs:
       with:
         name: integration test reports
         path: build/reports
-  docker:
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}
-    steps:
-    - uses: actions/checkout@v3
-    - uses: google-github-actions/auth@v0
-      with:
-        workload_identity_provider: projects/905134421768/locations/global/workloadIdentityPools/actions-javadocky/providers/actions-javadocky
-        service_account: ${{ secrets.GCP_EMAIL }}
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-    - uses: google-github-actions/setup-gcloud@v0
-    - name: Build Image
-      run: |
-        gcloud auth configure-docker
-        docker build -t $IMAGE_NAME .
-    - name: Push Image to GCR
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-      run: |
-        docker push $IMAGE_NAME

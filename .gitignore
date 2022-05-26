@@ -1,5 +1,7 @@
-node_modules
 .env
+appcds.jsa
+classes.lst
+node_modules
 
 # Created by https://www.toptal.com/developers/gitignore/api/gradle,intellij,eclipse
 # Edit at https://www.toptal.com/developers/gitignore?templates=gradle,intellij,eclipse

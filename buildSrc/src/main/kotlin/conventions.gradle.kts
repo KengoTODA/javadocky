@@ -1,14 +1,17 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 import de.undercouch.gradle.tasks.download.Download
 import net.ltgt.gradle.errorprone.errorprone
 import org.sonarqube.gradle.SonarQubeTask
 
 plugins {
-    `java`
+    `application`
     `jacoco`
     id("com.diffplug.spotless")
     id("de.undercouch.download")
     id("net.ltgt.errorprone")
     id("org.sonarqube")
+    id("com.github.johnrengelman.shadow")
 }
 
 val jacocoTestReport = tasks.jacocoTestReport {
@@ -51,6 +54,23 @@ tasks {
     withType<SonarQubeTask> {
         dependsOn(jacocoTestReport)
     }
+    withType<ShadowJar> {
+        // https://github.com/spring-projects/spring-boot/issues/1828#issue-47834157
+        mergeServiceFiles()
+        append("META-INF/spring.handlers")
+        append("META-INF/spring.schemas")
+        append("META-INF/spring.tooling")
+        transform(
+            PropertiesFileTransformer().apply {
+                paths = listOf("META-INF/spring.factories")
+                mergeStrategy = "append"
+            }
+        )
+    }
+}
+
+configure<JavaApplication> {
+    mainClass.set("jp.skypencil.javadocky.JavadockyApplication")
 }
 
 dependencies {

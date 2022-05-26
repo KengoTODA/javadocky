@@ -11,8 +11,8 @@ val integrationTest by sourceSets.creating {
 dependencies {
     "integrationTestImplementation"(project)
     "integrationTestImplementation"("org.junit.jupiter:junit-jupiter-api")
-    "integrationTestImplementation"("io.github.bonigarcia:selenium-jupiter:3.3.0")
-    "integrationTestImplementation"("com.codeborne:selenide:5.2.8")
+    "integrationTestImplementation"("io.github.bonigarcia:selenium-jupiter:4.1.0")
+    "integrationTestImplementation"("com.codeborne:selenide:6.5.1")
     "integrationTestImplementation"("io.percy:percy-java-selenium:1.0.0")
     "integrationTestImplementation"("org.springframework.boot:spring-boot-starter-test") {
         exclude("junit", "junit")
