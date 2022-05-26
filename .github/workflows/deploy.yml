@@ -5,7 +5,7 @@ on:
       - master
 
 permissions:
-  packages: write # for jib
+  packages: write
 
 env:
   HEROKU_APP: calm-escarpment-99854
@@ -23,7 +23,8 @@ jobs:
         cache: gradle
     - run: |
         heroku container:login
-        ./gradlew jib -Djib.to.image=registry.heroku.com/$HEROKU_APP/web
+        docker build -t registry.heroku.com/$HEROKU_APP/web .
+        docker push registry.heroku.com/$HEROKU_APP/web
         heroku container:release web --app $HEROKU_APP
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
@@ -34,7 +35,8 @@ jobs:
     - name: Build Image
       run: |
         echo $GITHUB_TOKEN | docker login https://ghcr.io -u $USER_NAME --password-stdin
-        ./gradlew jib -Djib.to.image=ghcr.io/kengotoda/javadocky
+        docker build -t ghcr.io/kengotoda/javadocky .
+        docker push ghcr.io/kengotoda/javadocky
       env:
         USER_NAME: ${{ github.actor }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

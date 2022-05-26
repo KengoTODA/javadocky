@@ -28,7 +28,7 @@ jobs:
         distribution: temurin
         cache: gradle
     - run: >
-        ./gradlew spotlessCheck build jibDockerBuild ${SONAR_TOKEN:+sonarqube}
+        ./gradlew spotlessCheck build ${SONAR_TOKEN:+sonarqube}
         -x integrationTest --no-daemon
         -Dsonar.organization=kengotoda-github
         -Dsonar.projectKey=javadocky
@@ -45,6 +45,11 @@ jobs:
       with:
         name: build reports
         path: build/reports
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker build .
   integrationTest:
     runs-on: ubuntu-latest
     steps:
