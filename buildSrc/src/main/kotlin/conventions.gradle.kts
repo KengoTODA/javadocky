@@ -1,6 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
-import com.google.cloud.tools.jib.gradle.JibTask
 import de.undercouch.gradle.tasks.download.Download
 import net.ltgt.gradle.errorprone.errorprone
 import org.sonarqube.gradle.SonarQubeTask
@@ -12,12 +11,9 @@ plugins {
     id("de.undercouch.download")
     id("net.ltgt.errorprone")
     id("org.sonarqube")
-    id("com.google.cloud.tools.jib")
     id("com.github.johnrengelman.shadow")
 }
 
-val jibExtraDirectory = "build/jib-agents"
-val newRelicAgentPath = "newrelic"
 val jacocoTestReport = tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
@@ -34,7 +30,7 @@ val downloadNewrelic by tasks.registering(Download::class) {
 val unzipNewrelic by tasks.registering(Copy::class) {
     dependsOn(downloadNewrelic)
     from(zipTree(file("$buildDir/newrelic-java.zip")))
-    into("$jibExtraDirectory/$newRelicAgentPath")
+    into("$buildDir")
 }
 
 tasks {
@@ -57,9 +53,6 @@ tasks {
     }
     withType<SonarQubeTask> {
         dependsOn(jacocoTestReport)
-    }
-    withType<JibTask> {
-        dependsOn(unzipNewrelic)
     }
     withType<ShadowJar> {
         // https://github.com/spring-projects/spring-boot/issues/1828#issue-47834157
@@ -108,21 +101,5 @@ spotless {
         target("*.gradle.kts")
         ktlint()
         indentWithSpaces()
-    }
-}
-
-jib {
-    extraDirectories {
-        paths {
-            path {
-                setFrom("$jibExtraDirectory/$newRelicAgentPath/newrelic")
-                into = "/$newRelicAgentPath"
-            }
-        }
-    }
-    container {
-        jvmFlags = listOf(
-            "-javaagent:/$newRelicAgentPath/newrelic.jar",
-        )
     }
 }
