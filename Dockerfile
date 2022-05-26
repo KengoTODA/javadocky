@@ -1,7 +1,8 @@
 # build the jar file to use
-FROM eclipse-temurin:17-alpine
+FROM eclipse-temurin:17-alpine as JAR
 COPY . /javadocky/
-RUN cd /javadocky && ./gradlew shadowJar --no-daemon
+WORKDIR /javadocky 
+RUN ./gradlew shadowJar --no-daemon
 
 FROM eclipse-temurin:17-alpine
 RUN apk update && apk upgrade
@@ -17,7 +18,7 @@ RUN cd /home/user/.javadocky && \
     wget https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
     unzip newrelic-java.zip && rm newrelic-java.zip
 
-COPY --from=0 /javadocky/build/libs/javadocky-*.jar /app/javadocky.jar
+COPY --from=JAR /javadocky/build/libs/javadocky-*.jar /app/javadocky.jar
 RUN java -XX:DumpLoadedClassList=/home/user/classes.lst -jar /app/javadocky.jar --appcds && \
     java -Xshare:dump -XX:SharedClassListFile=/home/user/classes.lst -XX:SharedArchiveFile=/home/user/appcds.jsa --class-path /app/javadocky.jar && \
     rm /home/user/classes.lst
