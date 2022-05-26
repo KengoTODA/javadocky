@@ -1,4 +1,4 @@
-plugins { id("com.gradle.enterprise") version "3.10" }
+plugins { id("com.gradle.enterprise") version "3.10.1" }
 
 rootProject.name = "javadocky"
 
