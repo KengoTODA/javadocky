@@ -23,6 +23,9 @@ WORKDIR /app
 USER user
 VOLUME /app/.javadocky
 
+# https://cloud.google.com/run/docs/tips/java#optimization-compiler
+ENV JAVA_TOOL_OPTIONS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+
 # for New Relic
 ENV NEW_RELIC_APP_NAME="javadocky"
 ENV NEW_RELIC_LOG_FILE_NAME="STDOUT"
