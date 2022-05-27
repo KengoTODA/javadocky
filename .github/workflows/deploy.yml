@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - remove-agent
 
 permissions:
   packages: write # to deploy to ghcr
