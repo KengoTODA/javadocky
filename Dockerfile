@@ -29,13 +29,6 @@ ENV JAVA_TOOL_OPTIONS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 # https://cloud.google.com/run/docs/tips/java#lazy-init
 ENV SPRING_MAIN_LAZY_INITIALIZATIION=true
 
-# for New Relic
-ENV NEW_RELIC_APP_NAME="javadocky"
-ENV NEW_RELIC_LOG_FILE_NAME="STDOUT"
-RUN cd /home/user/.javadocky && \
-    wget https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
-    unzip newrelic-java.zip && rm newrelic-java.zip
-
 COPY --from=JAR /javadocky/build/libs/javadocky-*.jar /app/javadocky.jar
 COPY --from=JLINK /jlink $JAVA_HOME
 # TODO: resolve `OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended`
@@ -44,4 +37,4 @@ RUN java -XX:DumpLoadedClassList=/home/user/classes.lst -jar /app/javadocky.jar 
     java -Xshare:dump -XX:SharedClassListFile=/home/user/classes.lst -XX:SharedArchiveFile=/home/user/appcds.jsa --class-path /app/javadocky.jar && \
     rm /home/user/classes.lst
 
-ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -Xshare:on -XX:SharedArchiveFile=/home/user/appcds.jsa -javaagent:/home/user/.javadocky/newrelic/newrelic.jar -jar /app/javadocky.jar" ]
+ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -Xshare:on -XX:SharedArchiveFile=/home/user/appcds.jsa -jar /app/javadocky.jar" ]

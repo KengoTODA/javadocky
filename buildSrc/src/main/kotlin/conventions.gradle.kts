@@ -1,6 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
-import de.undercouch.gradle.tasks.download.Download
 import net.ltgt.gradle.errorprone.errorprone
 import org.sonarqube.gradle.SonarQubeTask
 
@@ -9,7 +8,6 @@ plugins {
     `jacoco`
     `kotlin`
     id("com.diffplug.spotless")
-    id("de.undercouch.download")
     id("net.ltgt.errorprone")
     id("org.sonarqube")
     id("com.github.johnrengelman.shadow")
@@ -23,21 +21,7 @@ val jacocoTestReport = tasks.jacocoTestReport {
     }
 }
 
-val downloadNewrelic by tasks.registering(Download::class) {
-    src("https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip")
-    dest(file("$buildDir"))
-}
-
-val unzipNewrelic by tasks.registering(Copy::class) {
-    dependsOn(downloadNewrelic)
-    from(zipTree(file("$buildDir/newrelic-java.zip")))
-    into("$buildDir")
-}
-
 tasks {
-    build {
-        dependsOn(unzipNewrelic)
-    }
     check {
         dependsOn(jacocoTestReport)
     }
