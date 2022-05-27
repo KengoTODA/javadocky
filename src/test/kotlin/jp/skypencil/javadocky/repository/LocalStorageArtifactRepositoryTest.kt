@@ -3,8 +3,8 @@ package jp.skypencil.javadocky.repository
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
-import java.io.File
 import reactor.test.StepVerifier
+import java.io.File
 
 class LocalStorageArtifactRepositoryTest : FunSpec({
     val root = tempdir()
