@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - deploy-to-gcp
 
 permissions:
   packages: write # to deploy to ghcr
