@@ -7,6 +7,7 @@ import org.sonarqube.gradle.SonarQubeTask
 plugins {
     `application`
     `jacoco`
+    `kotlin`
     id("com.diffplug.spotless")
     id("de.undercouch.download")
     id("net.ltgt.errorprone")
@@ -73,10 +74,14 @@ configure<JavaApplication> {
     mainClass.set("jp.skypencil.javadocky.JavadockyApplication")
 }
 
+val koTestVersion = "5.3.0"
 dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.11.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.6")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("io.kotest:kotest-runner-junit5:$koTestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$koTestVersion")
+    testImplementation("io.kotest:kotest-property:$koTestVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude("junit", "junit")
         exclude("org.junit.jupiter")
@@ -99,6 +104,10 @@ spotless {
     }
     kotlinGradle {
         target("*.gradle.kts")
+        ktlint()
+        indentWithSpaces()
+    }
+    kotlin {
         ktlint()
         indentWithSpaces()
     }
