@@ -40,7 +40,7 @@ jobs:
         gcloud auth configure-docker
         docker build -t $IMAGE .
         docker push $IMAGE
-        gcloud run services update-traffic javadocky --to-latest --region asia-northeast1
+        gcloud run deploy javadocky --image $IMAGE --region asia-northeast1
   ghcr:
     runs-on: ubuntu-latest
     steps:
