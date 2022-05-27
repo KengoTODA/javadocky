@@ -1,4 +1,4 @@
-package jp.skypencil.javadocky.controller
+package jp.skypencil.javadocky.index
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
