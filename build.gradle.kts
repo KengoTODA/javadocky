@@ -22,6 +22,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.codehaus.janino:janino")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    annotationProcessor("org.springframework:spring-context-indexer")
 }
 
 defaultTasks("spotlessApply", "build")
