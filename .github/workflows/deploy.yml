@@ -6,7 +6,8 @@ on:
       - deploy-to-gcp
 
 permissions:
-  packages: write
+  packages: write # to deploy to ghcr
+  id-token: write # for google-github-actions/setup-gcloud
 
 env:
   HEROKU_APP: calm-escarpment-99854
