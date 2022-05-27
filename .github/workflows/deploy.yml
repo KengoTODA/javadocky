@@ -36,8 +36,8 @@ jobs:
     - uses: google-github-actions/setup-gcloud@v0
     - run: |
         gcloud auth configure-docker
-        docker build -t asia-northeast1-docker.pkg.dev/javadocky/javadocky .
-        docker push asia-northeast1-docker.pkg.dev/javadocky/javadocky
+        docker build -t asia-east2-docker.pkg.dev/javadocky/my-repository .
+        docker push asia-east2-docker.pkg.dev/javadocky/my-repository
   ghcr:
     runs-on: ubuntu-latest
     steps:
