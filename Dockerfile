@@ -6,7 +6,7 @@ RUN ./gradlew shadowJar --no-daemon
 
 FROM eclipse-temurin:17-alpine as JLINK
 RUN jlink \
-    --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,java.sql,java.instrument,jdk.unsupported,java.rmi \
+    --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,jdk.unsupported \
     --strip-java-debug-attributes \
     --compress 2 \
     --no-header-files \
