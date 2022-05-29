@@ -27,14 +27,13 @@ class LatestVersionFinderTest : FunSpec({
         val finder = LatestVersionFinder()
         StepVerifier.create<String>(
             events.reduce<String>(
-                "",
-                java.util.function.BiFunction<String, XMLEvent, String> { result: String?, xml: javax.xml.stream.events.XMLEvent? ->
-                    finder.parse(
-                        result,
-                        xml
-                    )
-                }
-            )
+                ""
+            ) { result: String?, xml: XMLEvent? ->
+                finder.parse(
+                    result,
+                    xml
+                )
+            }
         )
             .expectNext("3.1.0-RC3")
             .expectComplete()

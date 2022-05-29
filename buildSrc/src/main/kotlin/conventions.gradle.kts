@@ -11,6 +11,7 @@ plugins {
     id("net.ltgt.errorprone")
     id("org.sonarqube")
     id("com.github.johnrengelman.shadow")
+    id("io.gitlab.arturbosch.detekt")
 }
 
 val jacocoTestReport = tasks.jacocoTestReport {
@@ -51,6 +52,12 @@ tasks {
                 mergeStrategy = "append"
             }
         )
+    }
+    withType<io.gitlab.arturbosch.detekt.Detekt> {
+        reports {
+            html.required.set(true)
+            sarif.required.set(true)
+        }
     }
 }
 
@@ -95,4 +102,9 @@ spotless {
         ktlint()
         indentWithSpaces()
     }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
 }
