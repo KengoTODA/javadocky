@@ -1,8 +1,8 @@
 package jp.skypencil.javadocky
 
+import com.codeborne.selenide.Browsers
 import com.codeborne.selenide.Condition.exist
 import com.codeborne.selenide.Condition.text
-import com.codeborne.selenide.Browsers
 import com.codeborne.selenide.SelenideDriver
 import io.github.bonigarcia.seljup.SelenideConfiguration
 import io.github.bonigarcia.seljup.SeleniumJupiter
