@@ -7,7 +7,6 @@ plugins {
 
 val integrationTest by sourceSets.creating {
     java.srcDirs(
-        "src/integration-test/java",
         "src/integration-test/kotlin"
     )
 }
