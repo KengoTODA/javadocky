@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.apache.maven:maven-artifact:3.8.5")
+    implementation("org.apache.maven:maven-artifact:3.8.6")
     implementation("org.springframework.boot:spring-boot-starter-webflux") {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")
     }
