@@ -34,39 +34,38 @@ internal class BadgeController @Autowired constructor(@NonNull versionRepo: Vers
         ) { req: ServerRequest ->
             val ext = req.pathVariable("ext")
             if (ext != "png" && ext != "svg") {
-                return@route ServerResponse.badRequest()
+                ServerResponse.badRequest()
                     .body(
                         Mono.just("Unsupported extension"),
                         String::class.java
                     )
-            }
-            val groupId = req.pathVariable("groupId")
-            val artifactId = req.pathVariable("artifactId")
-            log.debug("Got access to badge for {}:{}", groupId, artifactId)
-            versionRepo
-                .findLatest(groupId, artifactId)
-                .flatMap { latestVersion: ArtifactVersion ->
-                    val shieldsUri = URI.create(
-                        String.format(
-                            Locale.getDefault(),
-                            "https://img.shields.io/badge/%s-%s-%s.%s",
-                            escape(req.queryParam("label").orElse("javadoc")),
-                            escape(latestVersion.toString()),
-                            escape(req.queryParam("color").orElse("brightgreen")),
-                            ext
+            } else {
+                val groupId = req.pathVariable("groupId")
+                val artifactId = req.pathVariable("artifactId")
+                log.debug("Got access to badge for {}:{}", groupId, artifactId)
+                versionRepo
+                    .findLatest(groupId, artifactId)
+                    .flatMap { latestVersion: ArtifactVersion ->
+                        val shieldsUri = URI.create(
+                            String.format(
+                                Locale.getDefault(),
+                                "https://img.shields.io/badge/%s-%s-%s.%s",
+                                escape(req.queryParam("label").orElse("javadoc")),
+                                escape(latestVersion.toString()),
+                                escape(req.queryParam("color").orElse("brightgreen")),
+                                ext
+                            )
                         )
-                    )
-                    ServerResponse.seeOther(shieldsUri).build()
-                }
-                .switchIfEmpty(ServerResponse.notFound().build())
+                        ServerResponse.seeOther(shieldsUri).build()
+                    }
+                    .switchIfEmpty(ServerResponse.notFound().build())
+            }
         }
     }
 
     /**
-     * Escape URI based on the rule described by [shields.io](https://shields.io/)
-     *
      * @param s target string
-     * @return escaped string
+     * @return An escaped string based on the rule described by [shields.io](https://shields.io/)
      */
     private fun escape(s: String): String {
         return s.replace("-", "--").replace("_", "__").replace(" ", "_")
