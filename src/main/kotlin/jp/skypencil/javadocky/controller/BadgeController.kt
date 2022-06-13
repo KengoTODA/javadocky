@@ -5,7 +5,6 @@ import org.apache.maven.artifact.versioning.ArtifactVersion
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
-import org.springframework.lang.NonNull
 import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.RequestPredicates
 import org.springframework.web.reactive.function.server.RouterFunction
@@ -17,15 +16,8 @@ import java.net.URI
 import java.util.*
 
 @Controller
-internal class BadgeController @Autowired constructor(@NonNull versionRepo: VersionRepository) {
+internal class BadgeController @Autowired constructor(private val versionRepo: VersionRepository) {
     private val log = LoggerFactory.getLogger(javaClass)
-
-    @NonNull
-    private val versionRepo: VersionRepository
-
-    init {
-        this.versionRepo = Objects.requireNonNull(versionRepo)
-    }
 
     @Bean
     fun routeForBadge(): RouterFunction<ServerResponse> {
