@@ -27,7 +27,7 @@ open class JavadockyApplication {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
-    fun localStorage(): Storage {
+    open fun localStorage(): Storage {
         val home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, STORAGE_DIR)
         home.toFile().mkdirs()
         log.info("Making storage at {}", home.toFile().absolutePath)
@@ -35,7 +35,7 @@ open class JavadockyApplication {
     }
 
     @Bean
-    fun artifactRepository(): ArtifactRepository {
+    open fun artifactRepository(): ArtifactRepository {
         val home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, JAVADOC_DIR)
         home.toFile().mkdirs()
         log.info("Making storage at {}", home.toFile().absolutePath)
@@ -43,7 +43,7 @@ open class JavadockyApplication {
     }
 
     @Bean
-    fun javadocDownloader(
+    open fun javadocDownloader(
         @Value("\${javadocky.maven.repository}") repoURL: String
     ): JavadocDownloader {
         val home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, JAVADOC_DIR)
@@ -53,7 +53,7 @@ open class JavadockyApplication {
     }
 
     @Bean
-    fun routes(artifactRepo: ArtifactRepository, versionRepo: VersionRepository) = router {
+    open fun routes(artifactRepo: ArtifactRepository, versionRepo: VersionRepository) = router {
         GET("/doc/{groupId}/{artifactId}") { req: ServerRequest ->
             val groupId = req.pathVariable("groupId")
             val artifactId = req.pathVariable("artifactId")
