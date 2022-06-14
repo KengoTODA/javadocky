@@ -23,7 +23,7 @@ import java.nio.file.Paths
 import java.util.*
 
 @SpringBootApplication
-class JavadockyApplication {
+open class JavadockyApplication {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
