@@ -18,7 +18,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
     implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
     implementation("org.gradle:test-retry-gradle-plugin:1.4.0")
-    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0")
+    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.21.0")
 }
 
 tasks {
