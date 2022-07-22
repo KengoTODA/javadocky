@@ -4,7 +4,7 @@ plugins {
     `java`
     `jacoco`
     id("io.spring.dependency-management") version "1.0.12.RELEASE"
-    id("org.springframework.boot") version "2.7.1"
+    id("org.springframework.boot") version "2.7.2"
     `conventions`
     `integration-test`
 }
