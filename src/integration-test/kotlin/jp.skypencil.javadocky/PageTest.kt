@@ -47,12 +47,13 @@ internal class PageTest {
     fun testLatestPageRedirectsToSpecificVersion() {
         Selenide.open("http://localhost:$port/page/jp.skypencil.guava/helper/latest/")
         Selenide.Wait()
-            .until<Boolean>({ driver: WebDriver ->
-                Objects.equals(
-                    driver.getCurrentUrl(),
-                    "http://localhost:$port/page/jp.skypencil.guava/helper/1.0.1/"
-                )
-            }
+            .until<Boolean>(
+                { driver: WebDriver ->
+                    Objects.equals(
+                        driver.getCurrentUrl(),
+                        "http://localhost:$port/page/jp.skypencil.guava/helper/1.0.1/"
+                    )
+                }
             )
     }
 }
