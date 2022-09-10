@@ -65,7 +65,7 @@ configure<JavaApplication> {
     mainClass.set("jp.skypencil.javadocky.JavadockyApplication")
 }
 
-val koTestVersion = "5.3.0"
+val koTestVersion = "5.4.2"
 dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.11.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.6")
