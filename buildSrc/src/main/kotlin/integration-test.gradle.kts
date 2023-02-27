@@ -1,18 +1,16 @@
 // refs https://docs.gradle.org/current/userguide/java_testing.html
 
 plugins {
-    `java`
+    `java-base`
+    `kotlin`
     id("org.gradle.test-retry")
 }
 
 val integrationTest by sourceSets.creating {
-    java.srcDirs(
-        "src/integration-test/kotlin"
-    )
+    runtimeClasspath += sourceSets["main"].output.classesDirs
 }
 
 dependencies {
-    "integrationTestImplementation"(project)
     "integrationTestImplementation"("org.junit.jupiter:junit-jupiter-api")
     "integrationTestImplementation"("io.github.bonigarcia:selenium-jupiter:4.1.0")
     "integrationTestImplementation"("com.codeborne:selenide:6.5.1")

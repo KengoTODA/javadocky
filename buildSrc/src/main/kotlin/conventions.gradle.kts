@@ -29,6 +29,7 @@ tasks {
     test {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
+        testClassesDirs = sourceSets["main"].output.classesDirs
     }
     withType<AbstractArchiveTask> {
         isPreserveFileTimestamps = false
