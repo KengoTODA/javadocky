@@ -2,7 +2,6 @@
 
 plugins {
     `java`
-    id("org.gradle.test-retry")
 }
 
 val integrationTest by sourceSets.creating {
@@ -34,12 +33,6 @@ val integrationTestTask = tasks.register<Test>("integrationTest") {
     classpath = integrationTest.runtimeClasspath
 
     mustRunAfter(tasks.test)
-
-    retry {
-        failOnPassedAfterRetry.set(true)
-        maxFailures.set(10)
-        maxRetries.set(3)
-    }
 }
 
 tasks.check {
