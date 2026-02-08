@@ -15,8 +15,9 @@ dependencies {
     "integrationTestImplementation"(project)
     "integrationTestImplementation"("org.junit.jupiter:junit-jupiter-api")
     "integrationTestImplementation"("io.github.bonigarcia:selenium-jupiter:6.3.1")
+    "integrationTestImplementation"("org.seleniumhq.selenium:selenium-remote-driver:4.40.0")
     "integrationTestImplementation"("com.codeborne:selenide:7.14.0")
-    "integrationTestImplementation"("io.percy:percy-java-selenium:1.0.0")
+    "integrationTestImplementation"("io.percy:percy-java-selenium:1.3.2")
     "integrationTestImplementation"("org.seleniumhq.selenium:selenium-http-jdk-client:4.13.0")
     "integrationTestImplementation"("org.springframework.boot:spring-boot-starter-test") {
         exclude("junit", "junit")
