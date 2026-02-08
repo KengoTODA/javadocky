@@ -1,10 +1,10 @@
 # build the jar file to use
-FROM eclipse-temurin:17-alpine as JAR
+FROM eclipse-temurin:17-alpine AS jar
 COPY . /javadocky/
 WORKDIR /javadocky 
 RUN ./gradlew shadowJar --no-daemon
 
-FROM eclipse-temurin:17-alpine as JLINK
+FROM eclipse-temurin:17-alpine AS jlink
 RUN jlink \
     --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,jdk.unsupported \
     --strip-java-debug-attributes \
@@ -30,8 +30,8 @@ ENV JAVA_TOOL_OPTIONS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -Xss256k"
 # https://cloud.google.com/run/docs/tips/java#lazy-init
 ENV SPRING_MAIN_LAZY_INITIALIZATIION=true
 
-COPY --from=JAR /javadocky/build/libs/javadocky-*.jar /app/javadocky.jar
-COPY --from=JLINK /jlink $JAVA_HOME
+COPY --from=jar /javadocky/build/libs/javadocky-*.jar /app/javadocky.jar
+COPY --from=jlink /jlink $JAVA_HOME
 # TODO: resolve `OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended`
 # TODO: better to use `-XX:ArchiveClassesAtExit` option? https://www.morling.dev/blog/smaller-faster-starting-container-images-with-jlink-and-appcds/
 RUN java -XX:DumpLoadedClassList=/home/user/classes.lst -jar /app/javadocky.jar --appcds && \
