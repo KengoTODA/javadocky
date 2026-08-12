@@ -1,7 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 import net.ltgt.gradle.errorprone.errorprone
-import org.sonarqube.gradle.SonarQubeTask
 
 plugins {
     `application`
@@ -9,7 +8,6 @@ plugins {
     `kotlin`
     id("com.diffplug.spotless")
     id("net.ltgt.errorprone")
-    id("org.sonarqube")
     id("com.github.johnrengelman.shadow")
     id("io.gitlab.arturbosch.detekt")
 }
@@ -36,9 +34,6 @@ tasks {
     }
     withType<JavaCompile> {
         options.release.set(17)
-    }
-    withType<SonarQubeTask> {
-        dependsOn(jacocoTestReport)
     }
     withType<ShadowJar> {
         // https://github.com/spring-projects/spring-boot/issues/1828#issue-47834157

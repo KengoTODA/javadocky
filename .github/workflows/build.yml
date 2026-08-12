@@ -5,22 +5,11 @@ on:
   pull_request:
     branches: master
 
-# set necessary permissions for SQ's GitHub integration
-# https://docs.sonarqube.org/latest/analysis/github-integration/#header-2
-permissions:
-  checks: write
-  contents: read
-  pull-requests: write
-  statuses: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-      PR_NUMBER: ${{ github.event.pull_request.number }}
-      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
     steps:
     - uses: actions/checkout@v7.0.1
       with:
@@ -34,21 +23,6 @@ jobs:
         cache: gradle
     - run: >
         ./gradlew spotlessCheck build -x integrationTest --no-daemon
-    - name: Set up JDK 21 for SonarCloud
-      if: ${{ env.SONAR_TOKEN != '' }}
-      uses: actions/setup-java@v5.7.0
-      with:
-        java-version: 21
-        distribution: temurin
-        cache: gradle
-    - name: Run SonarCloud analysis
-      if: ${{ env.SONAR_TOKEN != '' }}
-      run: >
-        ./gradlew sonarqube --no-daemon
-        -Dsonar.organization=kengotoda-github
-        -Dsonar.projectKey=javadocky
-        -Dsonar.host.url=https://sonarcloud.io
-        ${PR_NUMBER:+ -Dsonar.pullrequest.key=$PR_NUMBER -Dsonar.pullrequest.branch=${PR_BRANCH} }
     - name: Upload Test Report
       uses: actions/upload-artifact@v7.0.1
       if: always()
