@@ -51,6 +51,8 @@ jobs:
     - name: Install Google Chrome
       uses: browser-actions/setup-chrome@v1
       id: setup-chrome
+      with:
+        install-chromedriver: true
     - name: Run Integration Test
       run: npx @percy/cli exec -- ./gradlew integrationTest --no-build-cache
       env:
