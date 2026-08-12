@@ -50,10 +50,12 @@ jobs:
         node-version-file: '.nvmrc'
     - name: Install Google Chrome
       uses: browser-actions/setup-chrome@v1
+      id: setup-chrome
     - name: Run Integration Test
       run: npx @percy/cli exec -- ./gradlew integrationTest --no-build-cache
       env:
         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        JAVA_TOOL_OPTIONS: -Dwebdriver.chrome.driver=${{ steps.setup-chrome.outputs.chromedriver-path }}
     - name: Upload Test Report
       uses: actions/upload-artifact@v7.0.1
       if: failure()
