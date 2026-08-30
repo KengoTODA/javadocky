@@ -4,7 +4,6 @@ This project is a clone of [javadoc.io](http://javadoc.io/).
 This is also a sandbox project to play with spring-boot v2.7.0, spring-webflux v5.3.8 and selenide v6.5.1.
 
 ![Build Status](https://github.com/KengoTODA/javadocky/workflows/Build/badge.svg)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=javadocky&metric=coverage)](https://sonarcloud.io/dashboard?id=javadocky)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/14582f2758734bd3a9c2076e210e4174)](https://www.codacy.com/gh/KengoTODA/javadocky/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=KengoTODA/javadocky&amp;utm_campaign=Badge_Grade)
 
 ## How to build
