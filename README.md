@@ -25,7 +25,7 @@ You can [set property](https://docs.spring.io/spring-boot/docs/current/reference
 
 ## License
 
-Copyright 2017-2022 Kengo TODA
+Copyright 2017-2026 Kengo TODA
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
