@@ -23,16 +23,16 @@ dependencies {
 
 tasks {
     withType<JavaCompile> {
-        options.release.set(17)
+        options.release.set(25)
     }
     withType<KotlinJvmCompile> {
-        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_25)
     }
 }
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 

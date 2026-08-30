@@ -1,10 +1,10 @@
 # build the jar file to use
-FROM eclipse-temurin:17-alpine as JAR
+FROM eclipse-temurin:25-alpine as JAR
 COPY . /javadocky/
 WORKDIR /javadocky 
 RUN ./gradlew shadowJar --no-daemon
 
-FROM eclipse-temurin:17-alpine as JLINK
+FROM eclipse-temurin:25-alpine as JLINK
 RUN jlink \
     --add-modules java.base,java.desktop,java.management,java.xml,java.naming,java.net.http,jdk.unsupported \
     --strip-java-debug-attributes \
