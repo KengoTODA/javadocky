@@ -10,7 +10,5 @@ import reactor.core.publisher.Mono
 internal class IndexController {
     @GetMapping(path = ["/"])
     @ResponseBody
-    fun index(): Mono<ClassPathResource> {
-        return Mono.just(ClassPathResource("static/index.html"))
-    }
+    fun index(): Mono<ClassPathResource> = Mono.just(ClassPathResource("static/index.html"))
 }

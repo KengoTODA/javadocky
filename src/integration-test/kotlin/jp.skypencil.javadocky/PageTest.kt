@@ -25,7 +25,7 @@ internal class PageTest {
 
     @Test
     fun testScreenShot(
-        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver
+        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver,
     ) {
         driver.open("http://localhost:$port/page/jp.skypencil.guava/helper/1.0.1/")
         val percy = Percy(driver.getWebDriver())
@@ -35,7 +35,7 @@ internal class PageTest {
     /** Page page should have `<frameset>` to display javadoc.  */
     @Test
     fun testPageShouldHaveFrameset(
-        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver
+        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver,
     ) {
         driver.open("http://localhost:$port/page/jp.skypencil.guava/helper/1.0.1/")
         assertTrue(driver.`$`(By.tagName("frameset")).exists())
@@ -46,14 +46,15 @@ internal class PageTest {
     @Disabled("Not sure how to test redirect with Selenium/Selenide")
     fun testLatestPageRedirectsToSpecificVersion() {
         Selenide.open("http://localhost:$port/page/jp.skypencil.guava/helper/latest/")
-        Selenide.Wait()
+        Selenide
+            .Wait()
             .until<Boolean>(
                 { driver: WebDriver ->
                     Objects.equals(
                         driver.getCurrentUrl(),
-                        "http://localhost:$port/page/jp.skypencil.guava/helper/1.0.1/"
+                        "http://localhost:$port/page/jp.skypencil.guava/helper/1.0.1/",
                     )
-                }
+                },
             )
     }
 }

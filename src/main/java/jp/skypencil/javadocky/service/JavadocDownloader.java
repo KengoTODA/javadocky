@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.web.reactive.function.BodyExtractors;
@@ -47,19 +48,16 @@ public class JavadocDownloader {
     uriVariables.put("artifactId", artifactId);
     uriVariables.put("version", version);
 
-    Mono<ClientResponse> response =
-        webClient
-            .method(HttpMethod.GET)
-            .uri(
-                "{groupId}/{artifactId}/{version}/{artifactId}-{version}-javadoc.jar", uriVariables)
-            .accept(MediaType.parseMediaType("application/java-archive"))
-            .exchange();
-    return response.flatMap(fetchResponse(path));
+    return webClient
+        .method(HttpMethod.GET)
+        .uri("{groupId}/{artifactId}/{version}/{artifactId}-{version}-javadoc.jar", uriVariables)
+        .accept(MediaType.parseMediaType("application/java-archive"))
+        .exchangeToMono(fetchResponse(path));
   }
 
   private Function<ClientResponse, Mono<Optional<File>>> fetchResponse(Path path) {
     return res -> {
-      HttpStatus status = res.statusCode();
+      HttpStatusCode status = res.statusCode();
       if (status == HttpStatus.NOT_FOUND) {
         return Mono.just(Optional.empty());
       } else if (!status.is2xxSuccessful()) {

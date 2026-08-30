@@ -1,8 +1,9 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     `kotlin-dsl`
-    id("com.diffplug.spotless") version "6.12.0"
+    id("com.diffplug.spotless") version "8.10.0"
 }
 
 repositories {
@@ -11,25 +12,27 @@ repositories {
 }
 
 dependencies {
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:6.12.0")
-    implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
-    implementation("net.ltgt.gradle:gradle-errorprone-plugin:3.0.1")
-    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
-    implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
-    implementation("org.gradle:test-retry-gradle-plugin:1.5.2")
-    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.21.0")
+    implementation("com.diffplug.spotless:com.diffplug.spotless.gradle.plugin:8.10.0")
+    implementation("net.ltgt.errorprone:net.ltgt.errorprone.gradle.plugin:5.1.0")
+    implementation("org.sonarqube:org.sonarqube.gradle.plugin:7.4.0.8496")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
+    implementation("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.6.1")
+    implementation("org.gradle.test-retry:org.gradle.test-retry.gradle.plugin:1.6.5")
+    implementation("dev.detekt:dev.detekt.gradle.plugin:2.0.0-alpha.6")
 }
 
 tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+    withType<JavaCompile> {
+        options.release.set(17)
+    }
+    withType<KotlinJvmCompile> {
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
 kotlin {
     jvmToolchain {
-        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -37,6 +40,6 @@ spotless {
     kotlinGradle {
         target("**/*.gradle.kts")
         ktlint()
-        indentWithSpaces()
+        leadingTabsToSpaces()
     }
 }

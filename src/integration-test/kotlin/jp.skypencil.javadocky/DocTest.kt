@@ -21,7 +21,7 @@ class DocTest {
 
     @Test
     fun testScreenShot(
-        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver
+        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver,
     ) {
         driver.open("http://localhost:$port/doc/jp.skypencil.guava/helper/")
         val percy = Percy(driver.getWebDriver())
@@ -31,7 +31,7 @@ class DocTest {
     /** Doc page should have `<iframe>` to display `index.html`.  */
     @Test
     fun testDocPageShouldHaveIframe(
-        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver
+        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver,
     ) {
         driver.open("http://localhost:$port/doc/jp.skypencil.guava/helper/")
         driver.`$`(By.tagName("iframe")).should(com.codeborne.selenide.Condition.exist)
@@ -40,18 +40,24 @@ class DocTest {
     /** Doc page should have dropdown list to select `artifactId`.  */
     @Test
     fun testDocPageShouldHaveListOfArtifactId(
-        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver
+        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver,
     ) {
         driver.open("http://localhost:$port/doc/jp.skypencil.guava/helper/")
-        driver.`$`("li.dropdown#artifact-id").shouldHave(com.codeborne.selenide.Condition.text("helper"))
+        driver.`$`("li.dropdown#artifact-id").shouldHave(
+            com.codeborne.selenide.Condition
+                .text("helper"),
+        )
     }
 
     /** Doc page should have dropdown list to select `version`.  */
     @Test
     fun testDocPageShouldHaveListOfVersion(
-        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver
+        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver,
     ) {
         driver.open("http://localhost:$port/doc/jp.skypencil.guava/helper/")
-        driver.`$`("li.dropdown#version").shouldHave(com.codeborne.selenide.Condition.text("1.2.0"))
+        driver.`$`("li.dropdown#version").shouldHave(
+            com.codeborne.selenide.Condition
+                .text("1.2.0"),
+        )
     }
 }

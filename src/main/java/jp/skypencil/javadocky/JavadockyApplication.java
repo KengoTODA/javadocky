@@ -23,6 +23,7 @@ public class JavadockyApplication {
   private static final String JAVADOCKY_ROOT = ".javadocky";
 
   private static final String STORAGE_DIR = "storage";
+
   /** Name of directory to store downloaded javadoc.jar file. */
   private static final String JAVADOC_DIR = "javadoc";
 
