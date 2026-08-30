@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.xml.XmlEventDecoder;
 import org.springframework.lang.NonNull;
@@ -33,17 +34,15 @@ class RemoteRepoVersionReposiory implements VersionRepository {
 
   @Override
   public Mono<ArtifactVersion> findLatest(String groupId, String artifactId) {
-    Mono<ClientResponse> response =
-        webClient
-            .get()
-            .uri(String.format("%s/%s/%s", groupId.replace('.', '/'), artifactId, XML_NAME))
-            .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
-            .exchange();
-    return response.flatMap(this::fetchResponse);
+    return webClient
+        .get()
+        .uri(String.format("%s/%s/%s", groupId.replace('.', '/'), artifactId, XML_NAME))
+        .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
+        .exchangeToMono(this::fetchResponse);
   }
 
   private Mono<ArtifactVersion> fetchResponse(ClientResponse res) {
-    HttpStatus status = res.statusCode();
+    HttpStatusCode status = res.statusCode();
     if (status == HttpStatus.NOT_FOUND) {
       return Mono.empty();
     } else if (!status.is2xxSuccessful()) {
@@ -61,17 +60,15 @@ class RemoteRepoVersionReposiory implements VersionRepository {
 
   @Override
   public Flux<ArtifactVersion> list(String groupId, String artifactId) {
-    Mono<ClientResponse> response =
-        webClient
-            .get()
-            .uri(String.format("%s/%s/%s", groupId.replace('.', '/'), artifactId, XML_NAME))
-            .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
-            .exchange();
-    return response.flatMapMany(this::listVersions);
+    return webClient
+        .get()
+        .uri(String.format("%s/%s/%s", groupId.replace('.', '/'), artifactId, XML_NAME))
+        .accept(MediaType.TEXT_XML, MediaType.APPLICATION_XML)
+        .exchangeToFlux(this::listVersions);
   }
 
   private Flux<ArtifactVersion> listVersions(ClientResponse res) {
-    HttpStatus status = res.statusCode();
+    HttpStatusCode status = res.statusCode();
     if (status == HttpStatus.NOT_FOUND) {
       return Flux.empty();
     } else if (!status.is2xxSuccessful()) {

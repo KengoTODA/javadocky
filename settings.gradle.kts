@@ -1,10 +1,10 @@
-plugins { id("com.gradle.enterprise") version "3.11.4" }
+plugins { id("com.gradle.develocity") version "4.5.0" }
 
 rootProject.name = "javadocky"
 
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
+        termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
+        termsOfUseAgree.set("yes")
     }
 }

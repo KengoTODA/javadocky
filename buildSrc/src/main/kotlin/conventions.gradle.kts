@@ -1,7 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+import dev.detekt.gradle.Detekt
 import net.ltgt.gradle.errorprone.errorprone
-import org.sonarqube.gradle.SonarQubeTask
+import org.gradle.api.file.DuplicatesStrategy
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.sonarqube.gradle.SonarTask
 
 plugins {
     `application`
@@ -10,8 +14,8 @@ plugins {
     id("com.diffplug.spotless")
     id("net.ltgt.errorprone")
     id("org.sonarqube")
-    id("com.github.johnrengelman.shadow")
-    id("io.gitlab.arturbosch.detekt")
+    id("com.gradleup.shadow")
+    id("dev.detekt")
 }
 
 val jacocoTestReport = tasks.jacocoTestReport {
@@ -37,23 +41,32 @@ tasks {
     withType<JavaCompile> {
         options.release.set(17)
     }
-    withType<SonarQubeTask> {
+    withType<KotlinJvmCompile> {
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+    }
+    withType<SonarTask> {
         dependsOn(jacocoTestReport)
     }
     withType<ShadowJar> {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         // https://github.com/spring-projects/spring-boot/issues/1828#issue-47834157
         mergeServiceFiles()
         append("META-INF/spring.handlers")
         append("META-INF/spring.schemas")
         append("META-INF/spring.tooling")
+        append("META-INF/spring/aot.factories")
+        append(
+            "META-INF/spring/org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration.imports"
+        )
+        append("META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports")
         transform(
-            PropertiesFileTransformer().apply {
-                paths = listOf("META-INF/spring.factories")
-                mergeStrategy = "append"
+            PropertiesFileTransformer(project.objects).apply {
+                paths.set(listOf("META-INF/spring.factories"))
+                mergeStrategy.set(PropertiesFileTransformer.MergeStrategy.Append)
             }
         )
     }
-    withType<io.gitlab.arturbosch.detekt.Detekt> {
+    withType<Detekt> {
         reports {
             html.required.set(true)
             sarif.required.set(true)
@@ -65,10 +78,10 @@ configure<JavaApplication> {
     mainClass.set("jp.skypencil.javadocky.JavadockyApplication")
 }
 
-val koTestVersion = "5.4.2"
+val koTestVersion = "6.2.2"
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.11.0")
-    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.6")
+    errorprone("com.google.errorprone:error_prone_core:2.50.0")
+    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.29")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("io.kotest:kotest-runner-junit5:$koTestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$koTestVersion")
@@ -96,11 +109,11 @@ spotless {
     kotlinGradle {
         target("*.gradle.kts")
         ktlint()
-        indentWithSpaces()
+        leadingTabsToSpaces()
     }
     kotlin {
         ktlint()
-        indentWithSpaces()
+        leadingTabsToSpaces()
     }
 }
 

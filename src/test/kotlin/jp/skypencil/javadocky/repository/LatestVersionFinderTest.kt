@@ -1,6 +1,7 @@
 package jp.skypencil.javadocky.repository
 
 import io.kotest.core.spec.style.FunSpec
+import org.springframework.core.ResolvableType
 import org.springframework.core.io.buffer.DataBuffer
 import org.springframework.http.codec.xml.XmlEventDecoder
 import reactor.core.publisher.Flux
@@ -10,37 +11,40 @@ import javax.xml.stream.events.XMLEvent
 fun String.toDataBuffer(): DataBuffer {
     val bytes: ByteArray = this.toByteArray(java.nio.charset.StandardCharsets.UTF_8)
     val buffer: DataBuffer =
-        org.springframework.core.io.buffer.DefaultDataBufferFactory().allocateBuffer(bytes.size)
+        org.springframework.core.io.buffer
+            .DefaultDataBufferFactory()
+            .allocateBuffer(bytes.size)
     buffer.write(bytes)
     return buffer
 }
 
-class LatestVersionFinderTest : FunSpec({
-    test("LatestVersionFinder returns the value of the <latest> element in the given XML") {
-        val events: Flux<XMLEvent> = XmlEventDecoder()
-            .decode(
-                Flux.just<DataBuffer>(XML.toDataBuffer()),
-                null,
-                null,
-                emptyMap<String, Any>()
-            )
-        val finder = LatestVersionFinder()
-        StepVerifier.create<String>(
-            events.reduce<String>(
-                ""
-            ) { result: String?, xml: XMLEvent? ->
-                finder.parse(
-                    result,
-                    xml
-                )
-            }
-        )
-            .expectNext("3.1.0-RC3")
-            .expectComplete()
-            .verify()
-    }
-}) {
-
+class LatestVersionFinderTest :
+    FunSpec({
+        test("LatestVersionFinder returns the value of the <latest> element in the given XML") {
+            val events: Flux<XMLEvent> =
+                XmlEventDecoder()
+                    .decode(
+                        Flux.just<DataBuffer>(XML.toDataBuffer()),
+                        ResolvableType.forClass(XMLEvent::class.java),
+                        null,
+                        emptyMap<String, Any>(),
+                    )
+            val finder = LatestVersionFinder()
+            StepVerifier
+                .create<String>(
+                    events.reduce<String>(
+                        "",
+                    ) { result: String?, xml: XMLEvent? ->
+                        finder.parse(
+                            result,
+                            xml,
+                        )
+                    },
+                ).expectNext("3.1.0-RC3")
+                .expectComplete()
+                .verify()
+        }
+    }) {
     companion object {
         private const val XML = (
             "<metadata>" +
@@ -57,6 +61,6 @@ class LatestVersionFinderTest : FunSpec({
                 "<lastUpdated>20170610023153</lastUpdated>" +
                 "</versioning>" +
                 "</metadata>"
-            )
+        )
     }
 }

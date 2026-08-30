@@ -21,7 +21,7 @@ internal class IndexTest {
     /** Doc page should have `<iframe>` to display `index.html`.  */
     @Test
     fun testTitleExplainsServiceName(
-        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver
+        @SelenideConfiguration(browser = Browsers.CHROME, headless = true) driver: SelenideDriver,
     ) {
         driver.open("http://localhost:$port/")
         driver.`$`(By.tagName("h1")).shouldHave(text("Javadocky"))

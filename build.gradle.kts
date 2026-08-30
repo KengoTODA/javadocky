@@ -3,8 +3,8 @@
 plugins {
     `java`
     `jacoco`
-    id("io.spring.dependency-management") version "1.1.0"
-    id("org.springframework.boot") version "2.7.5"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("org.springframework.boot") version "4.1.1"
     `conventions`
     `integration-test`
 }
@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.apache.maven:maven-artifact:3.8.6")
+    implementation("org.apache.maven:maven-artifact:3.9.16")
     implementation("org.springframework.boot:spring-boot-starter-webflux") {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")
     }

@@ -5,7 +5,7 @@ plugins {
     id("org.gradle.test-retry")
 }
 
-val integrationTest by sourceSets.creating {
+val integrationTest = sourceSets.create("integrationTest") {
     java.srcDirs(
         "src/integration-test/kotlin"
     )
@@ -14,9 +14,9 @@ val integrationTest by sourceSets.creating {
 dependencies {
     "integrationTestImplementation"(project)
     "integrationTestImplementation"("org.junit.jupiter:junit-jupiter-api")
-    "integrationTestImplementation"("io.github.bonigarcia:selenium-jupiter:4.1.0")
-    "integrationTestImplementation"("com.codeborne:selenide:6.5.1")
-    "integrationTestImplementation"("io.percy:percy-java-selenium:1.0.0")
+    "integrationTestImplementation"("io.github.bonigarcia:selenium-jupiter:6.3.2")
+    "integrationTestImplementation"("com.codeborne:selenide:7.18.0")
+    "integrationTestImplementation"("io.percy:percy-java-selenium:2.2.1")
     "integrationTestImplementation"("org.springframework.boot:spring-boot-starter-test") {
         exclude("junit", "junit")
         exclude("org.junit.jupiter")

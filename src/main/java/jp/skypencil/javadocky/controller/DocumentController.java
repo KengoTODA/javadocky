@@ -37,7 +37,7 @@ class DocumentController {
   @Bean
   public RouterFunction<ServerResponse> routeForDoc() {
     return route(
-        GET("/doc/{groupId}/{artifactId}"),
+        GET("/doc/{groupId}/{artifactId}").or(GET("/doc/{groupId}/{artifactId}/")),
         req -> {
           String groupId = req.pathVariable("groupId");
           String artifactId = req.pathVariable("artifactId");
