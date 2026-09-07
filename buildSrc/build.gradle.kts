@@ -14,7 +14,7 @@ repositories {
 dependencies {
     implementation("com.diffplug.spotless:com.diffplug.spotless.gradle.plugin:8.10.2")
     implementation("net.ltgt.errorprone:net.ltgt.errorprone.gradle.plugin:5.1.1")
-    implementation("org.sonarqube:org.sonarqube.gradle.plugin:7.4.0.8496")
+    implementation("org.sonarqube:org.sonarqube.gradle.plugin:7.5.0.8588")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
     implementation("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.6.1")
     implementation("org.gradle.test-retry:org.gradle.test-retry.gradle.plugin:1.6.6")
