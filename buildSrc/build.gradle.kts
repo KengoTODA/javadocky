@@ -17,7 +17,7 @@ dependencies {
     implementation("org.sonarqube:org.sonarqube.gradle.plugin:7.4.0.8496")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
     implementation("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.6.1")
-    implementation("org.gradle.test-retry:org.gradle.test-retry.gradle.plugin:1.6.5")
+    implementation("org.gradle.test-retry:org.gradle.test-retry.gradle.plugin:1.6.6")
     implementation("dev.detekt:dev.detekt.gradle.plugin:2.0.0-alpha.6")
 }
 
