@@ -1,4 +1,4 @@
-
+import dev.detekt.gradle.plugin.getSupportedKotlinVersion
 
 plugins {
     `java`
@@ -11,6 +11,15 @@ plugins {
 
 repositories {
     mavenCentral()
+}
+
+// detekt must run with the Kotlin version it was compiled against.
+configurations.named("detekt") {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            useVersion(getSupportedKotlinVersion())
+        }
+    }
 }
 
 dependencies {
