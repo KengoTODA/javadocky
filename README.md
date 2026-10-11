@@ -14,6 +14,18 @@ $ docker-compose up --build
 
 You can visit [http://localhost:8080/](http://localhost:8080/) to enjoy service.
 
+### CI Java version and dependency submission
+
+The build and dependency submission workflows install the JDK specified in
+`.java-version`. When upgrading Java, also update the Gradle compilation targets,
+toolchains, and Docker images.
+
+The `Dependency Submission` workflow submits the dependency graph on pushes to
+`master` and can also be run manually. After enabling this workflow on `master`,
+disable GitHub's **Automatic dependency submission** under repository Settings
+→ Advanced Security → Dependency graph. The GitHub-managed Gradle job uses Java
+21, which cannot load this project's Java 25 build logic.
+
 
 ### How to configure
 

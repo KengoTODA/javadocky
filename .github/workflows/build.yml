@@ -16,10 +16,10 @@ jobs:
     - uses: actions/checkout@v7
       with:
         fetch-depth: 0
-    - name: Set up JDK 25
+    - name: Set up JDK
       uses: actions/setup-java@v5
       with:
-        java-version: 25
+        java-version-file: .java-version
         distribution: temurin
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v6
@@ -45,10 +45,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - name: Set up JDK 25
+    - name: Set up JDK
       uses: actions/setup-java@v5
       with:
-        java-version: 25
+        java-version-file: .java-version
         distribution: temurin
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v6
